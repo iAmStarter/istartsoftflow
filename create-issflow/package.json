@@ -1,0 +1,23 @@
+{
+  "name": "create-issflow",
+  "version": "1.0.0",
+  "description": "Scaffold the iStartSoftFlow AI-coding workflow (Claude Code) into a project. Non-destructive, Claude-only (no Azure, no Cursor).",
+  "bin": {
+    "create-issflow": "bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "template/"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude-code",
+    "agents",
+    "tdd",
+    "workflow",
+    "istartsoftflow"
+  ],
+  "license": "MIT"
+}
