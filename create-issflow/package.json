@@ -1,7 +1,7 @@
 {
   "name": "create-issflow",
   "version": "1.0.0",
-  "description": "Scaffold the iStartSoftFlow AI-coding workflow (Claude Code) into a project. Non-destructive, Claude-only (no Azure, no Cursor).",
+  "description": "Scaffold the iStartSoftFlow AI-coding workflow into a project. Stack-agnostic, tool-agnostic (Claude Code, Codex, Cursor, Gemini, Aider), non-destructive.",
   "bin": {
     "create-issflow": "bin/cli.js"
   },
@@ -14,6 +14,11 @@
   },
   "keywords": [
     "claude-code",
+    "codex",
+    "cursor",
+    "gemini-cli",
+    "aider",
+    "agents-md",
     "agents",
     "tdd",
     "workflow",

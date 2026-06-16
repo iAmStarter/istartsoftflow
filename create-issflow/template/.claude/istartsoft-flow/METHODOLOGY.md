@@ -1,11 +1,16 @@
 # iStartSoftFlow — portable agent methodology (single source of truth)
 
 > **The iStartSoft execution loop.** Namespaced under `.claude/istartsoft-flow/`
-> so it coexists with a repo's own `CLAUDE.md` / `AGENTS.md` (project docs) — it
-> does NOT replace them. This kit is **Claude-only** and assumes **managed infra
-> (Vercel + Supabase)**, so **Phase 0 (infra) is N/A** — phases begin at the first
-> vertical slice. Planning source of truth stays in **iSSM / BMAD**
-> (PRD / architecture / stories); iStartSoftFlow is the execution loop layered on top.
+> so it coexists with a repo's own agent-instruction files (`CLAUDE.md`,
+> `AGENTS.md`, `GEMINI.md`, …) — it does NOT replace them. The kit is
+> **stack-agnostic and tool-agnostic**: it pins a *process*, not a *stack*.
+> Declare your stack (language, framework, infra, auth, test + E2E runner,
+> planning source) once in `docs/OVERVIEW.md`; every rule below references *your
+> declared stack* and hardcodes none. If infra is **managed** (a PaaS + a managed
+> datastore), Phase 0 (infra) is N/A and phases begin at the first vertical slice;
+> otherwise Phase 0 provisions infra first. Planning source of truth stays in your
+> PRD / architecture / stories (e.g. BMAD / iSSM); iStartSoftFlow is the execution
+> loop layered on top.
 
 <!-- ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0 -->
 > **SENTINEL.** The HTML comment above (`ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0`) is a
@@ -71,8 +76,9 @@ can. Escalation is at most two hops.
 - **test-author** — writes tests BLIND (never reads implementation logic). On TDD
   phases it is dispatched BEFORE logic exists (RED-first), so blindness is
   structural, not honor-system. Writes a MOCK suite + a REAL API suite.
-- **e2e-runner** — writes/runs functional browser E2E (Playwright) BLIND. Reads
-  only the acceptance spec + `docs/ENDPOINTS.md`, never the implementation.
+- **e2e-runner** — writes/runs functional browser E2E (your declared E2E runner,
+  e.g. Playwright) BLIND. Reads only the acceptance spec + `docs/ENDPOINTS.md`,
+  never the implementation.
 - **debugger** — debugs in an ISOLATED context. Writes a trace to
   `docs/research/debug-<slug>.md`; returns a summary.
 - **synthesizer** — compresses `docs/STATE.md` / `docs/ISSUES.md`, prunes
@@ -149,7 +155,7 @@ recover: current phase, next action, open blocker.
    `STACK NOT READY` / `FLAKE` do not spend the debug budget. Only `LOGIC FAIL`
    reaches the debugger.
 7. E2E auth = a dedicated test account driven by a PROGRAMMATIC session
-   (Supabase API login / Playwright `storageState`), never by scripting a
+   (an API login or a saved/reused auth state), never by scripting a
    third-party OAuth/login UI.
 8. Architectural change (new/removed agent, hook, command, or a changed workflow
    rule)? -> run `log-decision` before closing.
@@ -190,8 +196,9 @@ the KB. The kit works normally without a KB.
   `debug-<slug>.md` (debugger traces).
 - `docs/.snapshots/` — pre-compact recovery markers (auto-pruned, gitignored).
   Holds no secrets.
-- `e2e/`, `scripts/e2e-stack.sh`, `docker-compose.test.yml`, `playwright.config.ts`
-  — the E2E stack.
+- your E2E stack — runner config + any ephemeral test services (e.g. `e2e/`,
+  `playwright.config.ts`, `scripts/e2e-stack.sh`, `docker-compose.test.yml`).
+  Names are conventions; use whatever your declared stack ships.
 - `tests/phase-<n>/` — phase-local test suites.
 - `tests/regression/` — cross-phase contract tests (the regression corpus). Run by
   `scripts/regression.sh` (default mock; `--real` runs the real corpus).
@@ -202,12 +209,21 @@ the KB. The kit works normally without a KB.
 
 -----
 
-## Capability matrix (which tools get what)
+## Capability matrix (which host gets what)
 
-- **Claude Code — full (reference implementation).** Generated commands; all three
-  lifecycle hooks WITH context injection (SessionStart / PreCompact / SubagentStop);
-  named subagents (`.claude/agents/*.md`); `@AGENTS.md` import; shared KB; skills
-  loaded on demand (`caveman`, `karpathy-guidelines`, `grill-me`, `ux-design`).
-- **Everything else.** Reads this `AGENTS.md` if it supports the open standard. No
-  generated adapters, no lifecycle hooks — the rituals degrade to model-run
-  fallbacks. Not claimed as a supported host in v2.0.
+The kit is single-source (`.claude/` + this file). `create-issflow --tool=<host>`
+writes the right adapter; unsupported features degrade to model-run rituals, never
+silently vanish. The portable assets (agents, commands, skills, methodology) are
+the same everywhere — only the *wiring* differs.
+
+| Host | Entry file | Commands | Subagents | Lifecycle hooks | Shared KB |
+|------|-----------|----------|-----------|-----------------|-----------|
+| **Claude Code** (reference) | `AGENTS.md` + `.claude/` | `.claude/commands/` | native | SessionStart · PreCompact · SubagentStop (with context injection) | yes |
+| **Codex CLI** | `AGENTS.md` (native) | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |
+| **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` (sessionStart · subagentStop) | yes |
+| **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |
+| **Aider** | `.aider.conf.yml` → `AGENTS.md` | read as reference | model-run | model-run | yes |
+| **Any AGENTS.md host** | `AGENTS.md` | read as reference | model-run | model-run | yes |
+
+"model-run" = the host can't automate the ritual, so the model performs it by hand
+(SESSION-OPEN at the top of each session; the COMPRESS snapshot before a reset).

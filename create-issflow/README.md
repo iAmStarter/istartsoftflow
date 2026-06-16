@@ -1,37 +1,54 @@
 # create-issflow
 
-Scaffold the **iStartSoftFlow** AI-coding workflow into any project — Claude Code
-only, **no Azure, no Cursor**. Non-destructive: it never overwrites your files.
+Scaffold the **iStartSoftFlow** AI-coding workflow into any project. Stack-agnostic
+and tool-agnostic. Non-destructive: it never overwrites your files.
 
 ## Use
 
 ```bash
 cd my-project
-npx create-issflow            # scaffolds .claude/ into the current project
-# then open Claude Code — the SessionStart hook fires automatically
-/overview                            # bootstrap the project
+npx create-issflow                  # prompts for your AI tool
+npx create-issflow --tool=claude    # or pass it: claude | codex | cursor | gemini | aider | all
+# then open your tool — Claude Code fires the SessionStart hook automatically
+/overview                           # bootstrap the project
 ```
 
 Flags:
+- `--tool=<name>` — pick the target tool (skips the prompt). `all` writes every adapter.
 - `--dry-run` — print what would happen, write nothing.
 - `--force` — overwrite existing kit files (default keeps yours; conflicts are
   written as `<file>.issflow-new` for you to merge).
+- `-h`, `--help` — usage.
 
-## What it installs (into `<project>/.claude/`)
+## What it installs
+
+The portable kit (every tool) in `<project>/.claude/`:
 
 - `agents/` — planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer
 - `commands/` — `/overview` `/phase` `/quick` `/replan` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck`
 - `skills/` — caveman · grill-me · karpathy-guidelines · ux-design
-- `hooks/` — session-start · pre-compact · subagent-stop (merged into `.claude/settings.json`, existing hooks preserved)
-- `istartsoft-flow/METHODOLOGY.md` — the full methodology
+- `hooks/` — session-start · pre-compact · subagent-stop
+- `istartsoft-flow/METHODOLOGY.md` — the full methodology (single source of truth)
+
+Plus a root `AGENTS.md` (the open standard) and the per-tool adapter:
+
+| Tool | Adds |
+|------|------|
+| `claude` | merges hooks into `.claude/settings.json` |
+| `codex` | nothing extra — `AGENTS.md` is read natively |
+| `cursor` | `.cursor/rules/` + `.cursor/commands/` + `.cursor/hooks.json` |
+| `gemini` | `GEMINI.md` pointer |
+| `aider` | `.aider.conf.yml` that loads the methodology |
+| `all` | every adapter above |
 
 It also un-ignores the workflow dirs in `.gitignore` if `.claude/*` was ignored.
 
 ## Loop
 
 `design-research → grill → plan → implement → test → deploy`, one vertical slice
-per phase. **Phase 0 (infra) is N/A** — infra is managed (Vercel + Supabase).
-Planning source of truth stays in iSSM/BMAD; iStartSoftFlow is the execution loop.
+per phase. Stack-agnostic: declare your stack in `docs/OVERVIEW.md`; Phase 0
+(infra) is N/A when infra is managed. Planning source of truth stays in your
+PRD / architecture / stories (e.g. BMAD / iSSM).
 
 ## Maintainers
 

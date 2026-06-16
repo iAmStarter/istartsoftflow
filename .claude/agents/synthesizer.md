@@ -47,7 +47,7 @@ phases remain in PLAN.md). When told, ALSO do:
 ## Final state
 
 Completed: <YYYY-MM-DD>
-Phases: <count> code phases + Phase 0 infra
+Phases: <count> code phases (+ Phase 0 infra, if self-managed)
 All phases: done
 
 ```
