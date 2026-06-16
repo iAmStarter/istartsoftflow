@@ -8,9 +8,6 @@ workflow runs itself instead of being hand-steered every session.
 **Claude-only. No Azure. No Cursor.** Infra is assumed managed (Vercel + Supabase),
 so there is no infra provisioning phase — Phase 0 is N/A.
 
-> Adapted from the open **anpunkit** workflow by MetheeS (MIT), trimmed to
-> Claude-only and de-coupled from Azure/Cursor.
-
 ## Install into a project
 
 ```bash
@@ -29,7 +26,7 @@ yours and writes conflicts as `<file>.issflow-new`).
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
 | **commands** | `/overview` `/phase` `/quick` `/replan` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
-| **skills** | caveman · grill-me · karpathy-guidelines |
+| **skills** | caveman · grill-me · karpathy-guidelines · ux-design |
 | **hooks** | session-start · pre-compact · subagent-stop (merged into `.claude/settings.json`) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` |
 

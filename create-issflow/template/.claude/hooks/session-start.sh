@@ -100,7 +100,7 @@ if [ -f "$KB_CONFIG" ]; then
     emit ""
   else
     emit "## Shared KB: configured but path not found (${KB_PATH})"
-    emit "Re-run setup.sh to fix the KB path."
+    emit "Fix kb_path in .claude/kb-config.json (or re-run: npx create-issflow)."
     emit ""
   fi
 fi

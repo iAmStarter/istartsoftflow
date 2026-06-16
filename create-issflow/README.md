@@ -21,7 +21,7 @@ Flags:
 
 - `agents/` — planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer
 - `commands/` — `/overview` `/phase` `/quick` `/replan` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck`
-- `skills/` — caveman · grill-me · karpathy-guidelines
+- `skills/` — caveman · grill-me · karpathy-guidelines · ux-design
 - `hooks/` — session-start · pre-compact · subagent-stop (merged into `.claude/settings.json`, existing hooks preserved)
 - `istartsoft-flow/METHODOLOGY.md` — the full methodology
 
@@ -37,5 +37,3 @@ Planning source of truth stays in iSSM/BMAD; iStartSoftFlow is the execution loo
 
 The kit lives in the repo's `.claude/`. After editing it, run `bash build.sh` to
 refresh `template/`, then bump `version` and publish.
-
-Adapted from the open "anpunkit" workflow by MetheeS (MIT).

@@ -1,22 +1,21 @@
 # iStartSoftFlow — portable agent methodology (single source of truth)
 
-> **Adapted for Saku POS (from the open "anpunkit" workflow by MetheeS).**
-> Namespaced under `.claude/istartsoft-flow/` to coexist with the repo's own
-> `CLAUDE.md` / `AGENTS.md` (Saku project docs) — it does NOT replace them.
-> Cursor support and the Azure infra phase were removed: this repo is Claude-only
-> and infra is **managed (Vercel + Supabase)**, so **Phase 0 (infra) is N/A** —
-> phases begin at the first vertical slice. Planning source of truth stays in
-> **iSSM/BMAD** (PRD/architecture/stories); iStartSoftFlow is the execution loop on top.
+> **The iStartSoft execution loop.** Namespaced under `.claude/istartsoft-flow/`
+> so it coexists with a repo's own `CLAUDE.md` / `AGENTS.md` (project docs) — it
+> does NOT replace them. This kit is **Claude-only** and assumes **managed infra
+> (Vercel + Supabase)**, so **Phase 0 (infra) is N/A** — phases begin at the first
+> vertical slice. Planning source of truth stays in **iSSM / BMAD**
+> (PRD / architecture / stories); iStartSoftFlow is the execution loop layered on top.
 
 <!-- ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0 -->
 > **SENTINEL.** The HTML comment above (`ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0`) is a
-> load-bearing marker. `setup.sh` greps for it to confirm this file resolved on
-> disk and was not clobbered. Do not remove or rename it.
+> load-bearing marker. The installer (`create-issflow`) and tooling grep for it to
+> confirm this file resolved on disk and was not clobbered. Do not remove or rename it.
 
 > **What this file is.** The complete, tool-agnostic methodology for the iStartSoftFlow
 > workflow: the loop, the roles, the procedures, the rituals, and the hard rules.
-> This is the ONE place every rule lives. Claude Code, Cursor, and any tool that
-> reads the open `AGENTS.md` standard get the full methodology from here.
+> This is the ONE place every rule lives. Claude Code, and any tool that reads the
+> open `AGENTS.md` standard, get the full methodology from here.
 
 > **Anti-drift invariant (load-bearing).** Every rule lives in exactly ONE place:
 > this file. `CLAUDE.md` restates NO rule — it only maps roles to Claude-native
@@ -25,7 +24,8 @@
 > architectural defect, not a convenience.
 
 Caveman ULTRA mode always on. Apply the `karpathy-guidelines` skill (engineering
-discipline) on every coding and debugging task.
+discipline) on every coding and debugging task. Apply the `ux-design` skill (the UX
+cookbook + wireframe baseline) on every UI-facing task.
 
 -----
 
@@ -53,10 +53,8 @@ non-TDD before SCAFFOLD fires.
 
 ## Roles (fresh-context workers)
 
-Each role is a fresh-context worker. Where the host tool supports named subagents
-(Claude Code natively; Cursor reads the same `.claude/agents/` files via its
-Claude-compatibility path), each maps to a definition file. Where it does not, the role
-degrades to a bounded sub-task that dumps its noise to a file and returns only a
+Each role is a fresh-context worker mapped to a named Claude Code subagent in
+`.claude/agents/*.md`. A worker dumps its noise to a file and returns only a
 terse summary + path. Workers cannot address the user — only the orchestrator
 can. Escalation is at most two hops.
 
@@ -64,8 +62,9 @@ can. Escalation is at most two hops.
   (service limits, API contracts, architectural constraints, cost surprises).
   IMPL: per-phase codebase + service investigation. Checks the shared KB snapshot
   first (step 0). Writes findings to `docs/research/`; returns terse summary + path.
-- **planner** — research → vertical-slice `docs/PLAN.md`. Phase 0 (infra) always
-  first; the last phase always contains the deploy task.
+- **planner** — research → vertical-slice `docs/PLAN.md`. Phase 0 (infra) leads
+  when there is infra to provision; with managed infra it is N/A and the plan
+  begins at the first slice. The last phase always contains the deploy task.
 - **implementer** — builds ONE phase. Two MODES for TDD phases (SCAFFOLD: stubs
   only; FILL: logic to green) plus a legacy full-build mode for non-TDD phases.
   Writes code, never tests. Maintains `docs/ENDPOINTS.md` each phase.
@@ -73,6 +72,7 @@ can. Escalation is at most two hops.
   phases it is dispatched BEFORE logic exists (RED-first), so blindness is
   structural, not honor-system. Writes a MOCK suite + a REAL API suite.
 - **e2e-runner** — writes/runs functional browser E2E (Playwright) BLIND. Reads
+  only the acceptance spec + `docs/ENDPOINTS.md`, never the implementation.
 - **debugger** — debugs in an ISOLATED context. Writes a trace to
   `docs/research/debug-<slug>.md`; returns a summary.
 - **synthesizer** — compresses `docs/STATE.md` / `docs/ISSUES.md`, prunes
@@ -84,11 +84,10 @@ The orchestrator ROUTES. It does not implement or debug.
 
 ## Procedures (the slash-command set)
 
-Named procedures, each with a canonical body in `commands.src/<name>.md` and a
-generated copy per tool (`.claude/commands/`, `.cursor/commands/`).
+Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 
 - **overview** — bootstrap a project: design-research → grill r1 → design-research
-  → re-grill r2 → `OVERVIEW.md` → planner → `PLAN.md` (Phase 0 always first).
+  → re-grill r2 → `OVERVIEW.md` → planner → `PLAN.md`.
 - **phase [n]** — run one phase end-to-end with the circuit breaker. Chooses the
   TDD or non-TDD order at RESEARCH. CLOSE runs the regression guard + ENDPOINTS
   coverage gate.
@@ -107,8 +106,8 @@ generated copy per tool (`.claude/commands/`, `.cursor/commands/`).
 
 ## Rituals (model-run fallback for hooks)
 
-Where the host tool can run lifecycle hooks (Claude Code, Cursor), these rituals
-are AUTOMATED by hook scripts and must NOT be run by hand. Where the tool cannot
+Where the host tool can run lifecycle hooks (Claude Code), these rituals are
+AUTOMATED by hook scripts and must NOT be run by hand. Where the tool cannot
 inject context, the model performs them itself.
 
 ### SESSION-OPEN (start / clear / compact-resume)
@@ -117,7 +116,7 @@ At the start of every session, before any other work, surface:
 1. git state (branch, uncommitted count, last 3 commits).
 2. `docs/STATE.md` — the current position. READ THIS FIRST.
 3. open items in `docs/ISSUES.md`.
-4. `docs/research/INDEX.md` (research map) + infra status + auth nudge.
+4. `docs/research/INDEX.md` (research map) + infra/auth status.
 5. shared KB: pull latest + load `docs/.kb-snapshot.md` if `.claude/kb-config.json`
    exists.
 6. a one-line reminder of the hard rules below.
@@ -129,10 +128,12 @@ recover: current phase, next action, open blocker.
 
 -----
 
-## Hard rules (1–11)
+## Hard rules (1–10)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
+   Before debugging an auth/infra error, check the infra + auth status surfaced
+   at SESSION-OPEN first.
 2. Debug attempt cap = 3: WARN the user at attempt 2; the FIRST hard-stop at 3
    STOPS and asks the user. No 4th in-place attempt.
 3. Every resolved error -> logged to `docs/ISSUES.md` with root cause + failed
@@ -147,12 +148,17 @@ recover: current phase, next action, open blocker.
    (unbiased). On TDD phases the suite is written before the logic (RED-first).
    `STACK NOT READY` / `FLAKE` do not spend the debug budget. Only `LOGIC FAIL`
    reaches the debugger.
-8. E2E auth = ROPC with a dedicated MFA-excluded test account. NEVER script the
-   Microsoft login UI.
-9. Architectural change (new/removed agent, hook, command, or a changed workflow
+7. E2E auth = a dedicated test account driven by a PROGRAMMATIC session
+   (Supabase API login / Playwright `storageState`), never by scripting a
+   third-party OAuth/login UI.
+8. Architectural change (new/removed agent, hook, command, or a changed workflow
    rule)? -> run `log-decision` before closing.
-    work. Never debug an auth error without checking this first.
-11. **No-rationalization (scoped).** Do not downgrade a TDD phase to non-TDD to
+9. **UI conforms to the frame.** Every UI-facing change is validated against the
+   `ux-design` cookbook (design tokens, spacing scale, a11y/WCAG AA, component +
+   state inventory, breakpoints) AND stays inside the wireframe baseline. Drift
+   outside the wireframe frame is a defect, not a creative liberty. A frontend
+   phase cannot CLOSE until the UX cookbook check passes.
+10. **No-rationalization (scoped).** Do not downgrade a TDD phase to non-TDD to
     dodge the RED gate, and do not route phase-worthy work through `quick` to
     dodge it. (Scoped deliberately to these two seams; this is not a broad
     "never make excuses" rule.)
@@ -172,8 +178,7 @@ the KB. The kit works normally without a KB.
 
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
-- `docs/PLAN.md` — the phase plan. Phase 0 (infra) always first; last phase has
-  the deploy task.
+- `docs/PLAN.md` — the phase plan. The last phase has the deploy task.
 - `docs/HISTORY.md` — one line per finished phase.
 - `docs/DESIGN_LOG.md` — kit architectural rationale (§5.x decision log).
 - `docs/OVERVIEW.md` — project scope. Written after the double-grill in `overview`.
@@ -184,13 +189,15 @@ the KB. The kit works normally without a KB.
   `design-<slug>.md` (design research), `<slug>.md` (impl research),
   `debug-<slug>.md` (debugger traces).
 - `docs/.snapshots/` — pre-compact recovery markers (auto-pruned, gitignored).
-  holds no secrets.
+  Holds no secrets.
 - `e2e/`, `scripts/e2e-stack.sh`, `docker-compose.test.yml`, `playwright.config.ts`
   — the E2E stack.
 - `tests/phase-<n>/` — phase-local test suites.
 - `tests/regression/` — cross-phase contract tests (the regression corpus). Run by
   `scripts/regression.sh` (default mock; `--real` runs the real corpus).
-- `.claude/kb-config.json` — shared KB path + remote (optional, written by setup.sh).
+- `.claude/skills/ux-design/` — the UX cookbook + wireframe baseline (read on
+  demand for any UI work).
+- `.claude/kb-config.json` — shared KB path + remote (optional).
 - `docs/.kb-snapshot.md` — KB INDEX loaded this session (auto-generated, gitignored).
 
 -----
@@ -199,16 +206,8 @@ the KB. The kit works normally without a KB.
 
 - **Claude Code — full (reference implementation).** Generated commands; all three
   lifecycle hooks WITH context injection (SessionStart / PreCompact / SubagentStop);
-  named subagents (`.claude/agents/*.md`); `@AGENTS.md` import; shared KB.
-- **Cursor — full (verified against cursor.com/docs, 2026-06).** Generated
-  commands (`.cursor/commands/`); the three lifecycle hooks via `.cursor/hooks.json`
-  (sessionStart / preCompact / subagentStop) wired to the SAME shared hook scripts —
-  sessionStart injects context via a JSON-envelope wrapper
-  (`cursor-session-start.sh`); named subagents work natively because Cursor reads
-  `.claude/agents/*.md` directly (no duplication); methodology via a
-  `.cursor/rules/` pointer at this file. Known degradations: `model: haiku/opus`
-  tiers are Claude-specific (Cursor falls back to inherit/compatible), and Cursor's
-  preCompact is observational (the snapshot side-effect still runs; no context
-  modification).
-- **Everything else.** Reads this `AGENTS.md` if it supports the open standard.
-  No generated adapters. Not claimed as supported in v2.0.
+  named subagents (`.claude/agents/*.md`); `@AGENTS.md` import; shared KB; skills
+  loaded on demand (`caveman`, `karpathy-guidelines`, `grill-me`, `ux-design`).
+- **Everything else.** Reads this `AGENTS.md` if it supports the open standard. No
+  generated adapters, no lifecycle hooks — the rituals degrade to model-run
+  fallbacks. Not claimed as a supported host in v2.0.

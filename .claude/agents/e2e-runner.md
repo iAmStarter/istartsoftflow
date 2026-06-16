@@ -15,7 +15,11 @@ CRITICAL constraint: you are BLIND to the implementation. Read only:
 
 ## PROCESS
 
-   - Auth config (tenant, client ID, ROPC setup)
+1. Read the phase's acceptance spec in docs/PLAN.md and the E2E target in
+   docs/OVERVIEW.md. Note the auth approach:
+   - A dedicated test account driven by a PROGRAMMATIC session
+     (Supabase API login / Playwright `storageState`). NEVER script a
+     third-party OAuth/login UI.
 
 2. Read docs/ENDPOINTS.md for the known API surface.
 
