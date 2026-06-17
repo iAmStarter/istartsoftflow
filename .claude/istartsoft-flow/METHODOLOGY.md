@@ -132,6 +132,25 @@ At the start of every session, before any other work, surface:
 Snapshot the live position to `docs/.snapshots/` so a post-compact session can
 recover: current phase, next action, open blocker.
 
+### Token economy (always)
+
+The cheapest token is the one never loaded. The kit is built to minimise context:
+
+- **Phase boundary is the primary reset.** `/synthesize -> /clear` ends every
+  phase so the next one starts with a small, fresh context instead of carrying
+  the whole history forward.
+- **Lazy, not always-on.** This methodology + the skills load on demand; only the
+  SessionStart hook output is paid every session, and it injects just the live
+  STATE + *open* issues (resolved ones stay on disk for grep, not re-paid in tokens).
+- **Subagents isolate the noise.** Research, debugging, log/test output run in a
+  worker's own context and return a terse summary — the orchestrator never pays
+  for the raw dump.
+- **Soft context budget.** The phase boundary should keep you well under the model
+  window. If a single phase grows past ~50% of the window (≈ 200k on a 1M-context
+  model), treat it as a signal the slice is too big: `/synthesize -> /clear` or
+  split the phase. Don't coast to auto-compact. This is guidance, not a hard gate —
+  the number scales with the host model's window, it is not fixed at 200k.
+
 -----
 
 ## Hard rules (1–10)

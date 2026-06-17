@@ -26,25 +26,39 @@ emit('uncommitted: ' + uncommitted + ' file(s)');
 for (const l of sh('git log --oneline -3').replace(/\n+$/, '').split('\n').filter(Boolean)) emit('  ' + l);
 emit('');
 
-// 2. active state
+// 2. active state (cap size — STATE.md is meant to stay small)
 const state = read('docs/STATE.md');
 if (state !== null) {
   emit('## STATE.md (current position - READ THIS FIRST)');
-  emit(state.replace(/\n$/, ''));
+  const sl = state.replace(/\n$/, '').split('\n');
+  for (const l of sl.slice(0, 40)) emit(l);
+  if (sl.length > 40) emit(`… (+${sl.length - 40} more — STATE.md should be small; trim it)`);
   emit('');
 } else {
   emit('## STATE.md missing -> run /overview to bootstrap the project.');
   emit('');
 }
 
-// 3. issue log
+// 3. issue log — inject only OPEN issues (resolved ones stay in the file for
+//    grep, but are NOT re-paid in tokens every session). Capped.
 const issues = read('docs/ISSUES.md');
 if (issues !== null) {
-  const open = (issues.match(/^- \[ \]/gm) || []).length;
-  emit(`## ISSUES.md (${open} open) - check this before debugging anything`);
-  let p = false; const picked = [];
-  for (const l of issues.split('\n')) { if (/^### /.test(l)) p = true; if (p) picked.push(l); }
-  for (const l of picked.slice(0, 100)) emit(l);
+  const blocks = [];
+  let cur = null;
+  for (const l of issues.split('\n')) {
+    if (/^### /.test(l)) { if (cur) blocks.push(cur); cur = [l]; }
+    else if (cur) cur.push(l);
+  }
+  if (cur) blocks.push(cur);
+  const open = blocks.filter((b) => b.some((l) => /- \[ \]/.test(l)));
+  emit(`## ISSUES.md (${open.length} open) - grep this file before debugging anything`);
+  if (open.length) {
+    const flat = open.flat();
+    for (const l of flat.slice(0, 50)) emit(l);
+    if (flat.length > 50) emit('… (more — grep docs/ISSUES.md for full detail)');
+  } else {
+    emit('(no open issues)');
+  }
   emit('');
 }
 
@@ -107,6 +121,9 @@ emit('- before debugging ANY error: grep ISSUES.md AND research/INDEX.md first.'
 emit('- debug attempts: WARN at 2; first hard-stop at 3 STOPS and asks you.');
 emit('- end of every phase: run /synthesize, then /clear.');
 emit('- small obvious change? use /quick, not /phase.');
+emit('- token economy: keep context lean. Delegate noisy work to subagents (they');
+emit('  return summaries). If one phase grows past ~50% of the model window, split');
+emit('  it or /synthesize -> /clear — do not coast to auto-compact.');
 if (kbActive) {
   emit('- KB active: researcher checks docs/.kb-snapshot.md before web search.');
   emit('- learned something worth keeping? run /store-wisdom.');
