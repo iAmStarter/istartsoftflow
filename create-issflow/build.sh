@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # build.sh — rebuild template/ from the repo-root .claude kit.
 # Run after changing any agent/command/skill/hook/methodology, before publishing.
-set -euo pipefail
+# Portable: avoid `pipefail` (a bashism some /bin/sh-style shells reject).
+set -eu
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(cd "$HERE/.." && pwd)"               # repo root (one level up)
 TPL="$HERE/template/.claude"
