@@ -3,3 +3,5 @@ node_modules/
 .DS_Store
 .issflow-backup-*/
 *.issflow-new
+docs/.snapshots/
+docs/.kb-snapshot.md
