@@ -1,0 +1,52 @@
+name: Publish create-issflow to npm
+
+# Publishes the npm package when you cut a GitHub Release whose tag matches the
+# version in create-issflow/package.json (e.g. tag v1.0.1 ↔ "version": "1.0.1").
+# Requires a repo secret NPM_TOKEN (npm automation token with publish rights).
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch: {}   # allow a manual run from the Actions tab
+
+permissions:
+  contents: read
+  id-token: write          # enables npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: create-issflow
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Rebuild template/ from .claude (source of truth)
+        run: bash build.sh
+
+      - name: Verify tag matches package version
+        if: github.event_name == 'release'
+        run: |
+          PKG=$(node -p "require('./package.json').version")
+          TAG=${GITHUB_REF_NAME#v}
+          if [ "$PKG" != "$TAG" ]; then
+            echo "::error::package.json version ($PKG) != release tag ($TAG). Bump create-issflow/package.json, commit, then re-tag."
+            exit 1
+          fi
+          echo "Publishing create-issflow@$PKG"
+
+      - name: Sanity check (cli parses, dry-run installs)
+        run: |
+          node -c bin/cli.js
+          node bin/cli.js --tool=claude --dry-run >/dev/null
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
