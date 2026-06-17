@@ -12,13 +12,14 @@ Only resolved issues and completed research qualify. Open issues do NOT.
 ## PRE-FLIGHT
 
 1. Read `.claude/kb-config.json`.
-   - Not found -> STOP. Tell me: "KB not configured. Run setup.sh to set up the
-     shared KB repo, then retry /store-wisdom."
+   - Not found -> STOP. Tell me: "KB not configured. Create `.claude/kb-config.json`
+     with `kb_path` + `kb_remote` pointing at the shared KB repo, then retry /store-wisdom."
    - Found -> extract `kb_path` and `kb_remote`.
 
 2. Expand `kb_path` (resolve `~` to home directory).
    Verify the path exists and is a git repo (`git -C <path> status`).
-   - Fails -> STOP. Tell me the path is broken and to re-run setup.sh.
+   - Fails -> STOP. Tell me the path is broken and to fix `kb_path` in
+     `.claude/kb-config.json`.
 
 ---
 

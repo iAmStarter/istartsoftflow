@@ -68,7 +68,8 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 
 6. Hand OVERVIEW.md + design-research findings to the `planner` subagent.
    PLAN.md MUST:
-   - Start with Phase 0 (infra setup) as the first entry (always).
+   - Start with Phase 0 (infra setup) only if infra is self-managed; with
+     managed infra, Phase 0 is N/A and the plan starts at Phase 1.
    - End with a final code phase that contains the deploy task block.
 
 7. Create docs/STATE.md:

@@ -14,7 +14,10 @@ Target phase: $ARGUMENTS  (default: the phase marked pending in docs/PLAN.md)
 
 ## 0. PRE-FLIGHT
 
-a. INFRA CHECK (phases > 0):
+a. INFRA CHECK (phases > 0): Read the declared infra in docs/OVERVIEW.md.
+   - Managed infra -> confirm it is reachable; no provisioning step is needed.
+   - Self-managed infra -> confirm Phase 0 (infra) ran and is healthy.
+   Surface infra + auth status before any work. Blocked infra -> STOP.
 
 b. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
    - No phase in progress, requested is next pending -> START at step 1.
@@ -77,7 +80,14 @@ Dispatch `implementer` in FILL mode with the phase spec + research + the test
 file paths (it MAY read the tests — frozen before logic, no overfit — but must
 NOT edit them). Fill to green. Budget 3, WARN@2, STUCK@3.
 
-`scripts/e2e-stack.sh up` / Playwright / `down`).
+## 3c. TEST (e2e) — FRONTEND phases only
+
+If this phase ships UI: dispatch `e2e-runner` (BLIND) to write + run browser E2E
+for the slice using the declared E2E runner (it brings the test stack up/down
+itself). Then run the `ux-design` cookbook + wireframe check on the new UI
+(hard rule 9): the UI must match the wireframe frame and pass the cookbook
+(tokens, a11y/WCAG AA, states, breakpoints). A `ux-design` BLOCK is a GATE FAIL.
+Non-frontend phase -> skip §3c.
 
 PHASE GATE (rule 5) -> go to §4/§5/§6 (see GATE below).
 
@@ -102,7 +112,8 @@ spec — never reads the logic. (e2e-runner only if frontend.)
 ## GATE (both paths)
 
 PHASE GATE = current-phase REAL API suite passes AND (if frontend) E2E passes AND
-the accumulated mock regression corpus stays green AND every docs/ENDPOINTS.md
+(if frontend) the `ux-design` cookbook + wireframe check passes AND the
+accumulated mock regression corpus stays green AND every docs/ENDPOINTS.md
 entry has a regression test (checked at CLOSE).
 - GATE PASS -> go to CLOSE.
 - GATE FAIL (LOGIC FAIL) -> go to FIX.

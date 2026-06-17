@@ -18,7 +18,7 @@ Use when PLAN.md no longer matches reality. Change: $ARGUMENTS
    - Phase in progress -> tell me which. Ask: revise around it, or is it the
      thing being changed? Do not silently rewrite a mid-execution phase.
    - Done phases are FROZEN. /replan never edits or reorders done phases.
-   - Phase 0 (infra) is ALWAYS frozen once done.
+   - Phase 0 (infra), if present, is frozen once done.
 
 2. DESIGN RESEARCH CHECK. Scan $ARGUMENTS for signals that design research
    is warranted before re-planning:
