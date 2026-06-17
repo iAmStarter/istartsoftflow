@@ -108,9 +108,9 @@ function copyTemplateCommands(destDir) {
 
 function adapterClaude() {
   const HOOKS = {
-    SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'bash .claude/hooks/session-start.sh' }] }],
-    PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'bash .claude/hooks/pre-compact.sh' }] }],
-    SubagentStop: [{ hooks: [{ type: 'command', command: 'bash .claude/hooks/subagent-stop.sh' }] }],
+    SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .claude/hooks/session-start.js' }] }],
+    PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .claude/hooks/pre-compact.js' }] }],
+    SubagentStop: [{ hooks: [{ type: 'command', command: 'node .claude/hooks/subagent-stop.js' }] }],
   };
   const sp = path.join(CWD, '.claude', 'settings.json');
   let settings = {};
@@ -140,8 +140,8 @@ function adapterCursor() {
   writeFile('.cursor/hooks.json', JSON.stringify({
     version: 1,
     hooks: {
-      sessionStart: [{ command: 'bash .claude/hooks/session-start.sh' }],
-      subagentStop: [{ command: 'bash .claude/hooks/subagent-stop.sh' }],
+      sessionStart: [{ command: 'node .claude/hooks/session-start.js' }],
+      subagentStop: [{ command: 'node .claude/hooks/subagent-stop.js' }],
     },
   }, null, 2) + '\n');
   warnings.push('cursor: PreCompact has no Cursor equivalent (snapshot ritual degrades to model-run); verify hooks.json against cursor.com/docs/hooks — the schema evolves.');
@@ -218,7 +218,7 @@ function agentsMd() {
 function main() {
   if (HELP) { printHelp(); return; }
   if (!fs.existsSync(path.join(TPL, '.claude'))) {
-    console.error('create-issflow: embedded template/ missing. From source run: bash build.sh');
+    console.error('create-issflow: embedded template/ missing. From source run: npm run build');
     process.exit(1);
   }
 
@@ -228,8 +228,7 @@ function main() {
   // 1. portable kit tree (.claude/) — every tool gets it.
   for (const src of walk(path.join(TPL, '.claude'))) {
     const rel = path.relative(TPL, src);
-    const isHook = rel.includes(`${path.sep}hooks${path.sep}`) && rel.endsWith('.sh');
-    writeFile(rel, fs.readFileSync(src, 'utf8'), { exec: isHook });
+    writeFile(rel, fs.readFileSync(src, 'utf8'));
   }
 
   // 2. AGENTS.md — the open-standard entry point.

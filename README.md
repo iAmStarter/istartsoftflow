@@ -5,7 +5,9 @@ A reusable, hook-enforced AI-coding workflow. Codifies a
 vertical-slice phases, agent orchestration, and automatic context hygiene — so the
 workflow runs itself instead of being hand-steered every session.
 
-**Stack-agnostic and tool-agnostic.** It pins a *process*, not a *stack*: declare
+**Cross-platform (macOS · Windows · Linux), stack-agnostic and tool-agnostic.**
+The installer, the build, and the lifecycle hooks are all pure Node — no
+bash/jq/python — so it runs the same everywhere. It pins a *process*, not a *stack*: declare
 your stack (language, framework, infra, auth, test + E2E runner, planning source)
 once in `docs/OVERVIEW.md` and every rule references *your* stack. If infra is
 managed (a PaaS + a managed datastore), Phase 0 (infra) is N/A and phases begin at
@@ -47,7 +49,7 @@ silently vanish.
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
 | **commands** | `/overview` `/phase` `/quick` `/replan` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
 | **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** |
-| **hooks** | session-start · pre-compact · subagent-stop (wired per tool) |
+| **hooks** | session-start · pre-compact · subagent-stop (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
 ## Core idea
@@ -112,8 +114,9 @@ istartsoftflow/
 ├── docs/research/                 # design research behind the kit's choices
 └── create-issflow/                # the npx installer
     ├── bin/cli.js                 # pure-Node, non-destructive, multi-tool
-    ├── template/                  # built from .claude by build.sh
-    ├── build.sh · package.json · README.md
+    ├── build.js                   # pure-Node template builder (cross-platform)
+    ├── template/                  # built from .claude by `npm run build`
+    └── package.json · README.md
 ```
 
 ## Maintainers / publishing

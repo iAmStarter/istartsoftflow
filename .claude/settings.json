@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(jq -r \".tool_input.file_path // empty\"); case \"$f\" in */CLAUDE.md|CLAUDE.md) echo \"{\\\"systemMessage\\\":\\\"⚠️ CLAUDE.md changed — sync BMAD: save_artifact type=claude-md\\\"}\";; esac"
+            "command": "node .claude/scripts/claude-md-notice.js"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/session-start.sh"
+            "command": "node .claude/hooks/session-start.js"
           }
         ]
       }
@@ -28,7 +28,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/pre-compact.sh"
+            "command": "node .claude/hooks/pre-compact.js"
           }
         ]
       }
@@ -38,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/subagent-stop.sh"
+            "command": "node .claude/hooks/subagent-stop.js"
           }
         ]
       }
