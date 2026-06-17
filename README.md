@@ -119,9 +119,10 @@ istartsoftflow/
 ## Maintainers / publishing
 
 1. Edit the kit in `.claude/`.
-2. `bash create-issflow/build.sh` to refresh `template/`.
-3. Bump `create-issflow/package.json` version, then `npm publish` from
-   `create-issflow/`.
+2. `npm run build` in `create-issflow/` to refresh `template/` (pure Node,
+   cross-platform — works in cmd / PowerShell / sh).
+3. Bump the version (`npm version patch`) and `npm publish` from `create-issflow/`.
+   `prepublishOnly` rebuilds `template/` automatically, so it can never ship stale.
 
 ## License
 

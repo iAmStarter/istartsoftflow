@@ -5,6 +5,10 @@
   "bin": {
     "create-issflow": "bin/cli.js"
   },
+  "scripts": {
+    "build": "node build.js",
+    "prepublishOnly": "node build.js"
+  },
   "files": [
     "bin/",
     "template/"

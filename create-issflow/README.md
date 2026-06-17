@@ -52,5 +52,7 @@ PRD / architecture / stories (e.g. BMAD / iSSM).
 
 ## Maintainers
 
-The kit lives in the repo's `.claude/`. After editing it, run `bash build.sh` to
-refresh `template/`, then bump `version` and publish.
+The kit lives in the repo's `.claude/`. After editing it, run `npm run build`
+(pure Node — cmd / PowerShell / sh) to refresh `template/`, then `npm version patch`
+and `npm publish`. `prepublishOnly` rebuilds `template/` on publish automatically.
+(`build.sh` is kept as a shell alternative for unix.)
