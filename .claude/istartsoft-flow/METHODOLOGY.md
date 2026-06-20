@@ -67,9 +67,11 @@ from idea to closeout:
 1. **Discover** — idea → requirements, captured by `/overview` (the double-grill).
 2. **PRD** — crystallised requirements in `docs/PRD.md` (or your BMAD/iSSM stories).
 3. **Stack & architecture** — decided in `/overview` design-research → `OVERVIEW.md`.
-4. **Proposal & estimate** — `/propose` → `docs/PROPOSAL.md`: scope, phase breakdown,
-   effort + cost estimate, timeline, assumptions. **Client sign-off gate** before build.
-5. **Plan** — `planner` → `docs/PLAN.md` (vertical-slice phases).
+4. **Plan** — `/overview`'s `planner` → `docs/PLAN.md` (the vertical-slice phases).
+   The plan exists before the proposal, because the proposal estimates *these* phases.
+5. **Proposal & estimate** — `/propose` reads OVERVIEW + PLAN → `docs/PROPOSAL.md`:
+   scope, phase breakdown, effort + cost estimate, timeline, assumptions. **Client
+   sign-off gate** before build.
 6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop).
 7. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
    change order (`docs/CHANGES.md`) + sign-off, then `/replan`. Scope and cost never
