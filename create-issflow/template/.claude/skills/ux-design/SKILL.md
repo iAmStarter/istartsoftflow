@@ -15,7 +15,7 @@ Caveman ULTRA mode. UI conforms to the FRAME. Build or change UI -> run this
 cookbook before you call it done. Drift outside the wireframe = defect, not
 creative liberty (METHODOLOGY hard rule 9).
 
-Read `wireframe-template.md` (same dir) when starting a new screen — it is the
+Read `references/wireframe-template.md` when starting a new screen — it is the
 canonical low-fidelity baseline every screen must map to. Read it on demand only.
 
 -----
