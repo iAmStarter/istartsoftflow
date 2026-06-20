@@ -32,7 +32,8 @@ Caveman ULTRA mode always on. Apply the `karpathy-guidelines` skill (engineering
 discipline) on every coding and debugging task. Apply the `ux-design` skill (the UX
 cookbook + wireframe baseline) on every UI-facing task. Apply the `security` skill
 (the Secure SDLC cookbook) at design (threat model), while coding (secure coding),
-and before any deploy.
+and before any deploy. Apply the `code-standards` skill (naming per the language's
+own idiom + the declared architecture) on every coding task.
 
 -----
 
@@ -69,9 +70,11 @@ from idea to closeout:
 3. **Stack & architecture** — decided in `/overview` design-research → `OVERVIEW.md`.
 4. **Plan** — `/overview`'s `planner` → `docs/PLAN.md` (the vertical-slice phases).
    The plan exists before the proposal, because the proposal estimates *these* phases.
-5. **Proposal & estimate** — `/propose` reads OVERVIEW + PLAN → `docs/PROPOSAL.md`:
-   scope, phase breakdown, effort + cost estimate, timeline, assumptions. **Client
-   sign-off gate** before build.
+5. **Proposal & estimate (OPTIONAL — depends on the job)** — for client / quoted
+   work, `/propose` reads OVERVIEW + PLAN → `docs/PROPOSAL.md` + a rendered
+   `docs/proposal.html`: scope, phase breakdown, effort + cost estimate, timeline,
+   assumptions, with a **client sign-off gate** before build. Internal / personal
+   projects skip straight from plan to build.
 6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop).
 7. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
    change order (`docs/CHANGES.md`) + sign-off, then `/replan`. Scope and cost never
@@ -267,11 +270,13 @@ development run that follows the spec and logs every problem so it never recurs.
    third-party OAuth/login UI.
 8. Architectural change (new/removed agent, hook, command, or a changed workflow
    rule)? -> run `log-decision` before closing.
-9. **UI conforms to the frame.** Every UI-facing change is validated against the
-   `ux-design` cookbook (design tokens, spacing scale, a11y/WCAG AA, component +
-   state inventory, breakpoints) AND stays inside the wireframe baseline. Drift
-   outside the wireframe frame is a defect, not a creative liberty. A frontend
-   phase cannot CLOSE until the UX cookbook check passes.
+9. **UI conforms to the frame.** ALL web / UI work applies the `ux-design` skill and
+   is verified EVERY time — no exception. Each change is validated against the
+   cookbook (design tokens, spacing, a11y/WCAG AA, **icons = a real SVG set, NEVER
+   emoji**, component + state inventory, breakpoints) AND stays inside the wireframe
+   baseline. Drift outside the frame is a defect, not a creative liberty. New visual
+   direction (something the wireframe doesn't cover) is confirmed with the user
+   before building. A frontend phase cannot CLOSE until the UX cookbook check passes.
 10. **No-rationalization (scoped).** Do not downgrade a TDD phase to non-TDD to
     dodge the RED gate, and do not route phase-worthy work through `quick` to
     dodge it. (Scoped deliberately to these two seams; this is not a broad
@@ -335,6 +340,8 @@ the KB. The kit works normally without a KB.
   demand for any UI work).
 - `.claude/skills/security/` — the Secure SDLC cookbook + threat-modeling /
   secure-coding / pentest / standards references (read on demand for security work).
+- `.claude/skills/code-standards/` — naming-per-language + architecture cookbook
+  (read on demand for any coding / scaffolding / structure decision).
 - `.claude/kb-config.json` — shared KB path + remote (optional).
 - `docs/.kb-snapshot.md` — KB INDEX loaded this session (auto-generated, gitignored).
 

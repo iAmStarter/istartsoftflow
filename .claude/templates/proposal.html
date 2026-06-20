@@ -6,6 +6,11 @@
   language (e.g. natural Thai) — keep technical terms in English where a Thai dev
   team would. Light + print-friendly on purpose (Ctrl/Cmd-P → "Save as PDF").
   Repeat the <tr> in the phases table per phase; repeat <li> lists as needed.
+
+  WHITE-LABEL: this template is brand-neutral. Fill {{COMPANY}} / {{LOGO}} with the
+  ISSUING company's brand (whoever is sending the proposal) — NOT the kit's. {{LOGO}}
+  is optional: replace with an <img src="…"> or a text wordmark, or delete it.
+  Icons: none by design (no emoji) — keep it clean and typographic.
 -->
 <html lang="{{LANG}}">
 <head>
@@ -23,6 +28,8 @@
     border-radius:14px;overflow:hidden}
   .head{padding:34px 40px;border-bottom:3px solid var(--accent);
     background:linear-gradient(120deg,#f3f1ff,#eafcff)}
+  .brand-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-size:1rem}
+  .brand-row .logo{display:inline-flex;align-items:center}
   .head .ey{font:600 .72rem/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
   .head h1{margin:.3em 0 .1em;font-size:1.9rem;letter-spacing:-.02em}
   .head .meta{color:var(--muted);font-size:.9rem}
@@ -53,9 +60,10 @@
 <body>
 <div class="sheet">
   <div class="head">
+    <div class="brand-row"><span class="logo">{{LOGO}}</span><strong>{{COMPANY}}</strong></div>
     <div class="ey">Proposal · {{VERSION}}</div>
     <h1>{{TITLE}}</h1>
-    <div class="meta">{{CLIENT}} · {{DATE}} · <span class="pill">{{STATUS}}</span></div>
+    <div class="meta">{{L_PREPARED_FOR}} {{CLIENT}} · {{DATE}} · <span class="pill">{{STATUS}}</span></div>
   </div>
   <main>
     <section>

@@ -63,6 +63,8 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
    - **Project language** (e.g. th / en / both) — downstream docs + proposal follow it
    - **Autonomy mode** for the dev loop (AUTO default / GUIDED) and the declared
      **stack** (framework, infra, auth, test + E2E runner, planning source)
+   - **Architecture pattern** (default Feature-Based) + **code conventions / style
+     guide** for the stack's language (`code-standards` skill) + the folder layout
    - **Estimation config** (for `/propose`): unit, rate card, currency, contingency,
      payment milestones
    - Scope and constraints (informed by research findings)
@@ -107,5 +109,6 @@ Then stop and show me PLAN.md for approval before any phase starts. Planning end
 with a human sign-off in both modes; AUTO only governs the development loop that
 runs AFTER the plan is approved.
 
-Next step (client projects): run `/propose` to turn this OVERVIEW + PLAN into a
-proposal with an effort + cost estimate for sign-off BEFORE building starts.
+Optional next step (client / quoted work only): run `/propose` to turn this
+OVERVIEW + PLAN into a proposal + estimate for sign-off before building. Internal or
+personal projects skip it and go straight to `/phase`.

@@ -201,7 +201,7 @@ function agentsMd() {
     '/overview · /propose · /phase · /change-request · /replan · /quick · /synthesize ·',
     '/store-wisdom · /log-issue · /log-decision · /unstuck', '',
     '## Skills — `.claude/skills/` (loaded on demand)', '',
-    'caveman · grill-me · karpathy-guidelines · ux-design · security (Secure SDLC)', '',
+    'caveman · grill-me · karpathy-guidelines · ux-design · security (Secure SDLC) · code-standards', '',
     '## Autonomy', '',
     'Planning (`/overview` grill + plan approval) always asks — that input is cheap.',
     '**AUTO (default)** governs the DEV loop: follow the plan, decide + log + continue,',
