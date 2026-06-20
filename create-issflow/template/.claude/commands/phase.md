@@ -23,7 +23,8 @@ b. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
    - No phase in progress, requested is next pending -> START at step 1.
    - Same phase in-progress -> RESUME from STATE.md "next action".
    - Different phase in-progress -> STOP. Tell me which phase is open.
-   - Out of dependency order -> STOP. Warn, proceed only if I confirm.
+   - Out of dependency order -> AUTO: ignore the request and run the next pending
+     phase in PLAN order. GUIDED: STOP, warn, proceed only if I confirm.
    - Phase not in PLAN.md -> STOP. Suggest /overview or /replan.
 
 c. FINAL PHASE CHECK: Read docs/PLAN.md. Is this the last phase (no further
@@ -38,6 +39,10 @@ Dispatch `researcher` in IMPL mode scoped to this phase.
 Returns terse summary + path. Read the file only if needed.
 Unknowns block the phase -> re-dispatch narrowed. No guessing.
 
+SECURE SDLC (design): if this phase touches a TRUST BOUNDARY (auth, untrusted input,
+data store, money, PII), threat-model it now (`security` skill) and fold the abuse
+cases into the acceptance criteria as negative cases BEFORE SCAFFOLD.
+
 Then classify the phase:
 
   `TDD_PHASE` = the phase adds or changes a PUBLIC CALLABLE SURFACE (endpoint,
@@ -47,9 +52,9 @@ Then classify the phase:
 - Clear public surface -> `TDD_PHASE=true` -> run the TDD path (§2 → §3a → §3b).
 - Pure infra/config/doc, no public surface -> `TDD_PHASE=false` -> run the
   non-TDD path (§2N → §3N).
-- AMBIGUOUS -> default `TDD_PHASE=true`, but STATE the classification + the reason
-  to me, so I can override to non-TDD BEFORE SCAFFOLD fires. (Hard rule 11: never
-  downgrade a TDD phase just to dodge the RED gate.)
+- AMBIGUOUS -> default `TDD_PHASE=true`. AUTO: log the classification + reason to
+  STATE and proceed. GUIDED: surface it so I can override to non-TDD BEFORE SCAFFOLD
+  fires. (Hard rule 10: never downgrade a TDD phase just to dodge the RED gate.)
 
 =====================================================================
 ## TDD PATH  (TDD_PHASE=true)
@@ -69,10 +74,12 @@ phase-local tests in `tests/phase-<n>/`. Run the suite.
 
 RED GATE = every acceptance test COLLECTS cleanly AND FAILS (assertion /
 NotImplemented).
-- Any test PASSES on stubs -> STOP (spec trivial or test wrong); show me.
+- Any test PASSES on stubs -> spec trivial or test wrong. AUTO: re-dispatch
+  test-author to tighten it (within budget) + log the cause; GUIDED: STOP, show me.
 - Collection / import / syntax error -> stub mismatch; re-dispatch SCAFFOLD to
   fix SIGNATURES (not logic); re-run.
-- UNDERSPEC -> STOP; ask me to sharpen the acceptance spec.
+- UNDERSPEC -> AUTO: sharpen the acceptance spec yourself from the BMAD/iSSM story,
+  log the interpretation as an Assumption, continue. GUIDED: STOP; ask me to sharpen it.
 
 ## 3b. GREEN
 
@@ -129,16 +136,24 @@ Dispatch `debugger` (isolated context) on the specific failure.
 
 ---
 
-## 5. ESCALATE — circuit breaker. Mode B.
+## 5. ESCALATE — circuit breaker (mode-aware; see METHODOLOGY → Autonomy)
 
-FIRST STUCK: STOP. Present to me: the problem, 3 failed hypotheses, the
-debugger's recommendation, the debug file path. Ask what to do. Wait. Options:
-  (a) "re-research" -> /unstuck
-  (b) hint -> re-dispatch debugger with hint, budget 3
-  (c) "skip" / "re-slice" -> mark blocked, dispatch planner
+**AUTO (default) — do NOT stop the run:**
+  FIRST STUCK: auto-run `/unstuck` (deep re-research) — CAP: at most ONCE per phase
+  (it is token-expensive); re-dispatch `debugger` with the findings, budget 3.
+  STILL STUCK (or already spent this phase's unstuck): log the issue (root cause +
+  every failed hypothesis) to ISSUES.md,
+  mark the slice `BLOCKED` in PLAN, and move to the next INDEPENDENT slice/phase.
+  Add it to the batched end-of-run report. HARD-STOP (pause for me) ONLY if no
+  independent work remains, or the blocker is on the hard-stop list
+  (security / irreversible / contradictory spec).
 
-SECOND STUCK: STOP completely. Full summary — every hypothesis, current state,
-what to try next. Hand control to me.
+**GUIDED:**
+  FIRST STUCK: STOP. Present the problem, 3 failed hypotheses, the debugger's
+  recommendation, the debug file path. Wait. Options:
+    (a) "re-research" -> /unstuck   (b) hint -> re-dispatch debugger, budget 3
+    (c) "skip" / "re-slice" -> mark blocked, dispatch planner
+  SECOND STUCK: STOP completely. Full summary. Hand control to me.
 
 ---
 
@@ -150,6 +165,19 @@ REGRESSION GATE (before closing — Feature 3):
   `tests/regression/`. Zero coverage -> FAIL HARD; do not close.
 - IF IS_FINAL_PHASE: additionally run `scripts/regression.sh --real` (full real
   corpus). A failure blocks close.
+
+CODE-STANDARDS GATE (rule 12): the formatter + linter are clean (the language's
+standard tool); names follow the language's own idiom; the code conforms to the
+declared architecture (Feature-Based by default). Lint/format errors or idiom
+violations BLOCK the close -> route to FIX. (`code-standards` skill.)
+
+SECURITY GATE (rule 11 — Secure SDLC build stage):
+- Security-touching OR deploy phase -> run the `security` cookbook. Build gates:
+  secrets scan + SCA (dependency CVEs) + SAST must be clean.
+- IS_FINAL_PHASE / deploy -> also run the pentest checklist (WSTG) + a security
+  review of the diff; sign artifacts (SLSA L2+).
+- Open HIGH/CRITICAL findings BLOCK the close -> route to FIX. Deploying to prod
+  with open high/critical findings is a hard-stop (human sign-off).
 
 Mark phase `done` in docs/PLAN.md.
 

@@ -9,15 +9,21 @@ tool grant; plan mode adds a read-only gate on the main session too. Optional.
 
 Goal: stand up a fresh project workspace with a well-grounded plan.
 
+LANGUAGE: detect the user's language and run the WHOLE discovery in it. A Thai user
+→ grill, summarise, and write OVERVIEW in **natural Thai** (keep tech terms in
+English as a Thai team would). Record the project language in OVERVIEW so downstream
+artifacts (PROPOSAL, the rendered proposal.html, docs) follow it. Be equally fluent
+in English; just don't default to it when the user speaks Thai.
+
 ---
 
 ## Steps
 
 ### Round 1 — Initial grill
 
-1. Run the `grill-me` skill to interrogate me. Goal: understand initial scope.
-   known constraints, unknowns.
-   Do not stop early. Do not write OVERVIEW.md yet.
+1. Run the `grill-me` skill to interrogate me. Goal: understand initial scope,
+   known constraints, unknowns. Asking is encouraged here — planning is where human
+   input is cheapest. Do not stop early. Do not write OVERVIEW.md yet.
 
 Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 
@@ -29,7 +35,7 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
    to verify before planning:
    - Each external service mentioned: what does it support at the relevant tier?
      Quotas, rate limits, known gaps?
-   - Auth patterns: any MSAL/Entra constraints for this scenario?
+   - Auth patterns: any constraints from the chosen auth provider for this scenario?
    - Any other architectural assumption in the round-1 answers worth verifying.
 
 3. Dispatch `researcher` in DESIGN mode with the DESIGN TOPICS list.
@@ -44,10 +50,8 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
    - The round-1 answers (already established — do not re-ask these)
    - The design-research key findings and new questions raised
 
-   The re-grill asks whatever it needs to build complete understanding. It is
-   not limited to "gaps from research" — research context makes new questions
-   relevant even if it found no blockers. Do not re-ask what round 1 already
-   established clearly.
+   The re-grill asks whatever it needs to build complete understanding — planning is
+   interactive in both modes. Do not re-ask what round 1 already established clearly.
 
 ---
 
@@ -56,6 +60,13 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 5. Write docs/OVERVIEW.md from the COMBINED output of round-1 + design-research
    + round-2. Include:
    - Project purpose and success criteria
+   - **Project language** (e.g. th / en / both) — downstream docs + proposal follow it
+   - **Autonomy mode** for the dev loop (AUTO default / GUIDED) and the declared
+     **stack** (framework, infra, auth, test + E2E runner, planning source)
+   - **Architecture pattern** (default Feature-Based) + **code conventions / style
+     guide** for the stack's language (`code-standards` skill) + the folder layout
+   - **Estimation config** (for `/propose`): unit, rate card, currency, contingency,
+     payment milestones
    - Scope and constraints (informed by research findings)
    - External services with confirmed capabilities/limits
    - Known risks / open questions (if any remain)
@@ -94,6 +105,10 @@ blocker: none
  > Base URL: (populated after deployment phase)
  ```
 
-Then stop and show me PLAN.md for approval before any phase starts.
+Then stop and show me PLAN.md for approval before any phase starts. Planning ends
+with a human sign-off in both modes; AUTO only governs the development loop that
+runs AFTER the plan is approved.
 
-before starting Phase 1."
+Optional next step (client / quoted work only): run `/propose` to turn this
+OVERVIEW + PLAN into a proposal + estimate for sign-off before building. Internal or
+personal projects skip it and go straight to `/phase`.

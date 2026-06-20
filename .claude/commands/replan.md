@@ -10,6 +10,11 @@ your approval regardless.
 
 Use when PLAN.md no longer matches reality. Change: $ARGUMENTS
 
+NOTE: if the change alters SCOPE after a proposal is approved (cost/timeline impact),
+run `/change-request` instead — it does the impact analysis + re-estimate + change
+order, then calls this command. `/replan` is for plan-shape changes with no
+commercial impact (split/merge/reorder, a discovered technical re-slice).
+
 ---
 
 ## Steps

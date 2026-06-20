@@ -30,7 +30,10 @@
 
 Caveman ULTRA mode always on. Apply the `karpathy-guidelines` skill (engineering
 discipline) on every coding and debugging task. Apply the `ux-design` skill (the UX
-cookbook + wireframe baseline) on every UI-facing task.
+cookbook + wireframe baseline) on every UI-facing task. Apply the `security` skill
+(the Secure SDLC cookbook) at design (threat model), while coding (secure coding),
+and before any deploy. Apply the `code-standards` skill (naming per the language's
+own idiom + the declared architecture) on every coding task.
 
 -----
 
@@ -53,6 +56,42 @@ exported function/class, CLI command, or message contract) that is assertable
 from the acceptance spec." Size is NOT the criterion. On ambiguity, default
 `TDD_PHASE=true` AND state the classification + reason so a human can override to
 non-TDD before SCAFFOLD fires.
+
+-----
+
+## Project lifecycle (real-world delivery)
+
+The loop above is the BUILD engine. Around it runs a full client-delivery lifecycle
+— every stage produces an artifact and is logged, so a project has a complete trail
+from idea to closeout:
+
+1. **Discover** — idea → requirements, captured by `/overview` (the double-grill).
+2. **PRD** — crystallised requirements in `docs/PRD.md` (or your BMAD/iSSM stories).
+3. **Stack & architecture** — decided in `/overview` design-research → `OVERVIEW.md`.
+4. **Plan** — `/overview`'s `planner` → `docs/PLAN.md` (the vertical-slice phases).
+   The plan exists before the proposal, because the proposal estimates *these* phases.
+5. **Proposal & estimate (OPTIONAL — depends on the job)** — for client / quoted
+   work, `/propose` reads OVERVIEW + PLAN → `docs/PROPOSAL.md` + a rendered
+   `docs/proposal.html`: scope, phase breakdown, effort + cost estimate, timeline,
+   assumptions, with a **client sign-off gate** before build. Internal / personal
+   projects skip straight from plan to build.
+6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop).
+7. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
+   change order (`docs/CHANGES.md`) + sign-off, then `/replan`. Scope and cost never
+   change silently.
+8. **Deploy** — in the final phase.
+9. **Closeout** — `/synthesize` (final pass) → a project summary: what was built, key
+   decisions, every change order, and the final cost vs the original estimate.
+
+**Logging is continuous and total.** Every stage writes to a durable artifact:
+requirements (PRD / OVERVIEW), commercial (PROPOSAL / CHANGES), execution
+(PLAN / HISTORY), decisions (DESIGN_LOG), errors (ISSUES), research (research/).
+Nothing important lives only in chat — it is on disk, so the project can always be
+reconstructed and summarised.
+
+**Commercial gates are always interactive** (both modes): the proposal sign-off and
+every change-order approval pause for the human. AUTO governs the *dev loop between*
+those gates, never the money decisions.
 
 -----
 
@@ -94,12 +133,17 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 
 - **overview** — bootstrap a project: design-research → grill r1 → design-research
   → re-grill r2 → `OVERVIEW.md` → planner → `PLAN.md`.
+- **propose** — turn approved requirements + stack into `PROPOSAL.md` (scope, phase
+  breakdown, effort + cost estimate, assumptions) with a client sign-off gate.
+- **change-request** — a mid-project scope change: impact analysis + re-estimate +
+  a logged change order (`CHANGES.md`) + sign-off, then `replan`.
 - **phase [n]** — run one phase end-to-end with the circuit breaker. Chooses the
   TDD or non-TDD order at RESEARCH. CLOSE runs the regression guard + ENDPOINTS
   coverage gate.
 - **quick [change]** — small, obvious, non-phase change; no agent chain. Stays
   non-TDD. Runs the mock regression corpus after the change.
-- **unstuck** — deep re-research after a circuit breaker (human-triggered).
+- **unstuck** — deep re-research after a circuit breaker (auto-run once in AUTO on
+  first stuck; human-triggered in GUIDED).
 - **synthesize** — compress STATE.md, dedup ISSUES.md, prune snapshots. Run
   before a context reset.
 - **replan** — revise `PLAN.md` (add/cut/split/merge/reorder pending phases) and
@@ -153,14 +197,62 @@ The cheapest token is the one never loaded. The kit is built to minimise context
 
 -----
 
-## Hard rules (1–10)
+## Autonomy
+
+The kit runs in one of two modes, declared in `docs/OVERVIEW.md` (default: **AUTO**):
+
+**Planning always asks; development doesn't.** Asking is cheap and decisive while
+*planning* — so `/overview` (the double-grill) and plan approval stay interactive in
+both modes. AUTO governs only the **development loop** (implement → test → debug →
+close): there, interruptions are expensive, so it follows the plan instead of asking.
+
+- **AUTO (default) — during DEVELOPMENT, follow the plan, don't interrupt.** Once a
+  plan exists, the dev loop prefers DECIDING over asking. Resolve any in-process
+  choice from (1) the PLAN/OVERVIEW/spec, (2) the codebase, (3) a sensible default +
+  the worker's recommendation — then RECORD it (`docs/DESIGN_LOG.md` or STATE) and
+  CONTINUE. Do not stop mid-build to ask.
+- **GUIDED — ask at each fork in dev too.** The original behaviour: the development
+  loop also surfaces choices and waits. Use when exploring an unfamiliar codebase.
+
+**Decision protocol (AUTO, dev loop).** Incomplete acceptance spec → fill the gap
+with the most reasonable interpretation, log it as an Assumption, continue.
+Ambiguous TDD classification → apply the default (`TDD_PHASE=true`), log the reason,
+continue. A worker that would have asked the user instead writes its question + its
+own best answer to STATE and proceeds on that answer. (If the gap is in the PLAN
+itself — not just an implementation detail — that's a planning question: surface it.)
+
+**Batched escalation (AUTO).** Blockers never halt the whole run. On first stuck,
+auto-run `/unstuck` (deep re-research) — capped at ONCE per phase, since it is
+token-expensive. Still stuck → park the blocked slice (mark `BLOCKED` in PLAN), move
+to the next independent slice, and surface ONE consolidated report of all parked
+blockers + logged assumptions at the phase boundary / end of run. The human reviews
+THERE (the `/re` checkpoint), not mid-flow.
+
+**Hard stops (BOTH modes — these always pause for a human).** Autonomy is for
+*development*, not for risk. Stop and get sign-off ONLY for:
+1. Irreversible or outbound actions — deploy to prod, data deletion/migration,
+   `git push`, publish, spending money, sending external messages.
+2. Security-sensitive changes — auth, secrets, permissions, data exposure.
+3. A spec that is internally CONTRADICTORY (merely incomplete is NOT a stop — fill
+   + log instead).
+4. The debug budget is spent AND no independent slice remains to make progress.
+
+AUTO removes *questions*, not *discipline*: tests, the phase gate, issue logging,
+and the regression corpus all still run. The point is an efficient, end-to-end
+development run that follows the spec and logs every problem so it never recurs.
+
+-----
+
+## Hard rules (1–12)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
    Before debugging an auth/infra error, check the infra + auth status surfaced
    at SESSION-OPEN first.
-2. Debug attempt cap = 3: WARN the user at attempt 2; the FIRST hard-stop at 3
-   STOPS and asks the user. No 4th in-place attempt.
+2. Debug attempt cap = 3: WARN at attempt 2. At 3, stop the in-place attempts (no
+   4th). GUIDED → ask the user. AUTO → log the issue (root cause + failed
+   attempts), park the slice, and continue per the batched-escalation protocol.
+   The cap protects efficiency (no flailing / token burn) in both modes.
 3. Every resolved error -> logged to `docs/ISSUES.md` with root cause + failed
    attempts.
 4. End of phase -> synthesize -> context reset -> next phase.
@@ -178,15 +270,33 @@ The cheapest token is the one never loaded. The kit is built to minimise context
    third-party OAuth/login UI.
 8. Architectural change (new/removed agent, hook, command, or a changed workflow
    rule)? -> run `log-decision` before closing.
-9. **UI conforms to the frame.** Every UI-facing change is validated against the
-   `ux-design` cookbook (design tokens, spacing scale, a11y/WCAG AA, component +
-   state inventory, breakpoints) AND stays inside the wireframe baseline. Drift
-   outside the wireframe frame is a defect, not a creative liberty. A frontend
-   phase cannot CLOSE until the UX cookbook check passes.
+9. **UI conforms to the frame.** ALL web / UI work applies the `ux-design` skill and
+   is verified EVERY time — no exception. Each change is validated against the
+   cookbook (design tokens, spacing, a11y/WCAG AA, **icons = a real SVG set, NEVER
+   emoji**, component + state inventory, breakpoints) AND stays inside the wireframe
+   baseline. Drift outside the frame is a defect, not a creative liberty. New visual
+   direction (something the wireframe doesn't cover) is confirmed with the user
+   before building. A frontend phase cannot CLOSE until the UX cookbook check passes.
 10. **No-rationalization (scoped).** Do not downgrade a TDD phase to non-TDD to
     dodge the RED gate, and do not route phase-worthy work through `quick` to
     dodge it. (Scoped deliberately to these two seams; this is not a broad
     "never make excuses" rule.)
+11. **Secure SDLC (security at every stage).** Security runs through the whole loop
+    via the `security` skill, not just at the end:
+    - **design** — threat-model any phase that touches a trust boundary (STRIDE);
+      set the ASVS level; write abuse cases as negative acceptance criteria.
+    - **implement** — follow the secure-coding rules (OWASP Top 10 2025).
+    - **build (every phase CLOSE)** — secrets scan + SCA (dependency CVEs) + SAST
+      must be clean; open HIGH/CRITICAL BLOCKS the close.
+    - **pre-deploy** — run the pentest checklist (WSTG) + a security review of the
+      diff; sign artifacts (SLSA L2+).
+    - **operate** — vulnerability management: keep an SBOM, monitor for new CVEs.
+    Deploying to prod with open high/critical findings is a hard-stop (human
+    sign-off — see Autonomy). Grounded in OWASP / ASVS / WSTG / ISO 27001 / ISO 25010.
+12. **Code-standards gate.** Every coding phase: the formatter + linter are clean
+    (the language's standard tool), names follow the language's OWN idiom, and the
+    code conforms to the declared architecture (Feature-Based by default) — checked
+    at CLOSE. Lint/format errors or idiom violations BLOCK the close. (`code-standards`.)
 
 -----
 
@@ -201,6 +311,15 @@ the KB. The kit works normally without a KB.
 
 ## File contract
 
+- `docs/PRD.md` — crystallised product requirements (or your BMAD/iSSM stories).
+- `docs/PROPOSAL.md` — scope + phase breakdown + effort/cost estimate + assumptions
+  + sign-off. Versioned; the commercial baseline (source of truth).
+- `docs/proposal.html` — the client-facing proposal, rendered from PROPOSAL.md via
+  `.claude/templates/proposal.html`, in the project language; print-ready (PDF).
+- `.claude/templates/` — client-facing document templates (proposal.html, …) the
+  commands render into `docs/`.
+- `docs/CHANGES.md` — change-order log (append-only): each scope change with its
+  impact, effort/cost delta, new total, and approval status. The commercial audit trail.
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
 - `docs/PLAN.md` — the phase plan. The last phase has the deploy task.
@@ -223,6 +342,10 @@ the KB. The kit works normally without a KB.
   `scripts/regression.sh` (default mock; `--real` runs the real corpus).
 - `.claude/skills/ux-design/` — the UX cookbook + wireframe baseline (read on
   demand for any UI work).
+- `.claude/skills/security/` — the Secure SDLC cookbook + threat-modeling /
+  secure-coding / pentest / standards references (read on demand for security work).
+- `.claude/skills/code-standards/` — naming-per-language + architecture cookbook
+  (read on demand for any coding / scaffolding / structure decision).
 - `.claude/kb-config.json` — shared KB path + remote (optional).
 - `docs/.kb-snapshot.md` — KB INDEX loaded this session (auto-generated, gitignored).
 

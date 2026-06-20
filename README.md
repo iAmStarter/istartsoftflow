@@ -47,8 +47,8 @@ silently vanish.
 | Group | Items |
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
-| **commands** | `/overview` `/phase` `/quick` `/replan` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
-| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** |
+| **commands** | `/overview` `/propose` `/phase` `/change-request` `/replan` `/quick` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
+| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** (naming-per-language + architecture) — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
 | **hooks** | session-start · pre-compact · subagent-stop (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
@@ -112,6 +112,7 @@ istartsoftflow/
 │   ├── istartsoft-flow/METHODOLOGY.md
 │   └── settings.json              # hook wiring (Claude Code)
 ├── docs/research/                 # design research behind the kit's choices
+├── index.html                     # self-contained landing page (open in a browser)
 └── create-issflow/                # the npx installer
     ├── bin/cli.js                 # pure-Node, non-destructive, multi-tool
     ├── build.js                   # pure-Node template builder (cross-platform)

@@ -116,9 +116,13 @@ if (exists(KB_CONFIG)) {
 
 // 4. hard rule reminder
 emit('## RULES (enforced this session)');
+emit('- AUTO mode (default) governs the DEV loop: follow the plan — decide + log +');
+emit('  continue, do NOT stop to ask. (Planning / grill still asks — that part is fine.)');
+emit('  Hard-stops only: security / irreversible-or-outbound actions / contradictory spec.');
 emit('- caveman ULTRA mode is active.');
 emit('- before debugging ANY error: grep ISSUES.md AND research/INDEX.md first.');
-emit('- debug attempts: WARN at 2; first hard-stop at 3 STOPS and asks you.');
+emit('- debug attempts: WARN at 2; cap 3. AUTO: log + park the slice + continue (batched');
+emit('  report at the phase boundary). GUIDED: stop and ask you.');
 emit('- end of every phase: run /synthesize, then /clear.');
 emit('- small obvious change? use /quick, not /phase.');
 emit('- token economy: keep context lean. Delegate noisy work to subagents (they');

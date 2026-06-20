@@ -1,6 +1,6 @@
 ---
 name: karpathy-guidelines
-description: Coding and debugging discipline. Apply on every coding and debug task.
+description: Engineering discipline for writing and debugging code — smallest change that works, one hypothesis at a time, no shotgun edits, run before claiming done. Use on every coding or debugging task: implementing a feature, fixing a bug, refactoring, or chasing a failing test. Keywords: code, implement, debug, fix, refactor, test failure, stack trace, error.
 ---
 
 # karpathy-guidelines
