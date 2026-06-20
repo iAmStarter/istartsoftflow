@@ -178,10 +178,12 @@ continue. A worker that would have asked the user instead writes its question + 
 own best answer to STATE and proceeds on that answer. (If the gap is in the PLAN
 itself — not just an implementation detail — that's a planning question: surface it.)
 
-**Batched escalation (AUTO).** Blockers never halt the whole run. Park the blocked
-slice (mark `BLOCKED` in PLAN), move to the next independent slice, and surface ONE
-consolidated report of all parked blockers + logged assumptions at the phase
-boundary / end of run. The human reviews THERE (the `/re` checkpoint), not mid-flow.
+**Batched escalation (AUTO).** Blockers never halt the whole run. On first stuck,
+auto-run `/unstuck` (deep re-research) — capped at ONCE per phase, since it is
+token-expensive. Still stuck → park the blocked slice (mark `BLOCKED` in PLAN), move
+to the next independent slice, and surface ONE consolidated report of all parked
+blockers + logged assumptions at the phase boundary / end of run. The human reviews
+THERE (the `/re` checkpoint), not mid-flow.
 
 **Hard stops (BOTH modes — these always pause for a human).** Autonomy is for
 *development*, not for risk. Stop and get sign-off ONLY for:

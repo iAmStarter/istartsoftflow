@@ -135,9 +135,10 @@ Dispatch `debugger` (isolated context) on the specific failure.
 ## 5. ESCALATE — circuit breaker (mode-aware; see METHODOLOGY → Autonomy)
 
 **AUTO (default) — do NOT stop the run:**
-  FIRST STUCK: auto-run `/unstuck` (deep re-research) ONCE; re-dispatch `debugger`
-  with the findings, budget 3.
-  STILL STUCK: log the issue (root cause + every failed hypothesis) to ISSUES.md,
+  FIRST STUCK: auto-run `/unstuck` (deep re-research) — CAP: at most ONCE per phase
+  (it is token-expensive); re-dispatch `debugger` with the findings, budget 3.
+  STILL STUCK (or already spent this phase's unstuck): log the issue (root cause +
+  every failed hypothesis) to ISSUES.md,
   mark the slice `BLOCKED` in PLAN, and move to the next INDEPENDENT slice/phase.
   Add it to the batched end-of-run report. HARD-STOP (pause for me) ONLY if no
   independent work remains, or the blocker is on the hard-stop list
