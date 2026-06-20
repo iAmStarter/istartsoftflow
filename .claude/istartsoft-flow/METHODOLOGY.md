@@ -304,7 +304,11 @@ the KB. The kit works normally without a KB.
 
 - `docs/PRD.md` — crystallised product requirements (or your BMAD/iSSM stories).
 - `docs/PROPOSAL.md` — scope + phase breakdown + effort/cost estimate + assumptions
-  + sign-off. Versioned; the commercial baseline.
+  + sign-off. Versioned; the commercial baseline (source of truth).
+- `docs/proposal.html` — the client-facing proposal, rendered from PROPOSAL.md via
+  `.claude/templates/proposal.html`, in the project language; print-ready (PDF).
+- `.claude/templates/` — client-facing document templates (proposal.html, …) the
+  commands render into `docs/`.
 - `docs/CHANGES.md` — change-order log (append-only): each scope change with its
   impact, effort/cost delta, new total, and approval status. The commercial audit trail.
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.

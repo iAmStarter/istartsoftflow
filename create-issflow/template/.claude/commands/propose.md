@@ -24,19 +24,27 @@ Derive the vertical-slice phases (or read `docs/PLAN.md` if it exists). Size eac
 - effort: an ideal-days RANGE (e.g. 2–3d), + story points if your team uses them
 - risk / unknowns: what could move the estimate
 
-## STEP 3 — ESTIMATE (reasonable, transparent — no false precision)
-- **Rate:** read the declared rate from OVERVIEW or `$ARGUMENTS`. If none, ASK once
-  (a commercial/planning input — allowed). Keep the currency as declared.
-- **Cost per phase** = effort × rate. **Total** = a RANGE (low–high) with a stated
-  contingency buffer (e.g. +10–15% for unknowns). Show the math.
-- **Timeline:** phases in dependency order → a calendar estimate (note any parallelism).
+## STEP 3 — ESTIMATE (flexible, transparent — no false precision)
+Read the **estimation config** from OVERVIEW (or ask once — a commercial/planning
+input, allowed). Everything is configurable; use sensible defaults if unset:
+- **unit:** ideal-days (default) | story-points | both.
+- **rate card:** a single blended rate, OR per-role rates (e.g. senior / mid /
+  junior). Cost = Σ(effort per role × that role's rate).
+- **currency:** as declared (THB default for a Thai project).
+- **contingency:** a % buffer for unknowns (default 10–15%).
+- **payment milestones:** by-phase, or a split (e.g. 30/40/30), or none.
+- **language:** the rendered doc's language (default = the project language).
+Compute cost per phase, then a **Total as a RANGE (low–high)** incl. contingency —
+show the math. **Timeline:** phases in dependency order → calendar estimate (note parallelism).
 
 ## STEP 4 — ASSUMPTIONS & EXCLUSIONS
 List every assumption the estimate rests on (infra provided, third-party/licence
 costs excluded, content/design provided, etc.). These are the baseline that
 change-orders re-price against.
 
-## STEP 5 — WRITE docs/PROPOSAL.md (versioned: v1 + date)
+## STEP 5 — WRITE + RENDER
+1. Write `docs/PROPOSAL.md` — the SOURCE OF TRUTH (versioned v1 + date). This is
+   what `CHANGES.md` re-prices against. Template:
 ```
 # Proposal — <project>   (v1, <date>)
 ## Scope        — in-scope: … | out-of-scope: …
@@ -48,6 +56,11 @@ change-orders re-price against.
 ## Payment      — milestones (if any)
 ## Sign-off     — approved by: ___  date: ___  version: v1
 ```
+2. RENDER a client-facing `docs/proposal.html` from `.claude/templates/proposal.html`:
+   copy it, replace every `{{PLACEHOLDER}}`, and LOCALISE all labels + content to the
+   declared language (natural Thai for Thai projects; keep tech terms in English).
+   It is print-ready (Save as PDF). Keep PROPOSAL.md and proposal.html in sync — the
+   markdown is the source, the HTML is the deliverable you send the client.
 
 ## STEP 6 — SIGN-OFF GATE
 Show me the proposal. **STOP for approval** (commercial gate — always interactive).

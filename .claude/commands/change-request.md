@@ -26,7 +26,9 @@ Determine:
 - dispatch `researcher` (DESIGN or IMPL) if the change needs grounding in facts.
 
 ## STEP 3 — RE-ESTIMATE (the DELTA only; reasonable + transparent)
-- added effort (ideal-days range) × rate = added cost; cut effort = credit.
+- Use the SAME estimation config as PROPOSAL.md (unit, rate card, currency,
+  contingency) — consistency is what makes the re-price defensible.
+- added effort × rate = added cost; cut effort = credit.
 - **net cost Δ** + **new total** vs the approved baseline — as a range + assumptions.
 - **timeline Δ**. State what stays the SAME so the client sees the price is fair.
 
@@ -40,8 +42,9 @@ cost Δ: <±amount> | new total: <amount> | status: proposed
 Show me CR-<n> (impact + price delta + new total). **STOP for approval** (commercial
 gate — always interactive).
 - **Approved** -> set CR status `approved`; bump PROPOSAL.md to a new version (vN+1)
-  with the delta folded in; then dispatch `/replan` to apply the phase changes to
-  PLAN.md (done phases stay frozen). Update STATE.md.
+  with the delta folded in; re-render `docs/proposal.html` from it (same template +
+  language); then dispatch `/replan` to apply the phase changes to PLAN.md (done
+  phases stay frozen). Update STATE.md.
 - **Rejected** -> set CR status `rejected`; PLAN + PROPOSAL unchanged.
 
 ## STEP 6 — RECORD

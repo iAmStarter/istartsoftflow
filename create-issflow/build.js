@@ -9,7 +9,7 @@ const path = require('path');
 const HERE = __dirname;
 const SRC = path.join(HERE, '..', '.claude');   // repo-root .claude (source of truth)
 const TPL = path.join(HERE, 'template', '.claude');
-const DIRS = ['agents', 'commands', 'skills', 'hooks', 'istartsoft-flow'];
+const DIRS = ['agents', 'commands', 'skills', 'hooks', 'istartsoft-flow', 'templates'];
 
 fs.rmSync(path.join(HERE, 'template'), { recursive: true, force: true });
 fs.mkdirSync(TPL, { recursive: true });

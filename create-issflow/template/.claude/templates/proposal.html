@@ -1,0 +1,118 @@
+<!doctype html>
+<!--
+  Client-facing proposal template (rendered by /propose from docs/PROPOSAL.md).
+  HOW TO USE (agent): copy this file to docs/proposal.html and replace every
+  {{PLACEHOLDER}}. LOCALISE the labels + content to the project's declared
+  language (e.g. natural Thai) — keep technical terms in English where a Thai dev
+  team would. Light + print-friendly on purpose (Ctrl/Cmd-P → "Save as PDF").
+  Repeat the <tr> in the phases table per phase; repeat <li> lists as needed.
+-->
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{{TITLE}} — Proposal {{VERSION}}</title>
+<style>
+  :root{ --ink:#1a2230; --muted:#5b6878; --line:#e3e8f0; --accent:#5b4cf0;
+    --accent2:#0ea5b7; --bg:#fff; --soft:#f6f8fc;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Thai",system-ui,sans-serif;
+    --mono:ui-monospace,Menlo,Consolas,monospace; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--soft);color:var(--ink);font-family:var(--sans);line-height:1.6}
+  .sheet{max-width:880px;margin:24px auto;background:var(--bg);border:1px solid var(--line);
+    border-radius:14px;overflow:hidden}
+  .head{padding:34px 40px;border-bottom:3px solid var(--accent);
+    background:linear-gradient(120deg,#f3f1ff,#eafcff)}
+  .head .ey{font:600 .72rem/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+  .head h1{margin:.3em 0 .1em;font-size:1.9rem;letter-spacing:-.02em}
+  .head .meta{color:var(--muted);font-size:.9rem}
+  main{padding:14px 40px 40px}
+  section{padding:20px 0;border-bottom:1px solid var(--line)}
+  section:last-child{border:none}
+  h2{font-size:1.05rem;margin:0 0 .5em;display:flex;align-items:center;gap:9px}
+  h2::before{content:"";width:10px;height:10px;border-radius:3px;
+    background:linear-gradient(120deg,var(--accent),var(--accent2))}
+  table{width:100%;border-collapse:collapse;font-size:.92rem}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{background:var(--soft);font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  td.num,th.num{text-align:right;font-family:var(--mono)}
+  tfoot td{font-weight:700;border-top:2px solid var(--ink);border-bottom:none}
+  ul{margin:.2em 0;padding-left:1.2em} li{margin:.2em 0;color:var(--muted)}
+  .total{font-size:1.5rem;font-weight:800}
+  .total small{font-size:.8rem;color:var(--muted);font-weight:500}
+  .cols{display:flex;gap:32px;flex-wrap:wrap} .cols>div{flex:1;min-width:220px}
+  .sign{display:flex;gap:40px;flex-wrap:wrap;margin-top:10px}
+  .sign div{flex:1;min-width:220px} .line{border-bottom:1px solid var(--ink);height:34px;margin-top:18px}
+  .muted{color:var(--muted)} .pill{display:inline-block;font:600 .7rem/1 var(--mono);
+    padding:3px 8px;border-radius:6px;background:var(--soft);border:1px solid var(--line);color:var(--muted)}
+  footer{padding:18px 40px;color:var(--muted);font-size:.8rem;background:var(--soft)}
+  @media print{ body{background:#fff} .sheet{margin:0;border:none;border-radius:0;max-width:none}
+    .head{background:#fff} section{break-inside:avoid} }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="head">
+    <div class="ey">Proposal · {{VERSION}}</div>
+    <h1>{{TITLE}}</h1>
+    <div class="meta">{{CLIENT}} · {{DATE}} · <span class="pill">{{STATUS}}</span></div>
+  </div>
+  <main>
+    <section>
+      <h2>{{L_OVERVIEW}}</h2>
+      <p class="muted">{{SUMMARY}}</p>
+    </section>
+
+    <section>
+      <h2>{{L_SCOPE}}</h2>
+      <div class="cols">
+        <div><strong>{{L_IN_SCOPE}}</strong><ul>{{SCOPE_IN_ITEMS}}</ul></div>
+        <div><strong>{{L_OUT_SCOPE}}</strong><ul>{{SCOPE_OUT_ITEMS}}</ul></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>{{L_PHASES}}</h2>
+      <table>
+        <thead><tr>
+          <th>{{L_PHASE}}</th><th>{{L_COMPLEXITY}}</th>
+          <th class="num">{{L_EFFORT}}</th><th class="num">{{L_COST}}</th>
+        </tr></thead>
+        <tbody>
+          {{PHASE_ROWS}}
+          <!-- e.g. <tr><td>1. Auth</td><td>M</td><td class="num">2–3d</td><td class="num">฿16,000–24,000</td></tr> -->
+        </tbody>
+        <tfoot><tr><td colspan="2">{{L_TOTAL}}</td><td class="num">{{TOTAL_EFFORT}}</td><td class="num">{{TOTAL_COST}}</td></tr></tfoot>
+      </table>
+      <p class="total" style="margin-top:14px">{{TOTAL_COST}} <small>{{CONTINGENCY_NOTE}}</small></p>
+    </section>
+
+    <section>
+      <h2>{{L_TIMELINE}}</h2>
+      <p class="muted">{{TIMELINE}}</p>
+    </section>
+
+    <section>
+      <div class="cols">
+        <div><h2>{{L_ASSUMPTIONS}}</h2><ul>{{ASSUMPTION_ITEMS}}</ul></div>
+        <div><h2>{{L_EXCLUSIONS}}</h2><ul>{{EXCLUSION_ITEMS}}</ul></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>{{L_PAYMENT}}</h2>
+      <ul>{{PAYMENT_ITEMS}}</ul>
+    </section>
+
+    <section>
+      <h2>{{L_SIGNOFF}}</h2>
+      <div class="sign">
+        <div><div class="line"></div><div class="muted">{{L_CLIENT_SIGN}}</div></div>
+        <div><div class="line"></div><div class="muted">{{L_DATE}}</div></div>
+      </div>
+    </section>
+  </main>
+  <footer>{{FOOTER}}</footer>
+</div>
+</body>
+</html>

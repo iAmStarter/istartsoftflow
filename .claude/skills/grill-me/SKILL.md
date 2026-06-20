@@ -9,6 +9,15 @@ Ask the questions one at a time.
 
 If a question can be answered by exploring the codebase, explore the codebase instead.
 
+## Language
+
+Grill in the USER'S language. If they write Thai, ask in **natural Thai** — real
+spoken business/dev Thai, not stiff word-for-word translations of English questions.
+Keep technical terms in English where a Thai team naturally would (API, deploy,
+auth, token, schema…). Mix is fine. The goal is that a Thai founder feels they are
+talking to a sharp Thai tech lead, not a translated bot. Capture the answers
+faithfully (the nuance often lives in the Thai phrasing).
+
 ## Depth & stop condition
 
 - **Stop on CONVERGENCE, not a fixed count.** Keep going until a full pass surfaces

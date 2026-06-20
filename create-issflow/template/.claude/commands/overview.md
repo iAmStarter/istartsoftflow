@@ -9,6 +9,12 @@ tool grant; plan mode adds a read-only gate on the main session too. Optional.
 
 Goal: stand up a fresh project workspace with a well-grounded plan.
 
+LANGUAGE: detect the user's language and run the WHOLE discovery in it. A Thai user
+→ grill, summarise, and write OVERVIEW in **natural Thai** (keep tech terms in
+English as a Thai team would). Record the project language in OVERVIEW so downstream
+artifacts (PROPOSAL, the rendered proposal.html, docs) follow it. Be equally fluent
+in English; just don't default to it when the user speaks Thai.
+
 ---
 
 ## Steps
@@ -54,8 +60,11 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 5. Write docs/OVERVIEW.md from the COMBINED output of round-1 + design-research
    + round-2. Include:
    - Project purpose and success criteria
+   - **Project language** (e.g. th / en / both) — downstream docs + proposal follow it
    - **Autonomy mode** for the dev loop (AUTO default / GUIDED) and the declared
-     **stack** (language, framework, infra, auth, test + E2E runner, planning source)
+     **stack** (framework, infra, auth, test + E2E runner, planning source)
+   - **Estimation config** (for `/propose`): unit, rate card, currency, contingency,
+     payment milestones
    - Scope and constraints (informed by research findings)
    - External services with confirmed capabilities/limits
    - Known risks / open questions (if any remain)
