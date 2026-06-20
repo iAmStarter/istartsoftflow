@@ -39,6 +39,10 @@ Dispatch `researcher` in IMPL mode scoped to this phase.
 Returns terse summary + path. Read the file only if needed.
 Unknowns block the phase -> re-dispatch narrowed. No guessing.
 
+SECURE SDLC (design): if this phase touches a TRUST BOUNDARY (auth, untrusted input,
+data store, money, PII), threat-model it now (`security` skill) and fold the abuse
+cases into the acceptance criteria as negative cases BEFORE SCAFFOLD.
+
 Then classify the phase:
 
   `TDD_PHASE` = the phase adds or changes a PUBLIC CALLABLE SURFACE (endpoint,
@@ -161,6 +165,14 @@ REGRESSION GATE (before closing — Feature 3):
   `tests/regression/`. Zero coverage -> FAIL HARD; do not close.
 - IF IS_FINAL_PHASE: additionally run `scripts/regression.sh --real` (full real
   corpus). A failure blocks close.
+
+SECURITY GATE (rule 11 — Secure SDLC build stage):
+- Security-touching OR deploy phase -> run the `security` cookbook. Build gates:
+  secrets scan + SCA (dependency CVEs) + SAST must be clean.
+- IS_FINAL_PHASE / deploy -> also run the pentest checklist (WSTG) + a security
+  review of the diff; sign artifacts (SLSA L2+).
+- Open HIGH/CRITICAL findings BLOCK the close -> route to FIX. Deploying to prod
+  with open high/critical findings is a hard-stop (human sign-off).
 
 Mark phase `done` in docs/PLAN.md.
 

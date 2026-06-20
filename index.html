@@ -102,6 +102,7 @@
     <a href="#loop"><span class="en">The loop</span><span class="th">ลูป</span></a>
     <a href="#kit"><span class="en">What you get</span><span class="th">ในชุด</span></a>
     <a href="#skills"><span class="en">Skills</span><span class="th">สกิล</span></a>
+    <a href="#security"><span class="en">Security</span><span class="th">ความปลอดภัย</span></a>
     <a href="#practices"><span class="en">Best practices</span><span class="th">แนวปฏิบัติ</span></a>
     <span class="lang keep" role="group" aria-label="language">
       <label for="lang-en">EN</label><label for="lang-th">ไทย</label>
@@ -212,8 +213,8 @@
   <div class="grid g2" style="margin-top:24px">
     <div class="card"><h3>🤖 <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
     <div class="card"><h3>⌨️ <span class="en">9 commands</span><span class="th">9 คำสั่ง</span></h3><p><code>/overview /phase /quick /replan /synthesize /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
-    <div class="card"><h3>✨ <span class="en">4 skills</span><span class="th">4 สกิล</span></h3>
-      <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
+    <div class="card"><h3>✨ <span class="en">5 skills</span><span class="th">5 สกิล</span></h3>
+      <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · security — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · security — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
     <div class="card"><h3>🪝 <span class="en">3 hooks</span><span class="th">3 ฮุก</span></h3>
       <p><span class="en">session-start · pre-compact · subagent-stop — pure-Node, cross-platform, wired per tool.</span><span class="th">session-start · pre-compact · subagent-stop — Node ล้วน ข้ามแพลตฟอร์ม ต่อสายตามเครื่องมือ</span></p></div>
   </div>
@@ -234,6 +235,25 @@
     <div class="card"><h3>🎨 <span class="en">Tokens</span><span class="th">โทเคน</span></h3><p><span class="en">No raw hex/px — named tokens, 8-pt spacing scale, fixed type ramp.</span><span class="th">ห้าม hex/px ดิบ — ใช้ token มีชื่อ, สเกลระยะ 8-pt, type ramp ตายตัว</span></p></div>
     <div class="card"><h3>♿ <span class="en">Accessibility</span><span class="th">การเข้าถึง</span></h3><p><span class="en">Contrast ≥ 4.5:1, keyboard-reachable, semantic HTML, 44×44 hit areas.</span><span class="th">คอนทราสต์ ≥ 4.5:1, ใช้คีย์บอร์ดได้, semantic HTML, พื้นที่กด 44×44</span></p></div>
     <div class="card"><h3>📐 <span class="en">Wireframe-first</span><span class="th">เริ่มที่ wireframe</span></h3><p><span class="en">Every screen maps to a low-fidelity baseline before pixels exist. Drift = defect.</span><span class="th">ทุกหน้าจอแมปกับต้นแบบ low-fidelity ก่อนมีพิกเซล — หลุดกรอบ = ข้อบกพร่อง</span></p></div>
+  </div>
+</div></section>
+
+<section id="security"><div class="wrap">
+  <div class="ey"><span class="en">Secure SDLC</span><span class="th">Secure SDLC</span></div>
+  <h2><span class="en">Security at every stage, not bolted on</span><span class="th">ความปลอดภัยทุก stage ไม่ใช่แปะทีหลัง</span></h2>
+  <p class="muted" style="max-width:780px">
+    <span class="en">The <code>security</code> skill weaves a Secure SDLC through the loop: threat-model at
+    design, secure coding while building, SAST/SCA/secrets at every phase close, a pentest
+    gate + security review before deploy, and vulnerability management after. Grounded in
+    OWASP Top 10 (2025), ASVS 5.0, WSTG, ISO/IEC 27001 &amp; 25010, and SLSA.</span>
+    <span class="th">สกิล <code>security</code> ร้อย Secure SDLC ผ่านทั้งลูป: threat-model ตอนออกแบบ,
+    secure coding ตอนเขียน, SAST/SCA/secrets ทุกครั้งที่ปิด phase, pentest gate + security review ก่อน deploy,
+    และ vulnerability management หลังจากนั้น อิง OWASP Top 10 (2025), ASVS 5.0, WSTG, ISO/IEC 27001 และ 25010, SLSA</span>
+  </p>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card"><h3>🧭 <span class="en">Threat modeling</span><span class="th">Threat modeling</span></h3><p><span class="en">STRIDE at design; abuse cases become negative acceptance criteria the tests assert.</span><span class="th">STRIDE ตอนออกแบบ; abuse case กลายเป็น negative acceptance criteria ที่เทสต์ตรวจ</span></p></div>
+    <div class="card"><h3>🔐 <span class="en">Secure coding + gates</span><span class="th">Secure coding + เกต</span></h3><p><span class="en">OWASP rules while coding; secrets/SCA/SAST must be clean to close a phase.</span><span class="th">กฎ OWASP ตอนเขียน; secrets/SCA/SAST ต้องสะอาดถึงจะปิด phase ได้</span></p></div>
+    <div class="card"><h3>🎯 <span class="en">Pentest gate</span><span class="th">Pentest gate</span></h3><p><span class="en">OWASP WSTG run + security review before deploy; open high/critical blocks it.</span><span class="th">รัน OWASP WSTG + security review ก่อน deploy; เจอ high/critical ค้าง = บล็อก</span></p></div>
   </div>
 </div></section>
 

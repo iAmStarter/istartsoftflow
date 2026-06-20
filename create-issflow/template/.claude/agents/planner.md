@@ -35,6 +35,10 @@ window. If a phase feels big, split it.
   Rule of thumb: if `test-author` couldn't turn the criterion into a passing-or-
   failing assertion without asking you a question, it is not sharp enough — sharpen it.
 - If a phase touches an external service, note it — its test must hit the real service.
+- If a phase touches a TRUST BOUNDARY (auth, untrusted/external input, a data store,
+  money, or PII), add a `security:` note: threat-model it (STRIDE) and fold abuse
+  cases into the acceptance criteria as negative cases; set the ASVS level (default
+  L2). This is the design stage of the Secure SDLC (`security` skill).
 
 LAST PHASE RULE — the final code phase (the highest-numbered phase you write)
 MUST contain a deployment task block:

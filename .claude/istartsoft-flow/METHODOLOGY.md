@@ -30,7 +30,9 @@
 
 Caveman ULTRA mode always on. Apply the `karpathy-guidelines` skill (engineering
 discipline) on every coding and debugging task. Apply the `ux-design` skill (the UX
-cookbook + wireframe baseline) on every UI-facing task.
+cookbook + wireframe baseline) on every UI-facing task. Apply the `security` skill
+(the Secure SDLC cookbook) at design (threat model), while coding (secure coding),
+and before any deploy.
 
 -----
 
@@ -200,7 +202,7 @@ development run that follows the spec and logs every problem so it never recurs.
 
 -----
 
-## Hard rules (1–10)
+## Hard rules (1–11)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
@@ -236,6 +238,18 @@ development run that follows the spec and logs every problem so it never recurs.
     dodge the RED gate, and do not route phase-worthy work through `quick` to
     dodge it. (Scoped deliberately to these two seams; this is not a broad
     "never make excuses" rule.)
+11. **Secure SDLC (security at every stage).** Security runs through the whole loop
+    via the `security` skill, not just at the end:
+    - **design** — threat-model any phase that touches a trust boundary (STRIDE);
+      set the ASVS level; write abuse cases as negative acceptance criteria.
+    - **implement** — follow the secure-coding rules (OWASP Top 10 2025).
+    - **build (every phase CLOSE)** — secrets scan + SCA (dependency CVEs) + SAST
+      must be clean; open HIGH/CRITICAL BLOCKS the close.
+    - **pre-deploy** — run the pentest checklist (WSTG) + a security review of the
+      diff; sign artifacts (SLSA L2+).
+    - **operate** — vulnerability management: keep an SBOM, monitor for new CVEs.
+    Deploying to prod with open high/critical findings is a hard-stop (human
+    sign-off — see Autonomy). Grounded in OWASP / ASVS / WSTG / ISO 27001 / ISO 25010.
 
 -----
 
@@ -272,6 +286,8 @@ the KB. The kit works normally without a KB.
   `scripts/regression.sh` (default mock; `--real` runs the real corpus).
 - `.claude/skills/ux-design/` — the UX cookbook + wireframe baseline (read on
   demand for any UI work).
+- `.claude/skills/security/` — the Secure SDLC cookbook + threat-modeling /
+  secure-coding / pentest / standards references (read on demand for security work).
 - `.claude/kb-config.json` — shared KB path + remote (optional).
 - `docs/.kb-snapshot.md` — KB INDEX loaded this session (auto-generated, gitignored).
 

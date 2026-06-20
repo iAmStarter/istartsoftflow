@@ -48,7 +48,7 @@ silently vanish.
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
 | **commands** | `/overview` `/phase` `/quick` `/replan` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
-| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
+| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
 | **hooks** | session-start · pre-compact · subagent-stop (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
