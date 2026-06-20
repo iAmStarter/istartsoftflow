@@ -243,7 +243,7 @@ development run that follows the spec and logs every problem so it never recurs.
 
 -----
 
-## Hard rules (1–11)
+## Hard rules (1–12)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
@@ -293,6 +293,10 @@ development run that follows the spec and logs every problem so it never recurs.
     - **operate** — vulnerability management: keep an SBOM, monitor for new CVEs.
     Deploying to prod with open high/critical findings is a hard-stop (human
     sign-off — see Autonomy). Grounded in OWASP / ASVS / WSTG / ISO 27001 / ISO 25010.
+12. **Code-standards gate.** Every coding phase: the formatter + linter are clean
+    (the language's standard tool), names follow the language's OWN idiom, and the
+    code conforms to the declared architecture (Feature-Based by default) — checked
+    at CLOSE. Lint/format errors or idiom violations BLOCK the close. (`code-standards`.)
 
 -----
 

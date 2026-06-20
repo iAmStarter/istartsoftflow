@@ -166,6 +166,11 @@ REGRESSION GATE (before closing — Feature 3):
 - IF IS_FINAL_PHASE: additionally run `scripts/regression.sh --real` (full real
   corpus). A failure blocks close.
 
+CODE-STANDARDS GATE (rule 12): the formatter + linter are clean (the language's
+standard tool); names follow the language's own idiom; the code conforms to the
+declared architecture (Feature-Based by default). Lint/format errors or idiom
+violations BLOCK the close -> route to FIX. (`code-standards` skill.)
+
 SECURITY GATE (rule 11 — Secure SDLC build stage):
 - Security-touching OR deploy phase -> run the `security` cookbook. Build gates:
   secrets scan + SCA (dependency CVEs) + SAST must be clean.
