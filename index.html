@@ -82,6 +82,13 @@
   .tbl tr:last-child td{border-bottom:none} .tbl td:first-child{font-weight:600}
   .tbl code{font-family:var(--mono);font-size:.84rem;color:var(--a2)} .scroll{overflow-x:auto}
 
+  ol.steps{list-style:none;counter-reset:s;padding:0;margin:8px 0 0}
+  ol.steps>li{display:flex;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+  ol.steps>li:last-child{border:none}
+  .stepno{flex:0 0 auto;width:34px;height:34px;border-radius:10px;background:var(--grad);color:#0a0e18;font:800 1rem/34px var(--mono);text-align:center}
+  .steps h3{font-size:1.05rem;margin:2px 0 6px}
+  .steps p{margin:8px 0 0;color:var(--muted);font-size:.93rem}
+  .chip{display:inline-block;font-family:var(--mono);font-size:.82rem;color:var(--a2);background:#0a0e18;border:1px solid var(--line);border-radius:8px;padding:5px 10px}
   ul.clean{list-style:none;padding:0;margin:0}
   ul.clean li{padding:9px 0;border-bottom:1px solid var(--line);color:var(--muted)}
   ul.clean li:last-child{border:none} ul.clean b{color:var(--txt)}
@@ -98,6 +105,7 @@
 <nav><div class="wrap">
   <span class="brand"><span class="dot"></span>iStartSoftFlow</span>
   <span class="links">
+    <a href="#start"><span class="en">Start</span><span class="th">เริ่มต้น</span></a>
     <a href="#tools"><span class="en">Tools</span><span class="th">เครื่องมือ</span></a>
     <a href="#loop"><span class="en">The loop</span><span class="th">ลูป</span></a>
     <a href="#kit"><span class="en">What you get</span><span class="th">ในชุด</span></a>
@@ -189,6 +197,44 @@
   </p>
 </div></section>
 
+<section id="start"><div class="wrap">
+  <div class="ey"><span class="en">getting started</span><span class="th">เริ่มต้นยังไง</span></div>
+  <h2><span class="en">The flow, step by step</span><span class="th">ขั้นตอนการทำงานทีละสเต็ป</span></h2>
+  <p class="muted"><span class="en">From idea to a deployed, summarised project — each step writes a durable artifact and is logged.</span><span class="th">จากไอเดียจนถึงโปรเจกต์ที่ deploy แล้วสรุปจบ — ทุกสเต็ปเขียนไฟล์เก็บไว้และมี log ครบ</span></p>
+  <ol class="steps">
+    <li><div class="stepno">1</div><div>
+      <h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3>
+      <code class="chip">npx create-issflow --tool=claude</code>
+      <p><span class="en">Scaffolds <code>.claude/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.claude/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>
+    </div></li>
+    <li><div class="stepno">2</div><div>
+      <h3><span class="en">Discover &amp; plan</span><span class="th">ค้นหาความต้องการ + วางแผน</span></h3>
+      <code class="chip">/overview</code>
+      <p><span class="en">Tell it your idea. It <b>grills you</b> (2 passes, to convergence — 5-whys depth on shallow answers), runs design-research, picks the stack &amp; architecture, and writes <code>OVERVIEW.md</code> + <code>PLAN.md</code>. Planning is interactive — asking is good here.</span><span class="th">เล่าไอเดียให้ฟัง มันจะ <b>ซักคุณ</b> (2 รอบ จนตกผลึก — เจาะลึกแบบ 5-whys ถ้าคำตอบยังตื้น) ทำ design-research เลือก stack/architecture แล้วเขียน <code>OVERVIEW.md</code> + <code>PLAN.md</code> ขั้นวางแผนถามได้เต็มที่</span></p>
+    </div></li>
+    <li><div class="stepno">3</div><div>
+      <h3><span class="en">Proposal &amp; price</span><span class="th">เสนอราคา</span></h3>
+      <code class="chip">/propose</code>
+      <p><span class="en">Turns scope + phases into an effort + cost estimate (range + assumptions) and a timeline. <b>You sign off before any build.</b></span><span class="th">แปลง scope + phases เป็นประเมินแรง+ราคา (เป็นช่วง + ระบุสมมุติฐาน) และไทม์ไลน์ <b>คุณเซ็นอนุมัติก่อนเริ่มสร้าง</b></span></p>
+    </div></li>
+    <li><div class="stepno">4</div><div>
+      <h3><span class="en">Build, phase by phase</span><span class="th">สร้างทีละ phase</span></h3>
+      <code class="chip">/phase</code>
+      <p><span class="en">The AUTO dev loop: implement → blind tests → UX + security gates → close. Follows the plan without stopping to ask; logs every decision, issue, and fix.</span><span class="th">AUTO dev loop: implement → blind test → เกต UX + security → ปิด ทำตามแผนไม่หยุดถาม และ log ทุก decision/ปัญหา/การแก้</span></p>
+    </div></li>
+    <li><div class="stepno">5</div><div>
+      <h3><span class="en">Change mid-way</span><span class="th">เปลี่ยนกลางทาง</span></h3>
+      <code class="chip">/change-request "…"</code>
+      <p><span class="en">Assesses impact, re-estimates the cost delta fairly, logs a change order, gets sign-off, then replans — scope/cost never change silently.</span><span class="th">ประเมินผลกระทบ คิดราคาส่วนต่างอย่างสมเหตุสมผล บันทึก change order ขออนุมัติ แล้ว replan — scope/ราคาไม่เปลี่ยนเงียบๆ</span></p>
+    </div></li>
+    <li><div class="stepno">6</div><div>
+      <h3><span class="en">Close out</span><span class="th">ปิดโปรเจกต์</span></h3>
+      <code class="chip">/synthesize</code>
+      <p><span class="en">Final pass writes a project summary: what was built, key decisions, every change order, and the final cost vs the original estimate.</span><span class="th">รอบสุดท้ายเขียนสรุปโปรเจกต์: สร้างอะไรไปบ้าง decision สำคัญ change order ทุกอัน และราคาสุดท้ายเทียบกับที่ประเมินไว้</span></p>
+    </div></li>
+  </ol>
+</div></section>
+
 <section id="loop"><div class="wrap">
   <div class="ey"><span class="en">the loop</span><span class="th">ลูป</span></div>
   <h2><span class="en">One vertical slice per phase</span><span class="th">หนึ่ง vertical slice ต่อหนึ่ง phase</span></h2>
@@ -212,7 +258,7 @@
   <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.claude/</code></h2>
   <div class="grid g2" style="margin-top:24px">
     <div class="card"><h3>🤖 <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
-    <div class="card"><h3>⌨️ <span class="en">9 commands</span><span class="th">9 คำสั่ง</span></h3><p><code>/overview /phase /quick /replan /synthesize /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
+    <div class="card"><h3>⌨️ <span class="en">11 commands</span><span class="th">11 คำสั่ง</span></h3><p><code>/overview /propose /phase /change-request /replan /quick /synthesize /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
     <div class="card"><h3>✨ <span class="en">5 skills</span><span class="th">5 สกิล</span></h3>
       <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · security — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · security — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
     <div class="card"><h3>🪝 <span class="en">3 hooks</span><span class="th">3 ฮุก</span></h3>

@@ -97,3 +97,6 @@ blocker: none
 Then stop and show me PLAN.md for approval before any phase starts. Planning ends
 with a human sign-off in both modes; AUTO only governs the development loop that
 runs AFTER the plan is approved.
+
+Next step (client projects): run `/propose` to turn this OVERVIEW + PLAN into a
+proposal with an effort + cost estimate for sign-off BEFORE building starts.

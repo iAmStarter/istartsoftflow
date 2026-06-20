@@ -58,6 +58,38 @@ non-TDD before SCAFFOLD fires.
 
 -----
 
+## Project lifecycle (real-world delivery)
+
+The loop above is the BUILD engine. Around it runs a full client-delivery lifecycle
+— every stage produces an artifact and is logged, so a project has a complete trail
+from idea to closeout:
+
+1. **Discover** — idea → requirements, captured by `/overview` (the double-grill).
+2. **PRD** — crystallised requirements in `docs/PRD.md` (or your BMAD/iSSM stories).
+3. **Stack & architecture** — decided in `/overview` design-research → `OVERVIEW.md`.
+4. **Proposal & estimate** — `/propose` → `docs/PROPOSAL.md`: scope, phase breakdown,
+   effort + cost estimate, timeline, assumptions. **Client sign-off gate** before build.
+5. **Plan** — `planner` → `docs/PLAN.md` (vertical-slice phases).
+6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop).
+7. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
+   change order (`docs/CHANGES.md`) + sign-off, then `/replan`. Scope and cost never
+   change silently.
+8. **Deploy** — in the final phase.
+9. **Closeout** — `/synthesize` (final pass) → a project summary: what was built, key
+   decisions, every change order, and the final cost vs the original estimate.
+
+**Logging is continuous and total.** Every stage writes to a durable artifact:
+requirements (PRD / OVERVIEW), commercial (PROPOSAL / CHANGES), execution
+(PLAN / HISTORY), decisions (DESIGN_LOG), errors (ISSUES), research (research/).
+Nothing important lives only in chat — it is on disk, so the project can always be
+reconstructed and summarised.
+
+**Commercial gates are always interactive** (both modes): the proposal sign-off and
+every change-order approval pause for the human. AUTO governs the *dev loop between*
+those gates, never the money decisions.
+
+-----
+
 ## Roles (fresh-context workers)
 
 Each role is a fresh-context worker mapped to a named Claude Code subagent in
@@ -96,6 +128,10 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 
 - **overview** — bootstrap a project: design-research → grill r1 → design-research
   → re-grill r2 → `OVERVIEW.md` → planner → `PLAN.md`.
+- **propose** — turn approved requirements + stack into `PROPOSAL.md` (scope, phase
+  breakdown, effort + cost estimate, assumptions) with a client sign-off gate.
+- **change-request** — a mid-project scope change: impact analysis + re-estimate +
+  a logged change order (`CHANGES.md`) + sign-off, then `replan`.
 - **phase [n]** — run one phase end-to-end with the circuit breaker. Chooses the
   TDD or non-TDD order at RESEARCH. CLOSE runs the regression guard + ENDPOINTS
   coverage gate.
@@ -264,6 +300,11 @@ the KB. The kit works normally without a KB.
 
 ## File contract
 
+- `docs/PRD.md` — crystallised product requirements (or your BMAD/iSSM stories).
+- `docs/PROPOSAL.md` — scope + phase breakdown + effort/cost estimate + assumptions
+  + sign-off. Versioned; the commercial baseline.
+- `docs/CHANGES.md` — change-order log (append-only): each scope change with its
+  impact, effort/cost delta, new total, and approval status. The commercial audit trail.
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
 - `docs/PLAN.md` — the phase plan. The last phase has the deploy task.

@@ -51,6 +51,12 @@ Phases: <count> code phases (+ Phase 0 infra, if self-managed)
 All phases: done
 
 ```
+
+5b. PROJECT CLOSEOUT SUMMARY (if docs/PROPOSAL.md exists). Append to OVERVIEW.md a
+"## Project summary" with: what was built (from HISTORY), key decisions
+(DESIGN_LOG), every change order (CHANGES.md) and its status, and the FINAL COST
+vs the original estimate (PROPOSAL.md v1 total → final total after approved CRs).
+This is the client closeout — the one-page record of the whole engagement.
 6. Update README.md (the project-level README, not the iStartSoftFlow README) — if a
 project README exists at the repo root, update or append:
 - Current status: "Production — deployed at <URL>"
