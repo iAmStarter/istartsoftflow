@@ -23,7 +23,8 @@ b. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
    - No phase in progress, requested is next pending -> START at step 1.
    - Same phase in-progress -> RESUME from STATE.md "next action".
    - Different phase in-progress -> STOP. Tell me which phase is open.
-   - Out of dependency order -> STOP. Warn, proceed only if I confirm.
+   - Out of dependency order -> AUTO: ignore the request and run the next pending
+     phase in PLAN order. GUIDED: STOP, warn, proceed only if I confirm.
    - Phase not in PLAN.md -> STOP. Suggest /overview or /replan.
 
 c. FINAL PHASE CHECK: Read docs/PLAN.md. Is this the last phase (no further
@@ -47,9 +48,9 @@ Then classify the phase:
 - Clear public surface -> `TDD_PHASE=true` -> run the TDD path (§2 → §3a → §3b).
 - Pure infra/config/doc, no public surface -> `TDD_PHASE=false` -> run the
   non-TDD path (§2N → §3N).
-- AMBIGUOUS -> default `TDD_PHASE=true`, but STATE the classification + the reason
-  to me, so I can override to non-TDD BEFORE SCAFFOLD fires. (Hard rule 11: never
-  downgrade a TDD phase just to dodge the RED gate.)
+- AMBIGUOUS -> default `TDD_PHASE=true`. AUTO: log the classification + reason to
+  STATE and proceed. GUIDED: surface it so I can override to non-TDD BEFORE SCAFFOLD
+  fires. (Hard rule 10: never downgrade a TDD phase just to dodge the RED gate.)
 
 =====================================================================
 ## TDD PATH  (TDD_PHASE=true)
@@ -69,10 +70,12 @@ phase-local tests in `tests/phase-<n>/`. Run the suite.
 
 RED GATE = every acceptance test COLLECTS cleanly AND FAILS (assertion /
 NotImplemented).
-- Any test PASSES on stubs -> STOP (spec trivial or test wrong); show me.
+- Any test PASSES on stubs -> spec trivial or test wrong. AUTO: re-dispatch
+  test-author to tighten it (within budget) + log the cause; GUIDED: STOP, show me.
 - Collection / import / syntax error -> stub mismatch; re-dispatch SCAFFOLD to
   fix SIGNATURES (not logic); re-run.
-- UNDERSPEC -> STOP; ask me to sharpen the acceptance spec.
+- UNDERSPEC -> AUTO: sharpen the acceptance spec yourself from the BMAD/iSSM story,
+  log the interpretation as an Assumption, continue. GUIDED: STOP; ask me to sharpen it.
 
 ## 3b. GREEN
 
@@ -129,16 +132,23 @@ Dispatch `debugger` (isolated context) on the specific failure.
 
 ---
 
-## 5. ESCALATE — circuit breaker. Mode B.
+## 5. ESCALATE — circuit breaker (mode-aware; see METHODOLOGY → Autonomy)
 
-FIRST STUCK: STOP. Present to me: the problem, 3 failed hypotheses, the
-debugger's recommendation, the debug file path. Ask what to do. Wait. Options:
-  (a) "re-research" -> /unstuck
-  (b) hint -> re-dispatch debugger with hint, budget 3
-  (c) "skip" / "re-slice" -> mark blocked, dispatch planner
+**AUTO (default) — do NOT stop the run:**
+  FIRST STUCK: auto-run `/unstuck` (deep re-research) ONCE; re-dispatch `debugger`
+  with the findings, budget 3.
+  STILL STUCK: log the issue (root cause + every failed hypothesis) to ISSUES.md,
+  mark the slice `BLOCKED` in PLAN, and move to the next INDEPENDENT slice/phase.
+  Add it to the batched end-of-run report. HARD-STOP (pause for me) ONLY if no
+  independent work remains, or the blocker is on the hard-stop list
+  (security / irreversible / contradictory spec).
 
-SECOND STUCK: STOP completely. Full summary — every hypothesis, current state,
-what to try next. Hand control to me.
+**GUIDED:**
+  FIRST STUCK: STOP. Present the problem, 3 failed hypotheses, the debugger's
+  recommendation, the debug file path. Wait. Options:
+    (a) "re-research" -> /unstuck   (b) hint -> re-dispatch debugger, budget 3
+    (c) "skip" / "re-slice" -> mark blocked, dispatch planner
+  SECOND STUCK: STOP completely. Full summary. Hand control to me.
 
 ---
 

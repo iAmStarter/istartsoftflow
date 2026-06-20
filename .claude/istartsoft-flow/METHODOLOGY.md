@@ -99,7 +99,8 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
   coverage gate.
 - **quick [change]** — small, obvious, non-phase change; no agent chain. Stays
   non-TDD. Runs the mock regression corpus after the change.
-- **unstuck** — deep re-research after a circuit breaker (human-triggered).
+- **unstuck** — deep re-research after a circuit breaker (auto-run once in AUTO on
+  first stuck; human-triggered in GUIDED).
 - **synthesize** — compress STATE.md, dedup ISSUES.md, prune snapshots. Run
   before a context reset.
 - **replan** — revise `PLAN.md` (add/cut/split/merge/reorder pending phases) and
@@ -153,14 +154,56 @@ The cheapest token is the one never loaded. The kit is built to minimise context
 
 -----
 
+## Autonomy
+
+The kit runs in one of two modes, declared in `docs/OVERVIEW.md` (default: **AUTO**):
+
+- **AUTO (default) — follow the docs, don't interrupt.** The spec is the source of
+  truth (OVERVIEW / PLAN / your BMAD/iSSM stories). Prefer DECIDING over asking.
+  For any in-process choice, resolve it in this order: (1) the spec, (2) the
+  codebase, (3) a sensible default + the worker's recommendation — then RECORD the
+  decision/assumption (`docs/DESIGN_LOG.md` or STATE) and CONTINUE. Do not stop mid-flow.
+- **GUIDED — ask at each fork.** The original behaviour: surface choices and wait.
+  Use when exploring, or when the spec is intentionally thin.
+
+**Decision protocol (AUTO).** Incomplete spec → fill the gap with the most
+reasonable interpretation, log it as an Assumption, continue. Ambiguous TDD
+classification → apply the default (`TDD_PHASE=true`), log the reason, continue. A
+worker that would have asked the user instead writes its question + its own best
+answer to STATE and proceeds on that answer. The grill becomes a SELF-grill: the
+agent answers the grill questions from the docs + codebase and logs only the
+genuinely unresolved ones as Assumptions — it does not interrogate the user live.
+
+**Batched escalation (AUTO).** Blockers never halt the whole run. Park the blocked
+slice (mark `BLOCKED` in PLAN), move to the next independent slice, and surface ONE
+consolidated report of all parked blockers + logged assumptions at the phase
+boundary / end of run. The human reviews THERE (the `/re` checkpoint), not mid-flow.
+
+**Hard stops (BOTH modes — these always pause for a human).** Autonomy is for
+*development*, not for risk. Stop and get sign-off ONLY for:
+1. Irreversible or outbound actions — deploy to prod, data deletion/migration,
+   `git push`, publish, spending money, sending external messages.
+2. Security-sensitive changes — auth, secrets, permissions, data exposure.
+3. A spec that is internally CONTRADICTORY (merely incomplete is NOT a stop — fill
+   + log instead).
+4. The debug budget is spent AND no independent slice remains to make progress.
+
+AUTO removes *questions*, not *discipline*: tests, the phase gate, issue logging,
+and the regression corpus all still run. The point is an efficient, end-to-end
+development run that follows the spec and logs every problem so it never recurs.
+
+-----
+
 ## Hard rules (1–10)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
    Before debugging an auth/infra error, check the infra + auth status surfaced
    at SESSION-OPEN first.
-2. Debug attempt cap = 3: WARN the user at attempt 2; the FIRST hard-stop at 3
-   STOPS and asks the user. No 4th in-place attempt.
+2. Debug attempt cap = 3: WARN at attempt 2. At 3, stop the in-place attempts (no
+   4th). GUIDED → ask the user. AUTO → log the issue (root cause + failed
+   attempts), park the slice, and continue per the batched-escalation protocol.
+   The cap protects efficiency (no flailing / token burn) in both modes.
 3. Every resolved error -> logged to `docs/ISSUES.md` with root cause + failed
    attempts.
 4. End of phase -> synthesize -> context reset -> next phase.

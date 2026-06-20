@@ -15,9 +15,12 @@ Goal: stand up a fresh project workspace with a well-grounded plan.
 
 ### Round 1 — Initial grill
 
-1. Run the `grill-me` skill to interrogate me. Goal: understand initial scope.
-   known constraints, unknowns.
-   Do not stop early. Do not write OVERVIEW.md yet.
+1. Goal: understand initial scope, known constraints, unknowns.
+   - **AUTO (default):** SELF-grill. Run `grill-me` against the docs — read the
+     BMAD/iSSM stories + the codebase and ANSWER each question yourself. Log only
+     the genuinely unresolved ones as Assumptions. Do NOT interrogate the user.
+   - **GUIDED:** run `grill-me` to interrogate me; do not stop early.
+   Do not write OVERVIEW.md yet.
 
 Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 
@@ -29,7 +32,7 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
    to verify before planning:
    - Each external service mentioned: what does it support at the relevant tier?
      Quotas, rate limits, known gaps?
-   - Auth patterns: any MSAL/Entra constraints for this scenario?
+   - Auth patterns: any constraints from the chosen auth provider for this scenario?
    - Any other architectural assumption in the round-1 answers worth verifying.
 
 3. Dispatch `researcher` in DESIGN mode with the DESIGN TOPICS list.
@@ -40,14 +43,11 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 
 ### Round 2 — Research-informed re-grill
 
-4. Run `grill-me` again — a second focused pass. Seed it with:
-   - The round-1 answers (already established — do not re-ask these)
-   - The design-research key findings and new questions raised
-
-   The re-grill asks whatever it needs to build complete understanding. It is
-   not limited to "gaps from research" — research context makes new questions
-   relevant even if it found no blockers. Do not re-ask what round 1 already
-   established clearly.
+4. Second focused pass, seeded with the round-1 answers + the design-research
+   findings and new questions raised.
+   - **AUTO (default):** SELF-re-grill — answer the new questions from the research
+     + docs + codebase; log anything still unresolved as an Assumption. No user prompts.
+   - **GUIDED:** run `grill-me` again; do not re-ask what round 1 already established.
 
 ---
 
@@ -56,9 +56,11 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 5. Write docs/OVERVIEW.md from the COMBINED output of round-1 + design-research
    + round-2. Include:
    - Project purpose and success criteria
+   - **Autonomy mode** (AUTO default / GUIDED) and the declared **stack** (language,
+     framework, infra, auth, test + E2E runner, planning source)
    - Scope and constraints (informed by research findings)
    - External services with confirmed capabilities/limits
-   - Known risks / open questions (if any remain)
+   - **Assumptions** (decisions taken in AUTO self-grill) + Known risks / open questions
 
    OVERVIEW.md is written HERE — after the re-grill, not before.
 
@@ -94,6 +96,8 @@ blocker: none
  > Base URL: (populated after deployment phase)
  ```
 
-Then stop and show me PLAN.md for approval before any phase starts.
-
-before starting Phase 1."
+Then, depending on mode:
+- **AUTO (default):** PLAN.md derives from the approved BMAD/iSSM stories, so it is
+  already approved — record it and proceed. If there is NO upstream plan, surface
+  PLAN.md once as the single checkpoint, then proceed. Don't gate per phase.
+- **GUIDED:** stop and show me PLAN.md for approval before any phase starts.
