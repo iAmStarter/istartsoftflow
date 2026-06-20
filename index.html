@@ -13,13 +13,12 @@
     --grad:linear-gradient(120deg,var(--a1),var(--a2));
     --radius:16px; --maxw:1080px;
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,system-ui,sans-serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,"Noto Sans Thai",system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:radial-gradient(1200px 700px at 80% -10%,#1a2238 0,transparent 60%),radial-gradient(900px 600px at -10% 10%,#16203a 0,transparent 55%),var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:var(--a2);text-decoration:none}
-  a:hover{text-decoration:underline}
+  a{color:var(--a2);text-decoration:none} a:hover{text-decoration:underline}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
   .ey{font-family:var(--mono);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--a2)}
   h1,h2,h3{line-height:1.18;margin:0 0 .4em}
@@ -27,39 +26,41 @@
   section{padding:64px 0;border-top:1px solid var(--line)}
   .muted{color:var(--muted)}
 
-  /* nav */
+  /* i18n toggle */
+  html[lang="en"] .th{display:none}
+  html[lang="th"] .en{display:none}
+  html[lang="th"] body{line-height:1.72}
+
   nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(11,15,26,.7);border-bottom:1px solid var(--line)}
   nav .wrap{display:flex;align-items:center;gap:18px;padding-top:14px;padding-bottom:14px}
   .brand{font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:9px;font-size:1.05rem}
   .dot{width:13px;height:13px;border-radius:4px;background:var(--grad);box-shadow:0 0 16px rgba(124,92,255,.6)}
-  nav .links{margin-left:auto;display:flex;gap:20px;font-size:.92rem}
+  nav .links{margin-left:auto;display:flex;gap:20px;font-size:.92rem;align-items:center}
   nav .links a{color:var(--muted)} nav .links a:hover{color:var(--txt);text-decoration:none}
-  @media(max-width:680px){nav .links{display:none}}
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .lang button{background:transparent;border:0;color:var(--muted);font:600 .8rem/1 var(--mono);padding:7px 11px;cursor:pointer}
+  .lang button.on{background:var(--grad);color:#0a0e18}
+  @media(max-width:760px){nav .links a:not(.keep){display:none}}
 
-  /* hero */
   .hero{padding:88px 0 64px;text-align:center}
   .hero h1{font-size:clamp(2.4rem,7vw,4.2rem);letter-spacing:-.03em;margin-bottom:.2em}
   .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lead{font-size:clamp(1.05rem,2.4vw,1.3rem);color:var(--muted);max-width:680px;margin:0 auto 1.6em}
+  .lead{font-size:clamp(1.05rem,2.4vw,1.3rem);color:var(--muted);max-width:700px;margin:0 auto 1.6em}
   .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
   .badge{font-family:var(--mono);font-size:.74rem;color:var(--muted);border:1px solid var(--line);background:var(--bg2);padding:6px 12px;border-radius:999px}
   .badge b{color:var(--a3)}
   .cmd{display:inline-flex;align-items:center;gap:14px;background:#0a0e18;border:1px solid var(--line);border-radius:12px;padding:13px 16px;font-family:var(--mono);font-size:.95rem;max-width:100%}
-  .cmd code{color:var(--txt);white-space:nowrap;overflow:auto}
-  .cmd .pp{color:var(--a3)}
+  .cmd code{color:var(--txt);white-space:nowrap;overflow:auto} .cmd .pp{color:var(--a3)}
   .copy{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:8px;padding:5px 10px;font-size:.72rem;font-family:var(--mono)}
   .copy:hover{color:var(--txt);border-color:var(--a1)}
   .cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
-  .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.95rem;border:1px solid var(--line)}
+  .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.95rem;border:1px solid var(--line);transition:transform .12s ease}
   .btn.primary{background:var(--grad);color:#0a0e18;border:none}
   .btn.ghost{color:var(--txt);background:var(--card)}
   .btn:hover{text-decoration:none;transform:translateY(-1px)}
-  .btn{transition:transform .12s ease}
 
-  /* grids */
   .grid{display:grid;gap:16px}
-  .g3{grid-template-columns:repeat(3,1fr)}
-  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
   @media(max-width:820px){.g3{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
   @media(max-width:520px){.g3{grid-template-columns:1fr}}
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
@@ -69,30 +70,23 @@
   .tag{font-family:var(--mono);font-size:.68rem;padding:3px 8px;border-radius:6px;background:var(--bg2);border:1px solid var(--line);color:var(--dim)}
   .ok{color:var(--a3)} .warn{color:#fbbf24}
 
-  /* loop */
   .loop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-family:var(--mono);font-size:.92rem}
   .step{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:9px 16px}
-  .step.alt{border-color:var(--a1);color:#cdbcff}
-  .arr{color:var(--a2)}
+  .step.alt{border-color:var(--a1);color:#cdbcff} .arr{color:var(--a2)}
 
-  /* table */
-  .tbl{width:100%;border-collapse:collapse;font-size:.9rem;overflow:hidden;border-radius:var(--radius);border:1px solid var(--line)}
+  .tbl{width:100%;border-collapse:collapse;font-size:.9rem;border-radius:var(--radius);border:1px solid var(--line);overflow:hidden}
   .tbl th,.tbl td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line)}
   .tbl th{background:var(--bg2);color:var(--muted);font-weight:600;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}
-  .tbl tr:last-child td{border-bottom:none}
-  .tbl td:first-child{font-weight:600}
-  .tbl code{font-family:var(--mono);font-size:.84rem;color:var(--a2)}
-  .scroll{overflow-x:auto}
+  .tbl tr:last-child td{border-bottom:none} .tbl td:first-child{font-weight:600}
+  .tbl code{font-family:var(--mono);font-size:.84rem;color:var(--a2)} .scroll{overflow-x:auto}
 
   ul.clean{list-style:none;padding:0;margin:0}
   ul.clean li{padding:9px 0;border-bottom:1px solid var(--line);color:var(--muted)}
-  ul.clean li:last-child{border:none}
-  ul.clean b{color:var(--txt)}
+  ul.clean li:last-child{border:none} ul.clean b{color:var(--txt)}
 
   footer{padding:48px 0;border-top:1px solid var(--line);color:var(--dim);font-size:.88rem}
   footer .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
-  footer a{color:var(--muted)}
-  .sp{margin-left:auto}
+  footer a{color:var(--muted)} .sp{margin-left:auto}
 </style>
 </head>
 <body>
@@ -100,22 +94,34 @@
 <nav><div class="wrap">
   <span class="brand"><span class="dot"></span>iStartSoftFlow</span>
   <span class="links">
-    <a href="#tools">Tools</a><a href="#loop">The loop</a><a href="#kit">What you get</a>
-    <a href="#skills">Skills</a><a href="#practices">Best practices</a>
-    <a href="https://www.npmjs.com/package/create-issflow">npm</a>
+    <a href="#tools"><span class="en">Tools</span><span class="th">เครื่องมือ</span></a>
+    <a href="#loop"><span class="en">The loop</span><span class="th">ลูป</span></a>
+    <a href="#kit"><span class="en">What you get</span><span class="th">ในชุด</span></a>
+    <a href="#skills"><span class="en">Skills</span><span class="th">สกิล</span></a>
+    <a href="#practices"><span class="en">Best practices</span><span class="th">แนวปฏิบัติ</span></a>
+    <span class="lang keep" role="group" aria-label="language">
+      <button data-lang="en">EN</button><button data-lang="th">ไทย</button>
+    </span>
   </span>
 </div></nav>
 
 <header class="hero"><div class="wrap">
-  <div class="ey">portable agentic-dev workflow</div>
-  <h1>Ship with a workflow that<br><span class="grad">runs itself.</span></h1>
-  <p class="lead">A hook-enforced <code>design&#8209;research → grill → plan → implement → test → deploy</code> loop with
-  agent orchestration and automatic context hygiene — for Claude Code, Codex, Cursor, Gemini &amp; Aider.</p>
+  <div class="ey"><span class="en">portable agentic-dev workflow</span><span class="th">เวิร์กโฟลว์ AI-coding แบบพกพา</span></div>
+  <h1>
+    <span class="en">Ship with a workflow that<br><span class="grad">runs itself.</span></span>
+    <span class="th">ส่งงานด้วยเวิร์กโฟลว์ที่<br><span class="grad">ทำงานเอง</span></span>
+  </h1>
+  <p class="lead">
+    <span class="en">A hook-enforced <code>design&#8209;research → grill → plan → implement → test → deploy</code> loop with
+    agent orchestration and automatic context hygiene — for Claude Code, Codex, Cursor, Gemini &amp; Aider.</span>
+    <span class="th">ลูป <code>design&#8209;research → grill → plan → implement → test → deploy</code> ที่บังคับด้วย hook
+    พร้อมการสั่งงาน agent และจัดการ context อัตโนมัติ — ใช้ได้กับ Claude Code, Codex, Cursor, Gemini และ Aider</span>
+  </p>
   <div class="badges">
-    <span class="badge"><b>6</b> tools</span>
+    <span class="badge"><b>6</b> <span class="en">tools</span><span class="th">เครื่องมือ</span></span>
     <span class="badge">macOS · Windows · Linux</span>
-    <span class="badge">pure <b>Node</b>, zero deps</span>
-    <span class="badge">token&#8209;lean</span>
+    <span class="badge"><span class="en">pure</span><span class="th">ใช้</span> <b>Node</b> <span class="en">zero deps</span><span class="th">ล้วน</span></span>
+    <span class="badge"><span class="en">token&#8209;lean</span><span class="th">ประหยัด token</span></span>
     <span class="badge">MIT</span>
   </div>
   <div class="cmd">
@@ -123,46 +129,68 @@
     <button class="copy" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText('npx create-issflow').then(()=>{this.textContent='copied';setTimeout(()=>this.textContent='copy',1200)})">copy</button>
   </div>
   <div class="cta">
-    <a class="btn primary" href="#tools">Get started</a>
-    <a class="btn ghost" href="https://github.com/iAmStarter/istartsoftflow">View on GitHub</a>
+    <a class="btn primary" href="#tools"><span class="en">Get started</span><span class="th">เริ่มใช้งาน</span></a>
+    <a class="btn ghost" href="https://github.com/iAmStarter/istartsoftflow"><span class="en">View on GitHub</span><span class="th">ดูบน GitHub</span></a>
   </div>
 </div></header>
 
 <section id="why"><div class="wrap">
-  <div class="ey">why</div>
-  <h2>Mandatory steps live in hooks. Thinking lives in agents.</h2>
+  <div class="ey"><span class="en">why</span><span class="th">ทำไม</span></div>
+  <h2><span class="en">Mandatory steps live in hooks. Thinking lives in agents.</span><span class="th">ขั้นตอนบังคับอยู่ใน hooks — การคิดอยู่ใน agents</span></h2>
   <p class="muted" style="max-width:760px">
-  It pins a <b style="color:var(--txt)">process</b>, not a stack. Deterministic rituals (read the issue log,
-  snapshot before compaction) run as lifecycle hooks so they can't be skipped; the reasoning runs in
-  fresh-context subagents that return only summaries. Declare your stack once in <code>docs/OVERVIEW.md</code> —
-  every rule references <i>your</i> stack and hardcodes none.</p>
+    <span class="en">It pins a <b style="color:var(--txt)">process</b>, not a stack. Deterministic rituals (read the issue log,
+    snapshot before compaction) run as lifecycle hooks so they can't be skipped; the reasoning runs in
+    fresh-context subagents that return only summaries. Declare your stack once in <code>docs/OVERVIEW.md</code> —
+    every rule references <i>your</i> stack and hardcodes none.</span>
+    <span class="th">มันยึด <b style="color:var(--txt)">กระบวนการ</b> ไม่ใช่ stack. ขั้นตอนที่ต้องทำแน่ๆ (อ่าน issue log,
+    snapshot ก่อน compact) รันเป็น lifecycle hook จึงข้ามไม่ได้; ส่วนการคิดรันใน subagent ที่ context สดและส่งกลับแค่สรุป.
+    ประกาศ stack ครั้งเดียวใน <code>docs/OVERVIEW.md</code> — ทุกกฎอ้างถึง stack <i>ของคุณ</i> ไม่ฮาร์ดโค้ดอะไรเลย</span>
+  </p>
   <div class="grid g3" style="margin-top:26px">
-    <div class="card"><h3>🪝 Hook-enforced</h3><p>SessionStart / PreCompact / SubagentStop inject live state and snapshot recovery — automatically, every session.</p></div>
-    <div class="card"><h3>🧩 Agent orchestration</h3><p>An orchestrator routes work to 7 specialist subagents (plan, research, implement, test, debug, e2e, synthesize) that isolate the noise.</p></div>
-    <div class="card"><h3>🪶 Token-lean by design</h3><p>The methodology &amp; skills load on demand; only live state + open issues are paid each session. Cost doesn't grow with history.</p></div>
+    <div class="card"><h3>🪝 <span class="en">Hook-enforced</span><span class="th">บังคับด้วย hook</span></h3>
+      <p><span class="en">SessionStart / PreCompact / SubagentStop inject live state and snapshot recovery — automatically, every session.</span><span class="th">SessionStart / PreCompact / SubagentStop ฉีดสถานะสดและ snapshot กู้คืน — อัตโนมัติทุก session</span></p></div>
+    <div class="card"><h3>🧩 <span class="en">Agent orchestration</span><span class="th">ออร์เคสเตรต agent</span></h3>
+      <p><span class="en">An orchestrator routes work to 7 specialist subagents (plan, research, implement, test, debug, e2e, synthesize) that isolate the noise.</span><span class="th">ตัวออร์เคสเตรตกระจายงานไป 7 subagent เฉพาะทาง (plan, research, implement, test, debug, e2e, synthesize) ที่แยก noise ออกไป</span></p></div>
+    <div class="card"><h3>🪶 <span class="en">Token-lean by design</span><span class="th">ประหยัด token ตั้งแต่ดีไซน์</span></h3>
+      <p><span class="en">The methodology &amp; skills load on demand; only live state + open issues are paid each session. Cost doesn't grow with history.</span><span class="th">methodology และ skill โหลดเมื่อใช้; จ่ายเฉพาะสถานะสด + issue ที่เปิดอยู่ ต่อ session ค่าใช้จ่ายไม่โตตามประวัติ</span></p></div>
   </div>
 </div></section>
 
 <section id="tools"><div class="wrap">
-  <div class="ey">install</div>
-  <h2>One kit, six tools</h2>
-  <p class="muted">Single source of truth (<code>.claude/</code> + <code>AGENTS.md</code>); the installer writes the right adapter. Unsupported features degrade to model-run rituals — never silently dropped.</p>
+  <div class="ey"><span class="en">install</span><span class="th">ติดตั้ง</span></div>
+  <h2><span class="en">One kit, six tools</span><span class="th">หนึ่งชุด ใช้ได้ 6 เครื่องมือ</span></h2>
+  <p class="muted">
+    <span class="en">Single source of truth (<code>.claude/</code> + <code>AGENTS.md</code>); the installer writes the right adapter. Unsupported features degrade to model-run rituals — never silently dropped.</span>
+    <span class="th">แหล่งความจริงเดียว (<code>.claude/</code> + <code>AGENTS.md</code>); installer เขียน adapter ให้ตรงเครื่องมือ ฟีเจอร์ที่ไม่รองรับจะ degrade เป็น ritual แบบ model-run — ไม่หายเงียบ</span>
+  </p>
   <div class="scroll" style="margin-top:22px"><table class="tbl">
-    <tr><th>Tool</th><th>Entry</th><th>Commands</th><th>Subagents</th><th>Lifecycle hooks</th></tr>
-    <tr><td>Claude Code <span class="tag">reference</span></td><td><code>AGENTS.md</code> + <code>.claude/</code></td><td><code>.claude/commands/</code></td><td class="ok">native</td><td class="ok">all 3, with injection</td></tr>
-    <tr><td>Codex CLI</td><td><code>AGENTS.md</code></td><td>read as prompts</td><td>reference</td><td class="warn">model-run</td></tr>
-    <tr><td>Cursor</td><td><code>.cursor/rules/</code></td><td><code>.cursor/commands/</code></td><td class="ok">reads <code>.claude/agents</code></td><td class="ok"><code>hooks.json</code></td></tr>
-    <tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td><td>read as prompts</td><td>reference</td><td class="warn">model-run</td></tr>
-    <tr><td>Aider</td><td><code>.aider.conf.yml</code></td><td>reference</td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
-    <tr><td>Any AGENTS.md tool</td><td><code>AGENTS.md</code></td><td>reference</td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
+    <tr>
+      <th><span class="en">Tool</span><span class="th">เครื่องมือ</span></th>
+      <th><span class="en">Entry</span><span class="th">ไฟล์เข้า</span></th>
+      <th><span class="en">Commands</span><span class="th">คำสั่ง</span></th>
+      <th><span class="en">Subagents</span><span class="th">ซับเอเจนต์</span></th>
+      <th><span class="en">Lifecycle hooks</span><span class="th">ฮุก</span></th>
+    </tr>
+    <tr><td>Claude Code <span class="tag">ref</span></td><td><code>AGENTS.md</code> + <code>.claude/</code></td><td><code>.claude/commands/</code></td><td class="ok"><span class="en">native</span><span class="th">เนทีฟ</span></td><td class="ok"><span class="en">all 3, with injection</span><span class="th">ครบ 3 + inject</span></td></tr>
+    <tr><td>Codex CLI</td><td><code>AGENTS.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
+    <tr><td>Cursor</td><td><code>.cursor/rules/</code></td><td><code>.cursor/commands/</code></td><td class="ok"><span class="en">reads</span><span class="th">อ่าน</span> <code>.claude/agents</code></td><td class="ok"><code>hooks.json</code></td></tr>
+    <tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
+    <tr><td>Aider</td><td><code>.aider.conf.yml</code></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
+    <tr><td><span class="en">Any AGENTS.md tool</span><span class="th">ทุก tool ที่อ่าน AGENTS.md</span></td><td><code>AGENTS.md</code></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
   </table></div>
-  <p class="muted" style="margin-top:14px;font-size:.86rem">Flags: <code>--tool=&lt;name&gt;</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Non-destructive: conflicts are written as <code>&lt;file&gt;.issflow-new</code>.</p>
+  <p class="muted" style="margin-top:14px;font-size:.86rem">
+    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Non-destructive: conflicts are written as <code>&lt;file&gt;.issflow-new</code>.</span>
+    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> — ไม่ทับไฟล์เดิม: ที่ชนกันจะเขียนเป็น <code>&lt;file&gt;.issflow-new</code></span>
+  </p>
 </div></section>
 
 <section id="loop"><div class="wrap">
-  <div class="ey">the loop</div>
-  <h2>One vertical slice per phase</h2>
-  <p class="muted" style="margin-bottom:26px">Implement <i>and</i> test a phase before the next; the last phase ships deployment. TDD phases write tests blind, RED-first.</p>
+  <div class="ey"><span class="en">the loop</span><span class="th">ลูป</span></div>
+  <h2><span class="en">One vertical slice per phase</span><span class="th">หนึ่ง vertical slice ต่อหนึ่ง phase</span></h2>
+  <p class="muted" style="margin-bottom:26px">
+    <span class="en">Implement <i>and</i> test a phase before the next; the last phase ships deployment. TDD phases write tests blind, RED-first.</span>
+    <span class="th">ทำ <i>และ</i> เทสต์ให้จบก่อนขึ้น phase ถัดไป; phase สุดท้ายรวม deploy — phase แบบ TDD เขียนเทสต์แบบ blind, RED ก่อน</span>
+  </p>
   <div class="loop">
     <span class="step">design-research</span><span class="arr">→</span>
     <span class="step">grill ×2</span><span class="arr">→</span>
@@ -175,40 +203,47 @@
 </div></section>
 
 <section id="kit"><div class="wrap">
-  <div class="ey">what you get</div>
-  <h2>In <code>&lt;project&gt;/.claude/</code></h2>
+  <div class="ey"><span class="en">what you get</span><span class="th">ในชุด</span></div>
+  <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.claude/</code></h2>
   <div class="grid g2" style="margin-top:24px">
-    <div class="card"><h3>🤖 7 agents</h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
-    <div class="card"><h3>⌨️ 9 commands</h3><p><code>/overview /phase /quick /replan /synthesize /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
-    <div class="card"><h3>✨ 4 skills</h3><p>caveman · grill-me · karpathy-guidelines · ux-design — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</p></div>
-    <div class="card"><h3>🪝 3 hooks</h3><p>session-start · pre-compact · subagent-stop — pure-Node, cross-platform, wired per tool.</p></div>
+    <div class="card"><h3>🤖 <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
+    <div class="card"><h3>⌨️ <span class="en">9 commands</span><span class="th">9 คำสั่ง</span></h3><p><code>/overview /phase /quick /replan /synthesize /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
+    <div class="card"><h3>✨ <span class="en">4 skills</span><span class="th">4 สกิล</span></h3>
+      <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
+    <div class="card"><h3>🪝 <span class="en">3 hooks</span><span class="th">3 ฮุก</span></h3>
+      <p><span class="en">session-start · pre-compact · subagent-stop — pure-Node, cross-platform, wired per tool.</span><span class="th">session-start · pre-compact · subagent-stop — Node ล้วน ข้ามแพลตฟอร์ม ต่อสายตามเครื่องมือ</span></p></div>
   </div>
 </div></section>
 
 <section id="skills"><div class="wrap">
-  <div class="ey">UX guardrail</div>
-  <h2>The <code>ux-design</code> cookbook</h2>
-  <p class="muted" style="max-width:760px">Generated UI is validated against a frame so it can't drift. The skill bundles a cookbook
-  (design tokens · 8&#8209;pt grid · WCAG&nbsp;2.1&nbsp;AA · state matrix · breakpoints · i18n) and a canonical
-  wireframe baseline under <code>references/</code> — loaded only when you touch UI. A frontend phase can't close until the check passes.</p>
+  <div class="ey"><span class="en">UX guardrail</span><span class="th">การ์ดราว UX</span></div>
+  <h2><span class="en">The</span><span class="th"></span> <code>ux-design</code> <span class="en">cookbook</span><span class="th">cookbook</span></h2>
+  <p class="muted" style="max-width:760px">
+    <span class="en">Generated UI is validated against a frame so it can't drift. The skill bundles a cookbook
+    (design tokens · 8&#8209;pt grid · WCAG&nbsp;2.1&nbsp;AA · state matrix · breakpoints · i18n) and a canonical
+    wireframe baseline under <code>references/</code> — loaded only when you touch UI. A frontend phase can't close until the check passes.</span>
+    <span class="th">UI ที่สร้างจะถูกตรวจกับ "กรอบ" ไม่ให้หลุดดีไซน์ สกิลนี้รวม cookbook
+    (design token · กริด 8&#8209;pt · WCAG&nbsp;2.1&nbsp;AA · state matrix · breakpoint · i18n) และ wireframe ต้นแบบ
+    ไว้ใน <code>references/</code> — โหลดเฉพาะตอนทำ UI และ phase ฝั่งหน้าบ้านปิดไม่ได้จนกว่าจะผ่านการตรวจ</span>
+  </p>
   <div class="grid g3" style="margin-top:24px">
-    <div class="card"><h3>🎨 Tokens</h3><p>No raw hex/px — named tokens, 8-pt spacing scale, fixed type ramp.</p></div>
-    <div class="card"><h3>♿ Accessibility</h3><p>Contrast ≥ 4.5:1, keyboard-reachable, semantic HTML, 44×44 hit areas.</p></div>
-    <div class="card"><h3>📐 Wireframe-first</h3><p>Every screen maps to a low-fidelity baseline before pixels exist. Drift = defect.</p></div>
+    <div class="card"><h3>🎨 <span class="en">Tokens</span><span class="th">โทเคน</span></h3><p><span class="en">No raw hex/px — named tokens, 8-pt spacing scale, fixed type ramp.</span><span class="th">ห้าม hex/px ดิบ — ใช้ token มีชื่อ, สเกลระยะ 8-pt, type ramp ตายตัว</span></p></div>
+    <div class="card"><h3>♿ <span class="en">Accessibility</span><span class="th">การเข้าถึง</span></h3><p><span class="en">Contrast ≥ 4.5:1, keyboard-reachable, semantic HTML, 44×44 hit areas.</span><span class="th">คอนทราสต์ ≥ 4.5:1, ใช้คีย์บอร์ดได้, semantic HTML, พื้นที่กด 44×44</span></p></div>
+    <div class="card"><h3>📐 <span class="en">Wireframe-first</span><span class="th">เริ่มที่ wireframe</span></h3><p><span class="en">Every screen maps to a low-fidelity baseline before pixels exist. Drift = defect.</span><span class="th">ทุกหน้าจอแมปกับต้นแบบ low-fidelity ก่อนมีพิกเซล — หลุดกรอบ = ข้อบกพร่อง</span></p></div>
   </div>
 </div></section>
 
 <section id="practices"><div class="wrap">
-  <div class="ey">workflow best practices</div>
-  <h2>How to drive it well</h2>
-  <p class="muted">Distilled from how teams run coding agents (sourced notes in <code>docs/research/</code>). The kit enforces most of these.</p>
+  <div class="ey"><span class="en">workflow best practices</span><span class="th">แนวปฏิบัติที่ดี</span></div>
+  <h2><span class="en">How to drive it well</span><span class="th">ขับเคลื่อนให้ดีต้องทำยังไง</span></h2>
+  <p class="muted"><span class="en">Distilled from how teams run coding agents (sourced notes in <code>docs/research/</code>). The kit enforces most of these.</span><span class="th">กลั่นจากวิธีที่ทีมจริงใช้ coding agent (บันทึกพร้อมแหล่งที่มาใน <code>docs/research/</code>) — kit บังคับใช้ส่วนใหญ่ให้แล้ว</span></p>
   <ul class="clean" style="margin-top:18px">
-    <li><b>Context hygiene</b> — fresh context per task; <code>/synthesize → /clear</code> between phases; delegate noisy work to subagents.</li>
-    <li><b>Spec-first</b> — write acceptance criteria before code; a human approves the plan; thin vertical slices, not layers.</li>
-    <li><b>TDD, blind</b> — tests written from the spec without seeing the code, RED-first. Never edit a test to make it pass.</li>
-    <li><b>Debug discipline</b> — cap attempts at 3; grep the issue log first; log every fix with its root cause.</li>
-    <li><b>Review the diff</b> — never trust "it works"; small changes; feature branch, never the default branch.</li>
-    <li><b>Security</b> — least-privilege tools; humans approve destructive/outbound actions; secrets in env, never in prompts.</li>
+    <li><b><span class="en">Context hygiene</span><span class="th">สุขอนามัย context</span></b> — <span class="en">fresh context per task; <code>/synthesize → /clear</code> between phases; delegate noisy work to subagents.</span><span class="th">context สดต่อหนึ่งงาน; <code>/synthesize → /clear</code> ระหว่าง phase; โยนงานรกๆ ให้ subagent</span></li>
+    <li><b><span class="en">Spec-first</span><span class="th">เริ่มที่ spec</span></b> — <span class="en">write acceptance criteria before code; a human approves the plan; thin vertical slices, not layers.</span><span class="th">เขียนเกณฑ์ยอมรับก่อนโค้ด; คนอนุมัติแผนก่อน; ตัดเป็น vertical slice บางๆ ไม่ใช่แบ่งเป็นเลเยอร์</span></li>
+    <li><b><span class="en">TDD, blind</span><span class="th">TDD แบบ blind</span></b> — <span class="en">tests written from the spec without seeing the code, RED-first. Never edit a test to make it pass.</span><span class="th">เขียนเทสต์จาก spec โดยไม่เห็นโค้ด, RED ก่อน — ห้ามแก้เทสต์เพื่อให้ผ่าน</span></li>
+    <li><b><span class="en">Debug discipline</span><span class="th">วินัยการดีบัก</span></b> — <span class="en">cap attempts at 3; grep the issue log first; log every fix with its root cause.</span><span class="th">จำกัด 3 ครั้ง; grep issue log ก่อน; บันทึกทุกการแก้พร้อม root cause</span></li>
+    <li><b><span class="en">Review the diff</span><span class="th">รีวิว diff</span></b> — <span class="en">never trust "it works"; small changes; feature branch, never the default branch.</span><span class="th">อย่าเชื่อคำว่า "มันรันได้"; เปลี่ยนทีละนิด; ทำบน feature branch ไม่ใช่ branch หลัก</span></li>
+    <li><b><span class="en">Security</span><span class="th">ความปลอดภัย</span></b> — <span class="en">least-privilege tools; humans approve destructive/outbound actions; secrets in env, never in prompts.</span><span class="th">ให้สิทธิ์เครื่องมือน้อยที่สุด; คนอนุมัติงานที่ลบ/ส่งออก; เก็บ secret ใน env ไม่ใส่ใน prompt</span></li>
   </ul>
 </div></section>
 
@@ -220,5 +255,23 @@
   <span class="sp">© 2026 iStartSoft</span>
 </div></footer>
 
+<script>
+  (function(){
+    var saved = null;
+    try { saved = localStorage.getItem('issflow-lang'); } catch(e){}
+    var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('th')===0 ? 'th' : 'en');
+    function set(l){
+      document.documentElement.lang = l;
+      try { localStorage.setItem('issflow-lang', l); } catch(e){}
+      var btns = document.querySelectorAll('.lang button');
+      for (var i=0;i<btns.length;i++) btns[i].classList.toggle('on', btns[i].getAttribute('data-lang')===l);
+    }
+    document.addEventListener('click', function(e){
+      var b = e.target.closest && e.target.closest('.lang button');
+      if (b) set(b.getAttribute('data-lang'));
+    });
+    set(lang);
+  })();
+</script>
 </body>
 </html>
