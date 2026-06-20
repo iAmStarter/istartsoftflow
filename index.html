@@ -26,10 +26,11 @@
   section{padding:64px 0;border-top:1px solid var(--line)}
   .muted{color:var(--muted)}
 
-  /* i18n toggle */
-  html[lang="en"] .th{display:none}
-  html[lang="th"] .en{display:none}
-  html[lang="th"] body{line-height:1.72}
+  /* i18n toggle — pure-CSS radio hack, works even with JS disabled */
+  .langradio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+  .en{display:inline} .th{display:none}
+  #lang-th:checked ~ * .en{display:none}
+  #lang-th:checked ~ * .th{display:inline}
 
   nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(11,15,26,.7);border-bottom:1px solid var(--line)}
   nav .wrap{display:flex;align-items:center;gap:18px;padding-top:14px;padding-bottom:14px}
@@ -38,8 +39,9 @@
   nav .links{margin-left:auto;display:flex;gap:20px;font-size:.92rem;align-items:center}
   nav .links a{color:var(--muted)} nav .links a:hover{color:var(--txt);text-decoration:none}
   .lang{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-  .lang button{background:transparent;border:0;color:var(--muted);font:600 .8rem/1 var(--mono);padding:7px 11px;cursor:pointer}
-  .lang button.on{background:var(--grad);color:#0a0e18}
+  .lang label{background:transparent;color:var(--muted);font:600 .8rem/1 var(--mono);padding:7px 11px;cursor:pointer;user-select:none;-webkit-user-select:none}
+  #lang-en:checked ~ * label[for="lang-en"],
+  #lang-th:checked ~ * label[for="lang-th"]{background:var(--grad);color:#0a0e18}
   @media(max-width:760px){nav .links a:not(.keep){display:none}}
 
   .hero{padding:88px 0 64px;text-align:center}
@@ -90,6 +92,8 @@
 </style>
 </head>
 <body>
+<input type="radio" name="lang" id="lang-en" class="langradio" checked>
+<input type="radio" name="lang" id="lang-th" class="langradio">
 
 <nav><div class="wrap">
   <span class="brand"><span class="dot"></span>iStartSoftFlow</span>
@@ -100,7 +104,7 @@
     <a href="#skills"><span class="en">Skills</span><span class="th">สกิล</span></a>
     <a href="#practices"><span class="en">Best practices</span><span class="th">แนวปฏิบัติ</span></a>
     <span class="lang keep" role="group" aria-label="language">
-      <button data-lang="en">EN</button><button data-lang="th">ไทย</button>
+      <label for="lang-en">EN</label><label for="lang-th">ไทย</label>
     </span>
   </span>
 </div></nav>
@@ -256,21 +260,18 @@
 </div></footer>
 
 <script>
+  /* Progressive enhancement only — the toggle already works via pure CSS.
+     JS just remembers the choice and auto-picks Thai for Thai browsers. */
   (function(){
+    var en = document.getElementById('lang-en'), th = document.getElementById('lang-th');
+    if (!en || !th) return;
     var saved = null;
     try { saved = localStorage.getItem('issflow-lang'); } catch(e){}
     var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('th')===0 ? 'th' : 'en');
-    function set(l){
-      document.documentElement.lang = l;
-      try { localStorage.setItem('issflow-lang', l); } catch(e){}
-      var btns = document.querySelectorAll('.lang button');
-      for (var i=0;i<btns.length;i++) btns[i].classList.toggle('on', btns[i].getAttribute('data-lang')===l);
-    }
-    document.addEventListener('click', function(e){
-      var b = e.target.closest && e.target.closest('.lang button');
-      if (b) set(b.getAttribute('data-lang'));
-    });
-    set(lang);
+    if (lang === 'th') th.checked = true; else en.checked = true;
+    function persist(){ try { localStorage.setItem('issflow-lang', th.checked ? 'th' : 'en'); } catch(e){} document.documentElement.lang = th.checked ? 'th' : 'en'; }
+    en.addEventListener('change', persist); th.addEventListener('change', persist);
+    document.documentElement.lang = lang;
   })();
 </script>
 </body>
