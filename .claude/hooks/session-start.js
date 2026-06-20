@@ -116,8 +116,9 @@ if (exists(KB_CONFIG)) {
 
 // 4. hard rule reminder
 emit('## RULES (enforced this session)');
-emit('- AUTO mode (default): follow the spec — decide + log + continue, do NOT stop to');
-emit('  ask. Hard-stops only: security / irreversible-or-outbound actions / contradictory spec.');
+emit('- AUTO mode (default) governs the DEV loop: follow the plan — decide + log +');
+emit('  continue, do NOT stop to ask. (Planning / grill still asks — that part is fine.)');
+emit('  Hard-stops only: security / irreversible-or-outbound actions / contradictory spec.');
 emit('- caveman ULTRA mode is active.');
 emit('- before debugging ANY error: grep ISSUES.md AND research/INDEX.md first.');
 emit('- debug attempts: WARN at 2; cap 3. AUTO: log + park the slice + continue (batched');

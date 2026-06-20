@@ -158,21 +158,25 @@ The cheapest token is the one never loaded. The kit is built to minimise context
 
 The kit runs in one of two modes, declared in `docs/OVERVIEW.md` (default: **AUTO**):
 
-- **AUTO (default) — follow the docs, don't interrupt.** The spec is the source of
-  truth (OVERVIEW / PLAN / your BMAD/iSSM stories). Prefer DECIDING over asking.
-  For any in-process choice, resolve it in this order: (1) the spec, (2) the
-  codebase, (3) a sensible default + the worker's recommendation — then RECORD the
-  decision/assumption (`docs/DESIGN_LOG.md` or STATE) and CONTINUE. Do not stop mid-flow.
-- **GUIDED — ask at each fork.** The original behaviour: surface choices and wait.
-  Use when exploring, or when the spec is intentionally thin.
+**Planning always asks; development doesn't.** Asking is cheap and decisive while
+*planning* — so `/overview` (the double-grill) and plan approval stay interactive in
+both modes. AUTO governs only the **development loop** (implement → test → debug →
+close): there, interruptions are expensive, so it follows the plan instead of asking.
 
-**Decision protocol (AUTO).** Incomplete spec → fill the gap with the most
-reasonable interpretation, log it as an Assumption, continue. Ambiguous TDD
-classification → apply the default (`TDD_PHASE=true`), log the reason, continue. A
-worker that would have asked the user instead writes its question + its own best
-answer to STATE and proceeds on that answer. The grill becomes a SELF-grill: the
-agent answers the grill questions from the docs + codebase and logs only the
-genuinely unresolved ones as Assumptions — it does not interrogate the user live.
+- **AUTO (default) — during DEVELOPMENT, follow the plan, don't interrupt.** Once a
+  plan exists, the dev loop prefers DECIDING over asking. Resolve any in-process
+  choice from (1) the PLAN/OVERVIEW/spec, (2) the codebase, (3) a sensible default +
+  the worker's recommendation — then RECORD it (`docs/DESIGN_LOG.md` or STATE) and
+  CONTINUE. Do not stop mid-build to ask.
+- **GUIDED — ask at each fork in dev too.** The original behaviour: the development
+  loop also surfaces choices and waits. Use when exploring an unfamiliar codebase.
+
+**Decision protocol (AUTO, dev loop).** Incomplete acceptance spec → fill the gap
+with the most reasonable interpretation, log it as an Assumption, continue.
+Ambiguous TDD classification → apply the default (`TDD_PHASE=true`), log the reason,
+continue. A worker that would have asked the user instead writes its question + its
+own best answer to STATE and proceeds on that answer. (If the gap is in the PLAN
+itself — not just an implementation detail — that's a planning question: surface it.)
 
 **Batched escalation (AUTO).** Blockers never halt the whole run. Park the blocked
 slice (mark `BLOCKED` in PLAN), move to the next independent slice, and surface ONE
