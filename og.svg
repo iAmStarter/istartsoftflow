@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="Inter,Helvetica,Arial,sans-serif">
+  <rect width="1200" height="630" fill="#f6f8fb"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#635bff"/>
+
+  <!-- brand -->
+  <g transform="translate(90,96)">
+    <rect width="64" height="64" rx="14" fill="#162033"/>
+    <text x="32" y="42" text-anchor="middle" fill="#fff" font-size="22" font-weight="800" letter-spacing="-1">iSS</text>
+    <text x="84" y="42" fill="#162033" font-size="32" font-weight="800">iStartSoftFlow</text>
+  </g>
+
+  <!-- eyebrow pill -->
+  <g transform="translate(90,210)">
+    <rect width="372" height="44" rx="22" fill="#ecfbf8" stroke="#c8f3ed"/>
+    <text x="24" y="29" fill="#087c70" font-size="18" font-weight="800">portable agentic-dev workflow</text>
+  </g>
+
+  <!-- headline -->
+  <text x="88" y="350" fill="#162033" font-size="84" font-weight="800" letter-spacing="-2">Ship with a workflow</text>
+  <text x="88" y="446" fill="#162033" font-size="84" font-weight="800" letter-spacing="-2">that <tspan fill="#635bff">runs itself.</tspan></text>
+
+  <!-- subline -->
+  <text x="90" y="524" fill="#5d6a7d" font-size="26" font-weight="500">Hook-enforced phases · agent orchestration · token-lean context</text>
+
+  <!-- tools -->
+  <text x="90" y="566" fill="#8a95a6" font-size="22" font-weight="700"
+        font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">Claude Code · Codex · Cursor · Gemini · Aider</text>
+
+  <!-- footer line -->
+  <text x="90" y="606" fill="#8a95a6" font-size="18" font-weight="600">npx create-issflow · cross-platform · MIT</text>
+</svg>
