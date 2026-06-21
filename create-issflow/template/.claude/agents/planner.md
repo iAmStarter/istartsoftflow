@@ -35,6 +35,10 @@ window. If a phase feels big, split it.
   Rule of thumb: if `test-author` couldn't turn the criterion into a passing-or-
   failing assertion without asking you a question, it is not sharp enough — sharpen it.
 - If a phase touches an external service, note it — its test must hit the real service.
+- Each phase is a CONTEXT PACKAGE (a BMAD-style story): it embeds the rationale,
+  the architecture it touches, implementation constraints, and QA focus — enough
+  that the implementer and test-author need NO extra digging. Embed the context;
+  don't make them hunt for it. (See METHODOLOGY → BMAD integration.)
 - If a phase touches a TRUST BOUNDARY (auth, untrusted/external input, a data store,
   money, or PII), add a `security:` note: threat-model it (STRIDE) and fold abuse
   cases into the acceptance criteria as negative cases; set the ASVS level (default
@@ -64,10 +68,14 @@ docs/PLAN.md format:
 ## Phase 1: <name>  [status: pending]
 
 - slice: <what works end-to-end after this phase>
+- rationale: <why this slice, why now — the user / business value (from the PRD)>
+- architecture: <component(s) it touches + the relevant decision; link the shard if any>
 - changes: <files/areas, high level>
 - acceptance (sharp, testable):
   - GIVEN <state> WHEN <action with concrete input> THEN <exact observable output>
   - edge/negative: <input> -> <expected handling>
+- impl notes: <constraints, gotchas, patterns to follow — so the implementer needs no extra digging>
+- qa focus: <what the tests must especially probe — abuse / edge cases>
 - external: <service name, or “none”>
   …
 
