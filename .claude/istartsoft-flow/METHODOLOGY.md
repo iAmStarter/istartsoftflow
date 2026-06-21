@@ -177,6 +177,9 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 - **ui-audit** — whole-product UI audit against the `ux-design` cookbook (a11y /
   responsive / consistency); scored findings report. Periodic / pre-release. Distinct
   from the per-phase ux-design gate (one screen) — this sweeps every screen.
+- **qa-audit** — whole-product FUNCTIONAL QA audit (coverage gaps, regression health,
+  flaky tests, critical-flow e2e, edge/error handling); scored report. The QA
+  counterpart of `ui-audit`. Distinct from the per-phase real-suite gate.
 - **unstuck** — deep re-research after a circuit breaker (auto-run once in AUTO on
   first stuck; human-triggered in GUIDED).
 - **synthesize** — compress STATE.md, dedup ISSUES.md, prune snapshots. Run
@@ -332,6 +335,26 @@ development run that follows the spec and logs every problem so it never recurs.
     (the language's standard tool), names follow the language's OWN idiom, and the
     code conforms to the declared architecture (Feature-Based by default) — checked
     at CLOSE. Lint/format errors or idiom violations BLOCK the close. (`code-standards`.)
+
+-----
+
+## Quality model (orthogonal axes — each audited)
+
+Quality is checked on independent axes. Passing one NEVER implies another. Each has a
+STANDARD, an inline GATE (per phase), and — for the user-facing ones — a holistic
+AUDIT (whole product, pre-release):
+
+| Axis | Question | Standard | Inline gate (per phase) | Whole-product audit |
+|------|----------|----------|-------------------------|---------------------|
+| **Functional / QA** | does it WORK? | blind TDD, RED-first (rules 5–6) | real suite green + regression corpus | full REAL corpus (final phase) · `/qa-audit` |
+| **UI / UX** | is it usable + on-brand? | `ux-design` cookbook | the ux-design check (rule 9) | `/ui-audit` |
+| **Security** | is it safe? | `security` cookbook (OWASP/ASVS/ISO) | secrets/SCA/SAST + secure coding (rule 11) | pentest + security review before deploy |
+| **Code** | is it consistent? | `code-standards` (naming/architecture) | lint/format + idiom (rule 12) | — |
+
+**QA is the test discipline**, not a single agent: `test-author` (blind tests) +
+`e2e-runner` (functional E2E) + the phase gate + the regression corpus + `debugger`.
+UI audit checks *presentation*; QA checks *behaviour* — a button can pass one and
+fail the other.
 
 -----
 
