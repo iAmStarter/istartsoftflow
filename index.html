@@ -118,6 +118,8 @@
   .stepno{flex:0 0 auto;width:36px;height:36px;border-radius:8px;background:#efedff;color:var(--violet-deep);font:900 1rem/36px var(--sans);text-align:center}
   .steps h3{font-size:1.02rem;margin:3px 0 6px;color:var(--ink)}
   .steps p{margin:7px 0 0;color:var(--muted);font-size:.93rem}
+  .steps .sub{margin:9px 0 0;font:600 .78rem/1.6 var(--mono);color:var(--dim)}
+  .steps .sub b{color:var(--violet-deep);font-weight:700}
   .chip{display:inline-block;font:700 .82rem/1.4 var(--mono);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:5px 11px}
   ul.clean{list-style:none;padding:0;margin:0}
   ul.clean li{padding:11px 0;border-bottom:1px solid var(--line);color:var(--muted)}
@@ -233,7 +235,7 @@
 <section id="start"><div class="wrap">
   <div class="ey"><span class="en">getting started</span><span class="th">เริ่มต้นยังไง</span></div>
   <h2><span class="en">The flow, step by step</span><span class="th">ขั้นตอนการทำงานทีละสเต็ป</span></h2>
-  <p class="muted"><span class="en">From idea to a deployed, summarised project — each step writes a durable artifact and is logged.</span><span class="th">จากไอเดียจนถึงโปรเจกต์ที่ deploy แล้วสรุปจบ — ทุกสเต็ปเขียนไฟล์เก็บไว้และมี log ครบ</span></p>
+  <p class="muted"><span class="en">Six commands, end to end — each one bundles several lifecycle stages (the full flow is 9 stages). Every step writes a durable artifact and is logged.</span><span class="th">6 คำสั่ง ตั้งแต่ต้นจนจบ — แต่ละคำสั่งรวมหลาย stage ไว้ในตัว (lifecycle เต็มมี 9 stage) ทุกสเต็ปเขียนไฟล์เก็บไว้และมี log ครบ</span></p>
   <ol class="steps">
     <li><div class="stepno">1</div><div>
       <h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3>
@@ -244,6 +246,7 @@
       <h3><span class="en">Discover &amp; plan</span><span class="th">ค้นหาความต้องการ + วางแผน</span></h3>
       <code class="chip">/overview</code>
       <p><span class="en">Tell it your idea. It <b>grills you</b> (2 passes, to convergence — 5-whys depth on shallow answers), runs design-research, picks the stack &amp; architecture, and writes <code>OVERVIEW.md</code> + <code>PLAN.md</code>. Planning is interactive — asking is good here.</span><span class="th">เล่าไอเดียให้ฟัง มันจะ <b>ซักคุณ</b> (2 รอบ จนตกผลึก — เจาะลึกแบบ 5-whys ถ้าคำตอบยังตื้น) ทำ design-research เลือก stack/architecture แล้วเขียน <code>OVERVIEW.md</code> + <code>PLAN.md</code> ขั้นวางแผนถามได้เต็มที่</span></p>
+      <p class="sub"><b>inside</b> · discover → PRD → stack &amp; architecture → grill ×2 → plan</p>
     </div></li>
     <li><div class="stepno">3</div><div>
       <h3><span class="en">Proposal &amp; price</span><span class="th">เสนอราคา</span></h3>
@@ -254,6 +257,7 @@
       <h3><span class="en">Build, phase by phase</span><span class="th">สร้างทีละ phase</span></h3>
       <code class="chip">/phase</code>
       <p><span class="en">The AUTO dev loop: implement → blind tests → UX + security gates → close. Follows the plan without stopping to ask; logs every decision, issue, and fix.</span><span class="th">AUTO dev loop: implement → blind test → เกต UX + security → ปิด ทำตามแผนไม่หยุดถาม และ log ทุก decision/ปัญหา/การแก้</span></p>
+      <p class="sub"><b>inside</b> · implement → blind tests → UX + security gates → <b>deploy</b> (final phase) → close</p>
     </div></li>
     <li><div class="stepno">5</div><div>
       <h3><span class="en">Change mid-way</span><span class="th">เปลี่ยนกลางทาง</span></h3>
