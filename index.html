@@ -112,15 +112,48 @@
   .tbl tr:last-child td{border-bottom:none} .tbl td:first-child{font-weight:700;color:var(--ink)}
   .tbl code{background:none;border:none;padding:0;font-size:.84rem;color:var(--teal-deep)} .scroll{overflow-x:auto}
 
-  ol.steps{list-style:none;counter-reset:s;padding:0;margin:8px 0 0}
-  ol.steps>li{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
-  ol.steps>li:last-child{border:none}
-  .stepno{flex:0 0 auto;width:36px;height:36px;border-radius:8px;background:#efedff;color:var(--violet-deep);font:900 1rem/36px var(--sans);text-align:center}
-  .steps h3{font-size:1.02rem;margin:3px 0 6px;color:var(--ink)}
-  .steps p{margin:7px 0 0;color:var(--muted);font-size:.93rem}
-  .steps .sub{margin:9px 0 0;font:600 .78rem/1.6 var(--mono);color:var(--dim)}
+  ol.steps{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:12px}
+  ol.steps>li{display:flex;gap:14px;align-items:flex-start}
+  .stepno{flex:0 0 auto;width:38px;height:38px;border-radius:8px;background:#efedff;color:var(--violet-deep);font:900 1.05rem/38px var(--sans);text-align:center}
+  .stepd{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:var(--card-sh);transition:border-color .15s,box-shadow .15s}
+  .stepd[open],.stepd:hover{border-color:#c4d0e0}
+  .stepd summary{display:flex;align-items:center;gap:12px;padding:15px 18px;cursor:pointer;list-style:none}
+  .stepd summary::-webkit-details-marker{display:none}
+  .sumt{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}
+  .sumt h3{margin:0;font-size:1rem;color:var(--ink)}
+  .caret{margin-left:auto;display:flex;color:var(--dim);transition:transform .22s}
+  .stepd[open] .caret{transform:rotate(90deg)}
+  .stepbody{padding:0 18px 18px}
+  .steps p{margin:6px 0 0;color:var(--muted);font-size:.93rem}
+  .steps .sub{margin:10px 0 0;font:600 .78rem/1.6 var(--mono);color:var(--dim)}
   .steps .sub b{color:var(--violet-deep);font-weight:700}
-  .chip{display:inline-block;font:700 .82rem/1.4 var(--mono);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:5px 11px}
+  .chip{display:inline-block;font:700 .8rem/1.4 var(--mono);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:4px 10px}
+  @supports (interpolate-size:allow-keywords){
+    html{interpolate-size:allow-keywords}
+    .stepd::details-content{height:0;overflow:clip;content-visibility:hidden;transition:height .28s ease,content-visibility .28s allow-discrete}
+    .stepd[open]::details-content{height:auto;content-visibility:visible}
+  }
+
+  /* motion — loop sweep · hero entrance · scroll reveal (reduced-motion safe) */
+  .loop .step{animation:flowsweep 6s ease-in-out infinite}
+  .loop>.step:nth-child(1){animation-delay:0s} .loop>.step:nth-child(3){animation-delay:1s}
+  .loop>.step:nth-child(5){animation-delay:2s} .loop>.step:nth-child(7){animation-delay:3s}
+  .loop>.step:nth-child(9){animation-delay:4s} .loop>.step:nth-child(11){animation-delay:5s}
+  @keyframes flowsweep{0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(99,91,255,0)}
+    8%{transform:translateY(-4px);box-shadow:0 8px 18px 0 rgba(99,91,255,.30)}
+    18%{transform:translateY(0);box-shadow:0 0 0 0 rgba(99,91,255,0)}}
+  .loop>span:last-child{display:inline-block;animation:spin 6s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero .ey,.hero h1,.hero .lead,.hero .badges,.hero .cmd,.hero .cta{animation:rise .6s both}
+  .hero h1{animation-delay:.05s} .hero .lead{animation-delay:.12s} .hero .badges{animation-delay:.18s}
+  .hero .cmd{animation-delay:.24s} .hero .cta{animation-delay:.3s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;transform:translateY(16px)}
+  .reveal.in{opacity:1;transform:none;transition:opacity .55s ease,transform .55s ease}
+  @media(prefers-reduced-motion:reduce){
+    .loop .step,.loop>span:last-child,.hero .ey,.hero h1,.hero .lead,.hero .badges,.hero .cmd,.hero .cta{animation:none!important}
+    .reveal{opacity:1;transform:none}
+  }
   ul.clean{list-style:none;padding:0;margin:0}
   ul.clean li{padding:11px 0;border-bottom:1px solid var(--line);color:var(--muted)}
   ul.clean li:last-child{border:none} ul.clean b{color:var(--ink)}
@@ -237,38 +270,62 @@
   <h2><span class="en">The flow, step by step</span><span class="th">ขั้นตอนการทำงานทีละสเต็ป</span></h2>
   <p class="muted"><span class="en">Six commands, end to end — each one bundles several lifecycle stages (the full flow is 9 stages). Every step writes a durable artifact and is logged.</span><span class="th">6 คำสั่ง ตั้งแต่ต้นจนจบ — แต่ละคำสั่งรวมหลาย stage ไว้ในตัว (lifecycle เต็มมี 9 stage) ทุกสเต็ปเขียนไฟล์เก็บไว้และมี log ครบ</span></p>
   <ol class="steps">
-    <li><div class="stepno">1</div><div>
-      <h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3>
-      <code class="chip">npx create-issflow --tool=claude</code>
-      <p><span class="en">Scaffolds <code>.claude/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.claude/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>
-    </div></li>
-    <li><div class="stepno">2</div><div>
-      <h3><span class="en">Discover &amp; plan</span><span class="th">ค้นหาความต้องการ + วางแผน</span></h3>
-      <code class="chip">/overview</code>
-      <p><span class="en">Tell it your idea. It <b>grills you</b> (2 passes, to convergence — 5-whys depth on shallow answers), runs design-research, picks the stack &amp; architecture, and writes <code>OVERVIEW.md</code> + <code>PLAN.md</code>. Planning is interactive — asking is good here.</span><span class="th">เล่าไอเดียให้ฟัง มันจะ <b>ซักคุณ</b> (2 รอบ จนตกผลึก — เจาะลึกแบบ 5-whys ถ้าคำตอบยังตื้น) ทำ design-research เลือก stack/architecture แล้วเขียน <code>OVERVIEW.md</code> + <code>PLAN.md</code> ขั้นวางแผนถามได้เต็มที่</span></p>
-      <p class="sub"><b>inside</b> · discover → PRD → stack &amp; architecture → grill ×2 → plan</p>
-    </div></li>
-    <li><div class="stepno">3</div><div>
-      <h3><span class="en">Proposal &amp; price</span><span class="th">เสนอราคา</span></h3>
-      <code class="chip">/propose</code>
-      <p><span class="en">Turns scope + phases into an effort + cost estimate (range + assumptions) and a timeline. <b>You sign off before any build.</b></span><span class="th">แปลง scope + phases เป็นประเมินแรง+ราคา (เป็นช่วง + ระบุสมมุติฐาน) และไทม์ไลน์ <b>คุณเซ็นอนุมัติก่อนเริ่มสร้าง</b></span></p>
-    </div></li>
-    <li><div class="stepno">4</div><div>
-      <h3><span class="en">Build, phase by phase</span><span class="th">สร้างทีละ phase</span></h3>
-      <code class="chip">/phase</code>
-      <p><span class="en">The AUTO dev loop: implement → blind tests → UX + security gates → close. Follows the plan without stopping to ask; logs every decision, issue, and fix.</span><span class="th">AUTO dev loop: implement → blind test → เกต UX + security → ปิด ทำตามแผนไม่หยุดถาม และ log ทุก decision/ปัญหา/การแก้</span></p>
-      <p class="sub"><b>inside</b> · implement → blind tests → UX + security gates → <b>deploy</b> (final phase) → close</p>
-    </div></li>
-    <li><div class="stepno">5</div><div>
-      <h3><span class="en">Change mid-way</span><span class="th">เปลี่ยนกลางทาง</span></h3>
-      <code class="chip">/change-request "…"</code>
-      <p><span class="en">Assesses impact, re-estimates the cost delta fairly, logs a change order, gets sign-off, then replans — scope/cost never change silently.</span><span class="th">ประเมินผลกระทบ คิดราคาส่วนต่างอย่างสมเหตุสมผล บันทึก change order ขออนุมัติ แล้ว replan — scope/ราคาไม่เปลี่ยนเงียบๆ</span></p>
-    </div></li>
-    <li><div class="stepno">6</div><div>
-      <h3><span class="en">Close out</span><span class="th">ปิดโปรเจกต์</span></h3>
-      <code class="chip">/synthesize</code>
-      <p><span class="en">Final pass writes a project summary: what was built, key decisions, every change order, and the final cost vs the original estimate.</span><span class="th">รอบสุดท้ายเขียนสรุปโปรเจกต์: สร้างอะไรไปบ้าง decision สำคัญ change order ทุกอัน และราคาสุดท้ายเทียบกับที่ประเมินไว้</span></p>
-    </div></li>
+    <li><div class="stepno">1</div>
+      <details class="stepd" open><summary>
+        <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow --tool=claude</code></span>
+        <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary><div class="stepbody">
+        <p><span class="en">Scaffolds <code>.claude/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.claude/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>
+        <p class="sub"><b>produces</b> · .claude/ (agents · commands · skills · hooks) · AGENTS.md</p>
+      </div></details>
+    </li>
+    <li><div class="stepno">2</div>
+      <details class="stepd"><summary>
+        <span class="sumt"><h3><span class="en">Discover &amp; plan</span><span class="th">ค้นหาความต้องการ + วางแผน</span></h3><code class="chip">/overview</code></span>
+        <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary><div class="stepbody">
+        <p><span class="en">Tell it your idea. It <b>grills you</b> (2 passes, to convergence — 5-whys depth on shallow answers), runs design-research, picks the stack &amp; architecture, and writes <code>OVERVIEW.md</code> + <code>PLAN.md</code>. Planning is interactive — asking is good here.</span><span class="th">เล่าไอเดียให้ฟัง มันจะ <b>ซักคุณ</b> (2 รอบ จนตกผลึก — เจาะลึกแบบ 5-whys ถ้าคำตอบยังตื้น) ทำ design-research เลือก stack/architecture แล้วเขียน <code>OVERVIEW.md</code> + <code>PLAN.md</code> ขั้นวางแผนถามได้เต็มที่</span></p>
+        <p class="sub"><b>inside</b> · discover → PRD → stack &amp; architecture → grill ×2 → plan</p>
+        <p class="sub"><b>produces</b> · OVERVIEW.md · PLAN.md</p>
+      </div></details>
+    </li>
+    <li><div class="stepno">3</div>
+      <details class="stepd"><summary>
+        <span class="sumt"><h3><span class="en">Proposal &amp; price</span><span class="th">เสนอราคา</span></h3><code class="chip">/propose</code></span>
+        <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary><div class="stepbody">
+        <p><span class="en">Turns scope + phases into an effort + cost estimate (range + assumptions) and a timeline. <b>You sign off before any build.</b></span><span class="th">แปลง scope + phases เป็นประเมินแรง+ราคา (เป็นช่วง + ระบุสมมุติฐาน) และไทม์ไลน์ <b>คุณเซ็นอนุมัติก่อนเริ่มสร้าง</b></span></p>
+        <p class="sub"><b>produces</b> · PROPOSAL.md · proposal.html — <span class="en">optional (client work)</span><span class="th">ทำเฉพาะงานลูกค้า</span></p>
+      </div></details>
+    </li>
+    <li><div class="stepno">4</div>
+      <details class="stepd"><summary>
+        <span class="sumt"><h3><span class="en">Build, phase by phase</span><span class="th">สร้างทีละ phase</span></h3><code class="chip">/phase</code></span>
+        <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary><div class="stepbody">
+        <p><span class="en">The AUTO dev loop: implement → blind tests → UX + security gates → close. Follows the plan without stopping to ask; logs every decision, issue, and fix.</span><span class="th">AUTO dev loop: implement → blind test → เกต UX + security → ปิด ทำตามแผนไม่หยุดถาม และ log ทุก decision/ปัญหา/การแก้</span></p>
+        <p class="sub"><b>inside</b> · implement → blind tests → UX + security gates → <b>deploy</b> (final phase) → close</p>
+        <p class="sub"><b>produces</b> · code · tests · ENDPOINTS.md · HISTORY.md</p>
+      </div></details>
+    </li>
+    <li><div class="stepno">5</div>
+      <details class="stepd"><summary>
+        <span class="sumt"><h3><span class="en">Change mid-way</span><span class="th">เปลี่ยนกลางทาง</span></h3><code class="chip">/change-request "…"</code></span>
+        <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary><div class="stepbody">
+        <p><span class="en">Assesses impact, re-estimates the cost delta fairly, logs a change order, gets sign-off, then replans — scope/cost never change silently.</span><span class="th">ประเมินผลกระทบ คิดราคาส่วนต่างอย่างสมเหตุสมผล บันทึก change order ขออนุมัติ แล้ว replan — scope/ราคาไม่เปลี่ยนเงียบๆ</span></p>
+        <p class="sub"><b>produces</b> · CHANGES.md (change order) · updated PROPOSAL</p>
+      </div></details>
+    </li>
+    <li><div class="stepno">6</div>
+      <details class="stepd"><summary>
+        <span class="sumt"><h3><span class="en">Close out</span><span class="th">ปิดโปรเจกต์</span></h3><code class="chip">/synthesize</code></span>
+        <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary><div class="stepbody">
+        <p><span class="en">Final pass writes a project summary: what was built, key decisions, every change order, and the final cost vs the original estimate.</span><span class="th">รอบสุดท้ายเขียนสรุปโปรเจกต์: สร้างอะไรไปบ้าง decision สำคัญ change order ทุกอัน และราคาสุดท้ายเทียบกับที่ประเมินไว้</span></p>
+        <p class="sub"><b>produces</b> · <span class="en">project summary · final cost vs estimate</span><span class="th">สรุปโปรเจกต์ · ราคาสุดท้าย vs ที่ประเมิน</span></p>
+      </div></details>
+    </li>
   </ol>
 </div></section>
 
@@ -376,6 +433,15 @@
     function persist(){ try { localStorage.setItem('issflow-lang', th.checked ? 'th' : 'en'); } catch(e){} document.documentElement.lang = th.checked ? 'th' : 'en'; }
     en.addEventListener('change', persist); th.addEventListener('change', persist);
     document.documentElement.lang = lang;
+  })();
+
+  /* scroll reveal — progressive enhancement, skipped if reduced-motion */
+  (function(){
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.card, .tbl, .loop, ol.steps>li').forEach(function(el){ el.classList.add('reveal'); io.observe(el); });
   })();
 </script>
 </body>
