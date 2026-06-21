@@ -31,6 +31,10 @@ confirmed with the user before building — design is where human taste matters.
 - Reviewing a UI diff (the "ตรวจ" pass).
 - CLOSE gate of any frontend phase — the cookbook check MUST pass.
 
+This skill is the STANDARD + the inline GATE (one screen, at phase close). For a
+WHOLE-PRODUCT sweep against this same cookbook — periodic or before a release — run
+`/ui-audit` (same rubric, broader scope, a scored report).
+
 Order: **wireframe first** (does the layout match the baseline frame?) ->
 **cookbook** (do the details obey the system?). Never invent layout the
 wireframe does not have. If the design truly needs a frame the wireframe lacks,

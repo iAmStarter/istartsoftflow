@@ -174,6 +174,9 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
   coverage gate.
 - **quick [change]** — small, obvious, non-phase change; no agent chain. Stays
   non-TDD. Runs the mock regression corpus after the change.
+- **ui-audit** — whole-product UI audit against the `ux-design` cookbook (a11y /
+  responsive / consistency); scored findings report. Periodic / pre-release. Distinct
+  from the per-phase ux-design gate (one screen) — this sweeps every screen.
 - **unstuck** — deep re-research after a circuit breaker (auto-run once in AUTO on
   first stuck; human-triggered in GUIDED).
 - **synthesize** — compress STATE.md, dedup ISSUES.md, prune snapshots. Run
