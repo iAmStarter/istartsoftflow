@@ -172,9 +172,9 @@
 <nav><div class="wrap">
   <span class="brand"><span class="dot">iSS</span>iStartSoftFlow</span>
   <span class="links">
-    <a href="#start"><span class="en">Start</span><span class="th">เริ่มต้น</span></a>
-    <a href="#tools"><span class="en">Tools</span><span class="th">เครื่องมือ</span></a>
     <a href="#loop"><span class="en">The loop</span><span class="th">ลูป</span></a>
+    <a href="#tools"><span class="en">Tools</span><span class="th">เครื่องมือ</span></a>
+    <a href="#start"><span class="en">Start</span><span class="th">เริ่มต้น</span></a>
     <a href="#kit"><span class="en">What you get</span><span class="th">ในชุด</span></a>
     <a href="#skills"><span class="en">Skills</span><span class="th">สกิล</span></a>
     <a href="#security"><span class="en">Security</span><span class="th">ความปลอดภัย</span></a>
@@ -215,6 +215,36 @@
 </div></header>
 
 <main id="main">
+<section id="loop"><div class="wrap">
+  <div class="ey"><span class="en">the loop</span><span class="th">ลูป</span></div>
+  <h2><span class="en">One vertical slice per phase</span><span class="th">หนึ่ง vertical slice ต่อหนึ่ง phase</span></h2>
+  <p class="muted" style="margin-bottom:26px">
+    <span class="en">Implement <i>and</i> test a phase before the next; the last phase ships deployment. TDD phases write tests blind, RED-first.</span>
+    <span class="th">ทำ <i>และ</i> เทสต์ให้จบก่อนขึ้น phase ถัดไป; phase สุดท้ายรวม deploy — phase แบบ TDD เขียนเทสต์แบบ blind, RED ก่อน</span>
+  </p>
+  <div class="loop">
+    <svg class="flowsvg" viewBox="0 0 720 112" role="img" aria-label="The loop: design-research, grill, plan, implement, test, deploy — repeating">
+      <line class="track" x1="36" y1="40" x2="684" y2="40"/>
+      <line class="flowline" x1="36" y1="40" x2="684" y2="40"/>
+      <g class="fn"><circle cx="36" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="165.6" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="295.2" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="424.8" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="554.4" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="684" cy="40" r="8"/></g>
+      <text class="flab" x="36" y="70">research</text>
+      <text class="flab" x="165.6" y="70">grill</text>
+      <text class="flab" x="295.2" y="70">plan</text>
+      <text class="flab" x="424.8" y="70">implement</text>
+      <text class="flab" x="554.4" y="70">test</text>
+      <text class="flab" x="684" y="70">deploy</text>
+      <path class="rback" d="M684 50 C 706 98, 14 98, 36 50"/>
+      <text class="rep" x="360" y="106" text-anchor="middle">↻ repeat</text>
+      <g class="dot"><circle class="halo" cx="36" cy="40" r="13"/><circle class="core" cx="36" cy="40" r="5.5"/></g>
+    </svg>
+  </div>
+</div></section>
+
 <section id="why"><div class="wrap">
   <div class="ey"><span class="en">why</span><span class="th">ทำไม</span></div>
   <h2><span class="en">Mandatory steps live in hooks. Thinking lives in agents.</span><span class="th">ขั้นตอนบังคับอยู่ใน hooks — การคิดอยู่ใน agents</span></h2>
@@ -327,36 +357,6 @@
       </div></details>
     </li>
   </ol>
-</div></section>
-
-<section id="loop"><div class="wrap">
-  <div class="ey"><span class="en">the loop</span><span class="th">ลูป</span></div>
-  <h2><span class="en">One vertical slice per phase</span><span class="th">หนึ่ง vertical slice ต่อหนึ่ง phase</span></h2>
-  <p class="muted" style="margin-bottom:26px">
-    <span class="en">Implement <i>and</i> test a phase before the next; the last phase ships deployment. TDD phases write tests blind, RED-first.</span>
-    <span class="th">ทำ <i>และ</i> เทสต์ให้จบก่อนขึ้น phase ถัดไป; phase สุดท้ายรวม deploy — phase แบบ TDD เขียนเทสต์แบบ blind, RED ก่อน</span>
-  </p>
-  <div class="loop">
-    <svg class="flowsvg" viewBox="0 0 720 112" role="img" aria-label="The loop: design-research, grill, plan, implement, test, deploy — repeating">
-      <line class="track" x1="36" y1="40" x2="684" y2="40"/>
-      <line class="flowline" x1="36" y1="40" x2="684" y2="40"/>
-      <g class="fn"><circle cx="36" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="165.6" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="295.2" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="424.8" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="554.4" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="684" cy="40" r="8"/></g>
-      <text class="flab" x="36" y="70">research</text>
-      <text class="flab" x="165.6" y="70">grill</text>
-      <text class="flab" x="295.2" y="70">plan</text>
-      <text class="flab" x="424.8" y="70">implement</text>
-      <text class="flab" x="554.4" y="70">test</text>
-      <text class="flab" x="684" y="70">deploy</text>
-      <path class="rback" d="M684 50 C 706 98, 14 98, 36 50"/>
-      <text class="rep" x="360" y="106" text-anchor="middle">↻ repeat</text>
-      <g class="dot"><circle class="halo" cx="36" cy="40" r="13"/><circle class="core" cx="36" cy="40" r="5.5"/></g>
-    </svg>
-  </div>
 </div></section>
 
 <section id="kit"><div class="wrap">
