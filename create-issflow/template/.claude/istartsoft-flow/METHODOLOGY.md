@@ -95,6 +95,38 @@ those gates, never the money decisions.
 
 -----
 
+## BMAD integration (planning front-end)
+
+iStartSoftFlow is the EXECUTION loop; **BMAD-METHOD** is an optional PLANNING
+front-end. They compose — BMAD plans, iStartSoftFlow builds — with no duplication:
+
+| BMAD (plan) | feeds → | iStartSoftFlow (execute) |
+|-------------|---------|--------------------------|
+| Analyst / PM / Architect / PO agents | → | `/overview` grill + `researcher` + `planner` |
+| PRD + Architecture | → | `docs/OVERVIEW.md` (+ `docs/PRD.md`) |
+| sharded epics / story files | → | `docs/PLAN.md` phases (1 story ≈ 1 phase) |
+| SM "story with embedded context" | → | the phase **context package** (rationale + architecture + impl notes + qa focus + sharp acceptance) |
+| Dev → QA | → | `implementer` → `test-author` + the phase gates (TDD · UX · security · code-standards) |
+
+Principles (lean, no bloat):
+- **Don't duplicate agents.** BMAD's planning roles map onto our grill + planner +
+  researcher — we ship no copies of them. The **iSSM MCP** already holds the BMAD
+  artifacts (PRD / architecture / stories) and feeds `/overview`.
+- **Adopt the signature pattern — context-engineered phases.** Each `PLAN.md` phase
+  is a self-contained story: it embeds the rationale, the architecture it touches,
+  implementation constraints, and QA focus, so the implementer / test-author need no
+  extra digging (see `planner`). This is BMAD's biggest win and it's cheap to adopt.
+- **Scale-adaptive.** Small change → `/quick` (BMAD "lightweight"); a real slice →
+  `/phase` (BMAD "heavyweight"). Pick the smaller that fits.
+- **Optional sharding for big plans.** A large `PLAN.md` may be split into
+  `docs/plan/<epic>.md` shards so a phase loads only its slice — finer-grained token
+  economy on top of the per-phase reset. Opt-in.
+
+BMAD-METHOD is MIT and installed separately (`npx bmad-method install`); use it for
+the planning phase when a project needs that rigor, then drive delivery here.
+
+-----
+
 ## Roles (fresh-context workers)
 
 Each role is a fresh-context worker mapped to a named Claude Code subagent in
