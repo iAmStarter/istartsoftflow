@@ -102,9 +102,18 @@
   .tag{font-size:.66rem;font-weight:850;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
   .ok{color:var(--green);font-weight:750} .warn{color:var(--amber);font-weight:750}
 
-  .loop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;font-family:var(--mono);font-size:.9rem}
-  .step{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 15px;font-weight:700;color:var(--ink)}
-  .step.alt{border-color:#c7c3ff;background:#efedff;color:var(--violet-deep)} .arr{color:var(--dim);font-weight:800}
+  .loop{display:flex;justify-content:center}
+  .flowsvg{width:100%;max-width:760px;height:auto;display:block;overflow:visible}
+  .flowsvg .track{stroke:var(--line);stroke-width:3;stroke-linecap:round}
+  .flowsvg .flowline{stroke:var(--violet);stroke-width:3;stroke-linecap:round;stroke-dasharray:1 15;opacity:.55;animation:flowdash 1.3s linear infinite}
+  @keyframes flowdash{to{stroke-dashoffset:-16}}
+  .flowsvg .fn circle{fill:#fff;stroke:var(--violet);stroke-width:3}
+  .flowsvg .flab{fill:var(--muted);font:700 13px var(--sans);text-anchor:middle}
+  .flowsvg .rback{stroke:var(--violet);stroke-width:2;fill:none;opacity:.3;stroke-dasharray:2 6}
+  .flowsvg .rep{fill:var(--violet);font:800 17px var(--sans);opacity:.6}
+  .flowsvg .dot .core{fill:var(--violet)} .flowsvg .dot .halo{fill:var(--violet);opacity:.16}
+  .flowsvg .dot{animation:flowtravel 4.6s linear infinite}
+  @keyframes flowtravel{from{transform:translateX(0)}to{transform:translateX(648px)}}
 
   .tbl{width:100%;border-collapse:collapse;font-size:.9rem;border-radius:8px;border:1px solid var(--line);overflow:hidden;background:#fff;box-shadow:var(--card-sh)}
   .tbl th,.tbl td{text-align:left;padding:13px 15px;border-bottom:1px solid var(--line)}
@@ -134,16 +143,7 @@
     .stepd[open]::details-content{height:auto;content-visibility:visible}
   }
 
-  /* motion — loop sweep · hero entrance · scroll reveal (reduced-motion safe) */
-  .loop .step{animation:flowsweep 6s ease-in-out infinite}
-  .loop>.step:nth-child(1){animation-delay:0s} .loop>.step:nth-child(3){animation-delay:1s}
-  .loop>.step:nth-child(5){animation-delay:2s} .loop>.step:nth-child(7){animation-delay:3s}
-  .loop>.step:nth-child(9){animation-delay:4s} .loop>.step:nth-child(11){animation-delay:5s}
-  @keyframes flowsweep{0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(99,91,255,0)}
-    8%{transform:translateY(-4px);box-shadow:0 8px 18px 0 rgba(99,91,255,.30)}
-    18%{transform:translateY(0);box-shadow:0 0 0 0 rgba(99,91,255,0)}}
-  .loop>span:last-child{display:inline-block;animation:spin 6s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+  /* motion — flow pipeline (above) · hero entrance · scroll reveal (reduced-motion safe) */
   .hero .ey,.hero h1,.hero .lead,.hero .badges,.hero .cmd,.hero .cta{animation:rise .6s both}
   .hero h1{animation-delay:.05s} .hero .lead{animation-delay:.12s} .hero .badges{animation-delay:.18s}
   .hero .cmd{animation-delay:.24s} .hero .cta{animation-delay:.3s}
@@ -151,7 +151,7 @@
   .reveal{opacity:0;transform:translateY(16px)}
   .reveal.in{opacity:1;transform:none;transition:opacity .55s ease,transform .55s ease}
   @media(prefers-reduced-motion:reduce){
-    .loop .step,.loop>span:last-child,.hero .ey,.hero h1,.hero .lead,.hero .badges,.hero .cmd,.hero .cta{animation:none!important}
+    .flowsvg .flowline,.flowsvg .dot,.hero .ey,.hero h1,.hero .lead,.hero .badges,.hero .cmd,.hero .cta{animation:none!important}
     .reveal{opacity:1;transform:none}
   }
   ul.clean{list-style:none;padding:0;margin:0}
@@ -337,13 +337,25 @@
     <span class="th">ทำ <i>และ</i> เทสต์ให้จบก่อนขึ้น phase ถัดไป; phase สุดท้ายรวม deploy — phase แบบ TDD เขียนเทสต์แบบ blind, RED ก่อน</span>
   </p>
   <div class="loop">
-    <span class="step">design-research</span><span class="arr">→</span>
-    <span class="step">grill ×2</span><span class="arr">→</span>
-    <span class="step">plan</span><span class="arr">→</span>
-    <span class="step alt">implement</span><span class="arr">→</span>
-    <span class="step alt">test</span><span class="arr">→</span>
-    <span class="step">deploy</span>
-    <span class="arr" style="font-size:1.3rem">↻</span>
+    <svg class="flowsvg" viewBox="0 0 720 112" role="img" aria-label="The loop: design-research, grill, plan, implement, test, deploy — repeating">
+      <line class="track" x1="36" y1="40" x2="684" y2="40"/>
+      <line class="flowline" x1="36" y1="40" x2="684" y2="40"/>
+      <g class="fn"><circle cx="36" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="165.6" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="295.2" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="424.8" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="554.4" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="684" cy="40" r="8"/></g>
+      <text class="flab" x="36" y="70">research</text>
+      <text class="flab" x="165.6" y="70">grill</text>
+      <text class="flab" x="295.2" y="70">plan</text>
+      <text class="flab" x="424.8" y="70">implement</text>
+      <text class="flab" x="554.4" y="70">test</text>
+      <text class="flab" x="684" y="70">deploy</text>
+      <path class="rback" d="M684 50 C 706 98, 14 98, 36 50"/>
+      <text class="rep" x="360" y="106" text-anchor="middle">↻ repeat</text>
+      <g class="dot"><circle class="halo" cx="36" cy="40" r="13"/><circle class="core" cx="36" cy="40" r="5.5"/></g>
+    </svg>
   </div>
 </div></section>
 
