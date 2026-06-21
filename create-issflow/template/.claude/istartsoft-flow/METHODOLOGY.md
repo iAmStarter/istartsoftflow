@@ -180,6 +180,9 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 - **qa-audit** — whole-product FUNCTIONAL QA audit (coverage gaps, regression health,
   flaky tests, critical-flow e2e, edge/error handling); scored report. The QA
   counterpart of `ui-audit`. Distinct from the per-phase real-suite gate.
+- **security-audit** — whole-product SECURITY audit against the `security` cookbook
+  (OWASP/ASVS/WSTG/secrets/SCA/SAST/supply-chain); scored report. On-demand; a
+  precondition for the pre-deploy pentest. Distinct from the per-phase rule-11 gate.
 - **unstuck** — deep re-research after a circuit breaker (auto-run once in AUTO on
   first stuck; human-triggered in GUIDED).
 - **synthesize** — compress STATE.md, dedup ISSUES.md, prune snapshots. Run
@@ -348,7 +351,7 @@ AUDIT (whole product, pre-release):
 |------|----------|----------|-------------------------|---------------------|
 | **Functional / QA** | does it WORK? | blind TDD, RED-first (rules 5–6) | real suite green + regression corpus | full REAL corpus (final phase) · `/qa-audit` |
 | **UI / UX** | is it usable + on-brand? | `ux-design` cookbook | the ux-design check (rule 9) | `/ui-audit` |
-| **Security** | is it safe? | `security` cookbook (OWASP/ASVS/ISO) | secrets/SCA/SAST + secure coding (rule 11) | pentest + security review before deploy |
+| **Security** | is it safe? | `security` cookbook (OWASP/ASVS/ISO) | secrets/SCA/SAST + secure coding (rule 11) | `/security-audit` · pentest + review before deploy |
 | **Code** | is it consistent? | `code-standards` (naming/architecture) | lint/format + idiom (rule 12) | — |
 
 **QA is the test discipline**, not a single agent: `test-author` (blind tests) +
