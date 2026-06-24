@@ -30,12 +30,14 @@ Flags: `--tool=<name>` (skip the prompt) · `--dry-run` (write nothing) · `--fo
 ## Supported tools
 
 One source of truth (`.claude/` + `AGENTS.md`); the installer writes the right
-adapter per tool. Unsupported features degrade to model-run rituals — they never
+adapter per tool. Claude Code only auto-loads `CLAUDE.md`, so the installer writes
+a one-line `CLAUDE.md` that imports `AGENTS.md` (`@AGENTS.md`) — full methodology,
+still one source. Unsupported features degrade to model-run rituals — they never
 silently vanish.
 
 | Tool | Entry | Commands | Subagents | Lifecycle hooks |
 |------|-------|----------|-----------|-----------------|
-| **Claude Code** (reference) | `AGENTS.md` + `.claude/` | `.claude/commands/` | native | SessionStart · PreCompact · SubagentStop |
+| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreCompact · SubagentStop |
 | **Codex CLI** | `AGENTS.md` (native) | read as prompts | reference | model-run |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | read as prompts | reference | model-run |
