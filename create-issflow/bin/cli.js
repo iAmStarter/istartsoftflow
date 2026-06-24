@@ -107,6 +107,14 @@ function copyTemplateCommands(destDir) {
 // ---- adapters (keep the methodology single-source — these POINT at it) ------
 
 function adapterClaude() {
+  // Claude Code auto-loads CLAUDE.md only — NOT AGENTS.md. Without a CLAUDE.md
+  // the methodology never enters context on its own (the SessionStart hook still
+  // injects the per-session summary, but the full single-source doc would not
+  // load). A one-line `@AGENTS.md` import gives Claude Code the full baseline
+  // while keeping ONE source of truth — no rule is restated here (anti-drift).
+  const c0 = conflicts;
+  writeFile('CLAUDE.md', claudeMd());
+  if (conflicts > c0) warnings.push('claude: you already keep a CLAUDE.md — ours was written as CLAUDE.md.issflow-new. Add a line `@AGENTS.md` to your CLAUDE.md so the methodology auto-loads.');
   const HOOKS = {
     SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .claude/hooks/session-start.js' }] }],
     PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .claude/hooks/pre-compact.js' }] }],
@@ -176,7 +184,7 @@ function adapterAider() {
 const ADAPTERS = { claude: adapterClaude, codex: adapterCodex, cursor: adapterCursor, gemini: adapterGemini, aider: adapterAider };
 
 const NEXT_STEPS = {
-  claude: 'Open Claude Code — the SessionStart hook fires automatically. Run /overview to bootstrap.',
+  claude: 'Open Claude Code — CLAUDE.md (@AGENTS.md) loads the methodology and the SessionStart hook fires automatically. Run /overview to bootstrap.',
   codex:  'Open Codex CLI — it reads AGENTS.md. Start by running the /overview procedure (.claude/commands/overview.md).',
   cursor: 'Open Cursor — the rule applies automatically. Run the /overview command to bootstrap.',
   gemini: 'Open Gemini CLI — it reads GEMINI.md. Run the SESSION-OPEN ritual, then the overview procedure.',
@@ -222,6 +230,22 @@ function agentsMd() {
     'Declare your stack (language, framework, infra, auth, test + E2E runner,',
     'planning source) once in `docs/OVERVIEW.md`. Every rule references *your declared',
     'stack* and hardcodes none.', '',
+  ].join('\n');
+}
+
+function claudeMd() {
+  return [
+    '# CLAUDE.md — iStartSoftFlow (Claude Code entry)', '',
+    '@AGENTS.md', '',
+    'The import above is the single source of truth — it points to',
+    '`.claude/istartsoft-flow/METHODOLOGY.md` (read on demand). Do NOT restate any',
+    'rule here; this file only wires Claude-native mechanisms (anti-drift invariant).', '',
+    '## Claude-native wiring (automatic — see `.claude/settings.json`)', '',
+    '- **SessionStart** hook injects git state + `docs/STATE.md` + open `docs/ISSUES.md`',
+    '  + the rule summary each session — read those first.',
+    '- **PreCompact** + **SubagentStop** hooks run their rituals automatically.',
+    '- Commands in `.claude/commands/` run as `/name`; agents in `.claude/agents/` are',
+    '  native subagents.', '',
   ].join('\n');
 }
 
