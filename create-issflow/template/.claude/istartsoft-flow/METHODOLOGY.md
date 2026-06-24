@@ -421,7 +421,7 @@ the same everywhere — only the *wiring* differs.
 
 | Host | Entry file | Commands | Subagents | Lifecycle hooks | Shared KB |
 |------|-----------|----------|-----------|-----------------|-----------|
-| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreCompact · SubagentStop (with context injection) | yes |
+| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse (context-budget watchdog) · PreCompact · SubagentStop | yes |
 | **Codex CLI** | `AGENTS.md` (native) | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` (sessionStart · subagentStop) | yes |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |

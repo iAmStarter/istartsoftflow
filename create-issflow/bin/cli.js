@@ -115,8 +115,13 @@ function adapterClaude() {
   const c0 = conflicts;
   writeFile('CLAUDE.md', claudeMd());
   if (conflicts > c0) warnings.push('claude: you already keep a CLAUDE.md — ours was written as CLAUDE.md.issflow-new. Add a line `@AGENTS.md` to your CLAUDE.md so the methodology auto-loads.');
+  // Context-budget watchdog config (consumed by .claude/hooks/context-guard.js).
+  // Shipped default window:0 = auto-detect; flow-config.json lives at .claude root,
+  // outside build.js's copied DIRS, so the installer writes it here.
+  writeFile('.claude/flow-config.json', flowConfig());
   const HOOKS = {
     SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .claude/hooks/session-start.js' }] }],
+    PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .claude/hooks/context-guard.js' }] }],
     PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .claude/hooks/pre-compact.js' }] }],
     SubagentStop: [{ hooks: [{ type: 'command', command: 'node .claude/hooks/subagent-stop.js' }] }],
   };
@@ -207,7 +212,7 @@ function agentsMd() {
     'planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer', '',
     '## Procedures — `.claude/commands/` (run as `/name`)', '',
     '/overview · /propose · /phase · /ui-audit · /qa-audit · /security-audit ·',
-    '/change-request · /replan · /quick · /synthesize · /store-wisdom · /log-issue ·',
+    '/change-request · /replan · /quick · /synthesize · /runbook · /store-wisdom · /log-issue ·',
     '/log-decision · /unstuck', '',
     '## Skills — `.claude/skills/` (loaded on demand)', '',
     'caveman · grill-me · karpathy-guidelines · ux-design · security (Secure SDLC) · code-standards', '',
@@ -247,6 +252,24 @@ function claudeMd() {
     '- Commands in `.claude/commands/` run as `/name`; agents in `.claude/agents/` are',
     '  native subagents.', '',
   ].join('\n');
+}
+
+function flowConfig() {
+  return JSON.stringify({
+    context: {
+      window: 0,
+      warnPct: 60,
+      gatePct: 78,
+      _note: 'Context-budget watchdog (.claude/hooks/context-guard.js, PreToolUse hook). '
+        + 'window 0 = auto-detect from the model id (200000 for standard models). '
+        + 'Some 1M-context models report their id WITHOUT a [1m] tag, so auto-detect '
+        + 'assumes 200000 and may false-gate around 156k — if you run a 1M model, set '
+        + 'window:1000000 here by hand. warnPct = soft non-blocking nudge; gatePct = hard '
+        + 'block on NEW build work (Edit/Write-to-source/feature Task). Checkpoint paths '
+        + '(docs/**, STATE/ISSUES/snapshots), the synthesizer subagent, and all Bash are '
+        + 'never blocked.',
+    },
+  }, null, 2) + '\n';
 }
 
 // ---- main -------------------------------------------------------------------
