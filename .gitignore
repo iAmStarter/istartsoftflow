@@ -5,3 +5,4 @@ node_modules/
 *.issflow-new
 docs/.snapshots/
 docs/.kb-snapshot.md
+.playwright-mcp/
