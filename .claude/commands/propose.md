@@ -57,12 +57,13 @@ change-orders re-price against.
 ## Sign-off     — approved by: ___  date: ___  version: v1
 ```
 2. RENDER a client-facing `docs/proposal.html` from `.claude/templates/proposal.html`:
-   copy it, replace every `{{PLACEHOLDER}}`, and LOCALISE all labels + content to the
-   declared language (natural Thai for Thai projects; keep tech terms in English).
-   Fill `{{COMPANY}}` / `{{LOGO}}` from the ISSUING company's brand declared in
-   OVERVIEW (or ask once) — the template is white-label, never hardcode the kit's
-   name. It is print-ready (Save as PDF). Keep PROPOSAL.md and proposal.html in sync —
-   the markdown is the source, the HTML is the deliverable you send the client.
+   copy it, replace every `{{PLACEHOLDER}}`, and fill the CONTENT in the declared
+   language (the section labels are already bilingual TH / EN). It must fit ONE A4
+   page — be terse (≈ 3–6 phase rows, ≈ 4 assumptions, short scope items); trim before
+   it spills to a second page. Fill `{{COMPANY}}` / `{{COMPANY_TAGLINE}}` / `{{LOGO}}`
+   from the ISSUING company's brand declared in OVERVIEW (or ask once) — white-label,
+   never hardcode the kit's name. Print-ready (Ctrl/Cmd-P → A4 → Save as PDF). Keep
+   PROPOSAL.md (source) and proposal.html (deliverable) in sync.
 
 ## STEP 6 — SIGN-OFF GATE
 Show me the proposal. **STOP for approval** (commercial gate — always interactive).
