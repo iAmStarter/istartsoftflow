@@ -298,7 +298,7 @@
 <section id="start"><div class="wrap">
   <div class="ey"><span class="en">getting started</span><span class="th">เริ่มต้นยังไง</span></div>
   <h2><span class="en">The flow, step by step</span><span class="th">ขั้นตอนการทำงานทีละสเต็ป</span></h2>
-  <p class="muted"><span class="en">Six commands, end to end — each one bundles several lifecycle stages (the full flow is 9 stages). Every step writes a durable artifact and is logged.</span><span class="th">6 คำสั่ง ตั้งแต่ต้นจนจบ — แต่ละคำสั่งรวมหลาย stage ไว้ในตัว (lifecycle เต็มมี 9 stage) ทุกสเต็ปเขียนไฟล์เก็บไว้และมี log ครบ</span></p>
+  <p class="muted"><span class="en">Seven steps, idea to production — each bundles several lifecycle stages (the full flow is 10 stages). Every step writes a durable artifact and is logged.</span><span class="th">7 สเต็ป ตั้งแต่ไอเดียจนขึ้น production — แต่ละสเต็ปรวมหลาย stage ไว้ในตัว (lifecycle เต็มมี 10 stage) ทุกสเต็ปเขียนไฟล์เก็บไว้และมี log ครบ</span></p>
   <ol class="steps">
     <li><div class="stepno">1</div>
       <details class="stepd" open><summary>
@@ -340,6 +340,16 @@
     </li>
     <li><div class="stepno">5</div>
       <details class="stepd"><summary>
+        <span class="sumt"><h3><span class="en">Release &amp; go live</span><span class="th">ปล่อย &amp; ขึ้นจริง</span></h3><code class="chip">/release</code></span>
+        <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
+      </summary><div class="stepbody">
+        <p><span class="en">The pre-production pipeline: full regression → auto audits (UI/QA/security/code) → smoke → <b>manual UAT</b> → defect loop → <b>sign-off</b> → promote to production. Production deploy needs a human signature.</span><span class="th">pipeline ก่อนขึ้นจริง: full regression → audit อัตโนมัติ (UI/QA/security/code) → smoke → <b>UAT คนเทส</b> → วนแก้บั๊ก → <b>เซ็น sign-off</b> → ขึ้น production (ขึ้นจริงต้องมีคนเซ็น)</span></p>
+        <p class="sub"><b>inside</b> · regression → audits → smoke → /uat → sign-off → deploy</p>
+        <p class="sub"><b>produces</b> · UAT-&lt;date&gt;.md · SIGNOFF-&lt;date&gt;.md · audit reports</p>
+      </div></details>
+    </li>
+    <li><div class="stepno">6</div>
+      <details class="stepd"><summary>
         <span class="sumt"><h3><span class="en">Change mid-way</span><span class="th">เปลี่ยนกลางทาง</span></h3><code class="chip">/change-request "…"</code></span>
         <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </summary><div class="stepbody">
@@ -347,7 +357,7 @@
         <p class="sub"><b>produces</b> · CHANGES.md (change order) · updated PROPOSAL</p>
       </div></details>
     </li>
-    <li><div class="stepno">6</div>
+    <li><div class="stepno">7</div>
       <details class="stepd"><summary>
         <span class="sumt"><h3><span class="en">Close out</span><span class="th">ปิดโปรเจกต์</span></h3><code class="chip">/synthesize</code></span>
         <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
@@ -364,7 +374,7 @@
   <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.claude/</code></h2>
   <div class="grid g2" style="margin-top:24px">
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5M20.5 20a5.5 5.5 0 0 0-4.5-5.4"/></svg> <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
-    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">14 commands</span><span class="th">14 คำสั่ง</span></h3><p><code class="flat">/overview /propose /phase /ui-audit /qa-audit /security-audit /change-request /replan /quick /synthesize /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">17 commands</span><span class="th">17 คำสั่ง</span></h3><p><code class="flat">/overview /propose /phase /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7z"/></svg> <span class="en">6 skills</span><span class="th">6 สกิล</span></h3>
       <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg> <span class="en">3 hooks</span><span class="th">3 ฮุก</span></h3>

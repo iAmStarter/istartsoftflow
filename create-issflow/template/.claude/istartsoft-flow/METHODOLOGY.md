@@ -75,13 +75,19 @@ from idea to closeout:
    `docs/proposal.html`: scope, phase breakdown, effort + cost estimate, timeline,
    assumptions, with a **client sign-off gate** before build. Internal / personal
    projects skip straight from plan to build.
-6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop).
+6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop). Each phase's
+   tests (unit + integration + e2e) are automated and MUST pass before the next phase.
 7. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
    change order (`docs/CHANGES.md`) + sign-off, then `/replan`. Scope and cost never
    change silently.
-8. **Deploy** — in the final phase.
-9. **Closeout** — `/synthesize` (final pass) → a project summary: what was built, key
-   decisions, every change order, and the final cost vs the original estimate.
+8. **Release** — `/release`: full regression (functional/integration/e2e) → auto
+   audits (UI / QA / security / code) → smoke → **manual UAT** (`/uat`, scenario sheet
+   + captured results) → defect loop → **sign-off** (`docs/SIGNOFF-…`) → promote to
+   production (a human-signed hard-stop).
+9. **Go-live & support** — after-go-live hypercare; new scope routes through
+   `/change-request`. The project is live; the loop continues.
+10. **Closeout** — `/synthesize` → a project summary: what was built, key decisions,
+    every change order, and the final cost vs the original estimate.
 
 **Logging is continuous and total.** Every stage writes to a durable artifact:
 requirements (PRD / OVERVIEW), commercial (PROPOSAL / CHANGES), execution
@@ -183,6 +189,11 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 - **security-audit** — whole-product SECURITY audit against the `security` cookbook
   (OWASP/ASVS/WSTG/secrets/SCA/SAST/supply-chain); scored report. On-demand; a
   precondition for the pre-deploy pentest. Distinct from the per-phase rule-11 gate.
+- **release** — the pre-production pipeline (run after all build phases): full
+  regression → auto audits → smoke → UAT handoff → defect loop → sign-off → promote
+  to production → go-live support. The automated SDLC backbone.
+- **uat** — manual UAT cycle: generate an all-case scenario sheet for human testers,
+  capture their results, drive the defect loop to 100% pass. Used inside `release`.
 - **unstuck** — deep re-research after a circuit breaker (auto-run once in AUTO on
   first stuck; human-triggered in GUIDED).
 - **synthesize** — compress STATE.md, dedup ISSUES.md, prune snapshots. Run
@@ -381,6 +392,12 @@ the KB. The kit works normally without a KB.
   commands render into `docs/`.
 - `docs/CHANGES.md` — change-order log (append-only): each scope change with its
   impact, effort/cost delta, new total, and approval status. The commercial audit trail.
+- `docs/UAT-<date>.md` — UAT scenario sheet (all cases) + captured tester results
+  (PASS/FAIL + notes). Drives the release defect loop.
+- `docs/SIGNOFF-<date>.md` — release sign-off: scope delivered, test/audit/UAT
+  summary, known limitations, approver — the gate to promote to production.
+- `docs/ui-audit-<date>.md` · `docs/qa-audit-<date>.md` · `docs/security-audit-<date>.md`
+  — scored whole-product audit reports (from the `*-audit` commands).
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
 - `docs/PLAN.md` — the phase plan. The last phase has the deploy task.
