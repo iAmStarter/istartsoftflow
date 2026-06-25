@@ -30,12 +30,14 @@ Flags: `--tool=<name>` (skip the prompt) · `--dry-run` (write nothing) · `--fo
 ## Supported tools
 
 One source of truth (`.claude/` + `AGENTS.md`); the installer writes the right
-adapter per tool. Unsupported features degrade to model-run rituals — they never
+adapter per tool. Claude Code only auto-loads `CLAUDE.md`, so the installer writes
+a one-line `CLAUDE.md` that imports `AGENTS.md` (`@AGENTS.md`) — full methodology,
+still one source. Unsupported features degrade to model-run rituals — they never
 silently vanish.
 
 | Tool | Entry | Commands | Subagents | Lifecycle hooks |
 |------|-------|----------|-----------|-----------------|
-| **Claude Code** (reference) | `AGENTS.md` + `.claude/` | `.claude/commands/` | native | SessionStart · PreCompact · SubagentStop |
+| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse · PreCompact · SubagentStop |
 | **Codex CLI** | `AGENTS.md` (native) | read as prompts | reference | model-run |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | read as prompts | reference | model-run |
@@ -47,9 +49,9 @@ silently vanish.
 | Group | Items |
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
-| **commands** | `/overview` `/propose` `/phase` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
+| **commands** | `/overview` `/propose` `/phase` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
 | **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** (naming-per-language + architecture) — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
-| **hooks** | session-start · pre-compact · subagent-stop (Node scripts, wired per tool) |
+| **hooks** | session-start · context-guard (token-budget watchdog) · pre-compact · subagent-stop (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
 ## Core idea

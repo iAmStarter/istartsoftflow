@@ -107,8 +107,21 @@ function copyTemplateCommands(destDir) {
 // ---- adapters (keep the methodology single-source — these POINT at it) ------
 
 function adapterClaude() {
+  // Claude Code auto-loads CLAUDE.md only — NOT AGENTS.md. Without a CLAUDE.md
+  // the methodology never enters context on its own (the SessionStart hook still
+  // injects the per-session summary, but the full single-source doc would not
+  // load). A one-line `@AGENTS.md` import gives Claude Code the full baseline
+  // while keeping ONE source of truth — no rule is restated here (anti-drift).
+  const c0 = conflicts;
+  writeFile('CLAUDE.md', claudeMd());
+  if (conflicts > c0) warnings.push('claude: you already keep a CLAUDE.md — ours was written as CLAUDE.md.issflow-new. Add a line `@AGENTS.md` to your CLAUDE.md so the methodology auto-loads.');
+  // Context-budget watchdog config (consumed by .claude/hooks/context-guard.js).
+  // Shipped default window:0 = auto-detect; flow-config.json lives at .claude root,
+  // outside build.js's copied DIRS, so the installer writes it here.
+  writeFile('.claude/flow-config.json', flowConfig());
   const HOOKS = {
     SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .claude/hooks/session-start.js' }] }],
+    PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .claude/hooks/context-guard.js' }] }],
     PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .claude/hooks/pre-compact.js' }] }],
     SubagentStop: [{ hooks: [{ type: 'command', command: 'node .claude/hooks/subagent-stop.js' }] }],
   };
@@ -176,7 +189,7 @@ function adapterAider() {
 const ADAPTERS = { claude: adapterClaude, codex: adapterCodex, cursor: adapterCursor, gemini: adapterGemini, aider: adapterAider };
 
 const NEXT_STEPS = {
-  claude: 'Open Claude Code — the SessionStart hook fires automatically. Run /overview to bootstrap.',
+  claude: 'Open Claude Code — CLAUDE.md (@AGENTS.md) loads the methodology and the SessionStart hook fires automatically. Run /overview to bootstrap.',
   codex:  'Open Codex CLI — it reads AGENTS.md. Start by running the /overview procedure (.claude/commands/overview.md).',
   cursor: 'Open Cursor — the rule applies automatically. Run the /overview command to bootstrap.',
   gemini: 'Open Gemini CLI — it reads GEMINI.md. Run the SESSION-OPEN ritual, then the overview procedure.',
@@ -199,7 +212,7 @@ function agentsMd() {
     'planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer', '',
     '## Procedures — `.claude/commands/` (run as `/name`)', '',
     '/overview · /propose · /phase · /ui-audit · /qa-audit · /security-audit · /release ·',
-    '/uat · /change-request · /replan · /quick · /synthesize · /store-wisdom ·',
+    '/uat · /change-request · /replan · /quick · /synthesize · /runbook · /store-wisdom ·',
     '/log-issue · /log-decision · /unstuck', '',
     '## Skills — `.claude/skills/` (loaded on demand)', '',
     'caveman · grill-me · karpathy-guidelines · ux-design · security (Secure SDLC) · code-standards', '',
@@ -223,6 +236,40 @@ function agentsMd() {
     'planning source) once in `docs/OVERVIEW.md`. Every rule references *your declared',
     'stack* and hardcodes none.', '',
   ].join('\n');
+}
+
+function claudeMd() {
+  return [
+    '# CLAUDE.md — iStartSoftFlow (Claude Code entry)', '',
+    '@AGENTS.md', '',
+    'The import above is the single source of truth — it points to',
+    '`.claude/istartsoft-flow/METHODOLOGY.md` (read on demand). Do NOT restate any',
+    'rule here; this file only wires Claude-native mechanisms (anti-drift invariant).', '',
+    '## Claude-native wiring (automatic — see `.claude/settings.json`)', '',
+    '- **SessionStart** hook injects git state + `docs/STATE.md` + open `docs/ISSUES.md`',
+    '  + the rule summary each session — read those first.',
+    '- **PreCompact** + **SubagentStop** hooks run their rituals automatically.',
+    '- Commands in `.claude/commands/` run as `/name`; agents in `.claude/agents/` are',
+    '  native subagents.', '',
+  ].join('\n');
+}
+
+function flowConfig() {
+  return JSON.stringify({
+    context: {
+      window: 0,
+      warnPct: 60,
+      gatePct: 78,
+      _note: 'Context-budget watchdog (.claude/hooks/context-guard.js, PreToolUse hook). '
+        + 'window 0 = auto-detect from the model id (200000 for standard models). '
+        + 'Some 1M-context models report their id WITHOUT a [1m] tag, so auto-detect '
+        + 'assumes 200000 and may false-gate around 156k — if you run a 1M model, set '
+        + 'window:1000000 here by hand. warnPct = soft non-blocking nudge; gatePct = hard '
+        + 'block on NEW build work (Edit/Write-to-source/feature Task). Checkpoint paths '
+        + '(docs/**, STATE/ISSUES/snapshots), the synthesizer subagent, and all Bash are '
+        + 'never blocked.',
+    },
+  }, null, 2) + '\n';
 }
 
 // ---- main -------------------------------------------------------------------
