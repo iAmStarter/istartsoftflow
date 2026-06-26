@@ -1,6 +1,6 @@
 ---
 description: Pre-production release pipeline — after all build phases, run the full automated gauntlet (full regression: functional / integration / e2e · all audits: UI / QA / security / code · smoke test), then hand off to manual UAT, drive the defect loop to green, produce a sign-off document, and promote to production. The automated SDLC backbone; production deploy is a human-signed hard-stop.
-argument-hint: [optional: target env]
+argument-hint: [optional: target env · "dry-run" to preview the pipeline without running it]
 ---
 
 Caveman ULTRA mode. You are the ORCHESTRATOR.

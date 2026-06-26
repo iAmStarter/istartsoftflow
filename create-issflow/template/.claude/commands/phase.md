@@ -1,6 +1,6 @@
 ---
 description: Run one phase end-to-end. TDD phases run SCAFFOLD -> RED -> GREEN; non-TDD phases run IMPLEMENT -> TEST. Both with the debug circuit breaker and the regression guard at CLOSE.
-argument-hint: [phase number]
+argument-hint: [phase number · "dry-run" to preview what the phase would do]
 ---
 
 Caveman ULTRA mode. You are the ORCHESTRATOR. Route work to subagents —
