@@ -2,7 +2,11 @@
 'use strict';
 // PreToolUse context watchdog (iStartSoftFlow). Two tiers, one hook:
 //   warnPct  -> non-blocking nudge (additionalContext) once per climb into the band
-//   gatePct  -> HARD block of NEW build work (Edit/Write-to-source/feature Task)
+//   gatePct  -> HARD block of NEW build work (Edit/Write to SOURCE files)
+// Delegation (Task) is the prescribed escape — a subagent runs in its OWN context
+// and returns a terse summary, so it SHRINKS orchestrator context, never grows it.
+// Blocking it would force the orchestrator to build inline (worse). So Task is
+// never gated; only direct source mutations by the orchestrator are.
 // Reads REAL token usage from the transcript. Fail-OPEN: any error -> allow,
 // never wedge the tool loop on a hook bug.
 const path = require('path');
@@ -34,7 +38,7 @@ function run(evt) {
   const tool = evt.tool_name || '';
   const ti = evt.tool_input || {};
   const band = u.pct >= gate ? 'gate' : u.pct >= warn ? 'warn' : 'ok';
-  const BLOCKABLE = new Set(['Edit', 'Write', 'MultiEdit', 'NotebookEdit', 'Task']);
+  const BLOCKABLE = new Set(['Edit', 'Write', 'MultiEdit', 'NotebookEdit']);
 
   // HARD GATE — block new build mutations; reason is fed to the model.
   if (band === 'gate' && BLOCKABLE.has(tool) && !isEscape(tool, ti)) {
@@ -67,15 +71,12 @@ function run(evt) {
   return silent();
 }
 
-// Checkpoint/logging writes + the synthesizer ritual are never blocked, so the
-// model always has an escape path out of the gate.
+// Checkpoint/logging writes (docs/**, STATE/ISSUES/snapshots) are never blocked,
+// so the model always has an escape path out of the gate. (Task delegation is not
+// in BLOCKABLE at all — see the header note — so it needs no escape carve-out.)
 function isEscape(tool, ti) {
-  if (tool === 'Edit' || tool === 'Write' || tool === 'MultiEdit' || tool === 'NotebookEdit') {
-    const fp = ti.file_path || ti.path || ti.notebook_path || '';
-    return /(^|\/)docs\//.test(fp) || /STATE\.md|ISSUES\.md|\.snapshots\//.test(fp);
-  }
-  if (tool === 'Task') return (ti.subagent_type || '').toLowerCase() === 'synthesizer';
-  return false;
+  const fp = ti.file_path || ti.path || ti.notebook_path || '';
+  return /(^|\/)docs\//.test(fp) || /STATE\.md|ISSUES\.md|\.snapshots\//.test(fp);
 }
 
 const fmt = (n) => (n >= 1000 ? Math.round(n / 1000) + 'k' : String(n));

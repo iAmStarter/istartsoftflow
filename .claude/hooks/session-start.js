@@ -80,7 +80,7 @@ if (issues !== null) {
 // 3b. research index
 const idx = read('docs/research/INDEX.md');
 if (idx !== null) {
-  const rows = idx.split('\n').filter((l) => /^[0-9]/.test(l));
+  const rows = idx.split('\n').filter((l) => /^\|\s*\d{4}-\d{2}-\d{2}/.test(l));
   emit(`## research/INDEX.md (${rows.length} prior investigations)`);
   emit('grep this before any new research or debugging.');
   for (const l of rows.slice(-15)) emit('  ' + l);

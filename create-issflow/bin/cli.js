@@ -266,9 +266,15 @@ function flowConfig() {
         + 'Some 1M-context models report their id WITHOUT a [1m] tag, so auto-detect '
         + 'assumes 200000 and may false-gate around 156k — if you run a 1M model, set '
         + 'window:1000000 here by hand. warnPct = soft non-blocking nudge; gatePct = hard '
-        + 'block on NEW build work (Edit/Write-to-source/feature Task). Checkpoint paths '
-        + '(docs/**, STATE/ISSUES/snapshots), the synthesizer subagent, and all Bash are '
-        + 'never blocked.',
+        + 'block on NEW build work (Edit/Write to SOURCE files). Checkpoint paths '
+        + '(docs/**, STATE/ISSUES/snapshots) and all Bash are never blocked; Task '
+        + 'delegation is never gated (a subagent isolates noise and shrinks context).',
+    },
+    sprint: {
+      defaultCapacity: 8,
+      _note: 'Sprint layer (/sprint). defaultCapacity = points committed to the FIRST '
+        + 'sprint before any velocity history exists; later sprints size to the rolling '
+        + 'completed-velocity average. Optional — /sprint falls back to 8 if absent.',
     },
   }, null, 2) + '\n';
 }

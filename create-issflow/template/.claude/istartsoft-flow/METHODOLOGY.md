@@ -191,9 +191,9 @@ can. Escalation is at most two hops.
   phases it is dispatched BEFORE logic exists (RED-first), so blindness is
   structural, not honor-system. Writes a MOCK suite + a REAL API suite.
 - **e2e-runner** — writes/runs functional browser E2E (your declared E2E runner,
-  e.g. Playwright) BLIND. Reads only the acceptance spec + `docs/ENDPOINTS.md`,
-  never the implementation. Writes a trace to `docs/research/e2e-<phase-slug>.md`;
-  returns a terse summary.
+  e.g. Playwright) BLIND. Reads the acceptance spec, `docs/OVERVIEW.md` (stack),
+  `docs/ENDPOINTS.md`, and the E2E runner config — never the implementation. Writes
+  a trace to `docs/research/e2e-<phase-slug>.md`; returns a terse summary.
 - **debugger** — debugs in an ISOLATED context. Writes a trace to
   `docs/research/debug-<slug>.md`; returns a summary.
 - **synthesizer** — compresses `docs/STATE.md` / `docs/ISSUES.md`, prunes

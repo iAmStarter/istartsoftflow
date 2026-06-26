@@ -1,11 +1,15 @@
 ---
 description: Make a small, obvious change directly — no agent chain, no phase overhead.
-argument-hint: [what to change]
+argument-hint: [what to change · "dry-run" to preview the edit]
 ---
 
 Caveman ULTRA mode. Apply `karpathy-guidelines` skill.
 
 Purpose: skip the orchestration tax for a 5-line fix.
+
+DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, describe the exact edit
+you'd make (file · lines · the change) and the regression you'd run, then STOP —
+change nothing. (METHODOLOGY → Dry-run.)
 
 Use `/quick` when ALL hold:
 - change is small (under 30 lines) and obvious

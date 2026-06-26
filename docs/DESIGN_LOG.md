@@ -5,6 +5,23 @@ bugs → ISSUES.md. (See `/log-decision`.)
 
 ## 0. Changelog
 
+- 2026-06-26 — **Kit best-dev-kit review pass** — fixes from a full multi-axis audit:
+  (1) **SessionStart research-index regex bug** — `session-start.js` counted INDEX rows
+  with `/^[0-9]/`, but rows are markdown table rows (`| 2026-… |`), so it always reported
+  "0 prior investigations" and injected nothing — silently breaking hard rule 1's research
+  surface. Fixed to match `/^\|\s*\d{4}-\d{2}-\d{2}/`. (2) **ISSUES open-issue convention
+  drift** — `log-issue.md` canonical said `- [x] open`, but the SessionStart hook detects
+  open via the EMPTY box `- [ ]`, so canonically-logged issues were invisible as open.
+  Standardized on `- [ ]` open / `- [x] resolved` (matches the hook, store-wisdom, unstuck).
+  (3) **Context-gate no longer blocks `Task`** — gating delegation was backwards (a subagent
+  isolates noise and SHRINKS orchestrator context); the gate now blocks only direct source
+  Edit/Write. See §5.3. (4) **Universal dry-run wired into command bodies** — the documented
+  modifier now has an explicit pre-flight branch in `/phase /release /change-request /sprint
+  /propose /quick` (was only in METHODOLOGY + a couple argument-hints). (5) Minor: installer
+  `flowConfig()` now ships the documented `sprint.defaultCapacity` block; e2e-runner read-set
+  corrected in METHODOLOGY + frontmatter (it reads OVERVIEW + E2E config too); `/replan`
+  guards `--real` regression on a pre-build replan.
+
 - 2026-06-26 — **Formalize the PLAN-APPROVAL gate** (hard rule 13): the plan→build
   transition becomes a named, recorded sign-off gate symmetric with the `/propose`
   commercial gate. `/overview` stamps the approval (PLAN.md `> Approval:` header +
@@ -19,6 +36,25 @@ bugs → ISSUES.md. (See `/log-decision`.)
   `docs/sprints/VELOCITY.md`; `sprint.defaultCapacity` knob in flow-config. See §5.1.
 
 ## 5. Decisions
+
+### 5.3 Context gate stops blocking `Task` — delegation is the escape, not the leak
+
+The PreToolUse context watchdog (`context-guard.js`) hard-denied, at the gate band,
+any `Edit/Write/Task` except a `synthesizer` Task. The `Task` half was backwards. The
+whole token-economy thesis (METHODOLOGY → Token economy) is "delegate noisy work to a
+subagent — it runs in its OWN context and returns a terse summary," i.e. a `Task`
+*shrinks* the orchestrator's context, it never grows it. Blocking `Task` at the gate
+forced the orchestrator to do the work inline instead, which is exactly the
+context-bloating path the gate exists to prevent — and it broke the natural "near the
+gate, hand off to a fresh-context worker" move. The lone `synthesizer` carve-out was
+the author already noticing the rule fought itself.
+
+**Chosen: remove `Task` from the blockable set entirely.** The gate now denies only
+direct *source* mutations by the orchestrator (`Edit/Write/MultiEdit/NotebookEdit` to
+non-`docs/**` paths); checkpoint writes and all `Bash` stay exempt as before, and every
+delegation is always allowed. The gate's true job is to bound the *orchestrator's* own
+context, and that is precisely what unrestricted delegation preserves. `flowConfig()`
+note + the live `flow-config.json` note updated to match.
 
 ### 5.2 PLAN-APPROVAL gate — formalize the plan→build sign-off
 

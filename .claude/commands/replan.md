@@ -54,9 +54,10 @@ commercial impact (split/merge/reorder, a discovered technical re-slice).
    - A MERGE -> consolidate the merged phases' regression tests.
    - A REORDER -> keep the tests as-is (contracts are phase-independent).
    Do NOT touch phase-local `tests/phase-<n>/` here beyond renumbering dirs.
-   After reconciling, run `scripts/regression.sh --real` to confirm the
-   reconciled corpus still passes against live services. A failure -> surface it
-   and stop before approval.
+   After reconciling, re-run the regression corpus to confirm it still passes:
+   `--real` ONLY if at least one phase is done (live services exist); on a pre-build
+   replan (no done phase, managed infra not yet wired) run the mock corpus instead,
+   or skip with a noted reason. A failure -> surface it and stop before approval.
 
 6. PLAN-APPROVAL gate (hard rule 13). A re-plan reshapes UNBUILT scope, so it reverts
    the plan to unapproved: set the PLAN.md `> Approval:` header back to `PENDING`, SHOW

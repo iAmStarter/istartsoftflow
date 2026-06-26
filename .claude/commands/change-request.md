@@ -1,12 +1,17 @@
 ---
 description: Handle a mid-project requirement change — assess impact, re-estimate effort + cost, log the change order, then update the plan + proposal. Run whenever scope changes after the proposal is approved.
-argument-hint: [the requested change]
+argument-hint: [the requested change · "dry-run" to preview impact without logging]
 ---
 
 Caveman ULTRA mode. You are the ORCHESTRATOR.
 
 A change request is a COMMERCIAL event, not just a re-plan: changing scope changes
 cost and timeline. Handle it transparently and fairly. Change: $ARGUMENTS
+
+DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, do the impact analysis +
+re-estimate but EXECUTE NOTHING — print the ACTION PLAN (cost/scope/timeline delta,
+files you'd touch) and STOP. No change order is logged, no plan/proposal is edited.
+(METHODOLOGY → Dry-run.)
 
 ## PRE-FLIGHT
 Read `docs/PROPOSAL.md` (the approved baseline), `docs/PLAN.md`, `docs/STATE.md`,

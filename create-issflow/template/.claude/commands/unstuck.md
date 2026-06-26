@@ -15,7 +15,7 @@ Steps:
 
 - [ ] open - stuck after 3 attempts
 - symptom: <…>
-- attempts that FAILED: <hypothesis 1>, <2>, <3>
+- failed attempts: <hypothesis 1>, <2>, <3>
 
 ```
 Reference the existing debug-<slug>.md.

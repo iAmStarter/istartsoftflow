@@ -1,6 +1,6 @@
 ---
 description: Turn approved requirements + tech stack into a client proposal — scope, phase breakdown, effort + cost estimate, timeline, assumptions, and a sign-off gate. Run after /overview, before building.
-argument-hint: [optional: rate / budget / constraints]
+argument-hint: [optional: rate / budget / constraints · "dry-run" to preview]
 ---
 
 Caveman ULTRA mode. You are the ORCHESTRATOR.
@@ -8,6 +8,10 @@ Caveman ULTRA mode. You are the ORCHESTRATOR.
 Purpose: produce `docs/PROPOSAL.md` — WHAT we build, in what phases, how long, how
 much, and on what assumptions — for the client to approve BEFORE any build starts.
 A proposal is a commercial gate: always interactive (both AUTO and GUIDED).
+
+DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, do the full analysis but
+EXECUTE NOTHING — print the ACTION PLAN (scope, phase breakdown, rough estimate)
+and STOP. No PROPOSAL.md / proposal.html is written. (METHODOLOGY → Dry-run.)
 
 ## PRE-FLIGHT
 Read `docs/OVERVIEW.md` (scope, stack, success criteria) and `docs/PRD.md` if
