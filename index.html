@@ -173,6 +173,7 @@
   <span class="brand"><span class="dot">iSS</span>iStartSoftFlow</span>
   <span class="links">
     <a href="#loop"><span class="en">The loop</span><span class="th">ลูป</span></a>
+    <a href="#sprint"><span class="en">Sprints</span><span class="th">สปรินต์</span></a>
     <a href="#tools"><span class="en">Tools</span><span class="th">เครื่องมือ</span></a>
     <a href="#start"><span class="en">Start</span><span class="th">เริ่มต้น</span></a>
     <a href="#kit"><span class="en">What you get</span><span class="th">ในชุด</span></a>
@@ -243,6 +244,37 @@
       <g class="dot"><circle class="halo" cx="36" cy="40" r="13"/><circle class="core" cx="36" cy="40" r="5.5"/></g>
     </svg>
   </div>
+</div></section>
+
+<section id="sprint"><div class="wrap">
+  <div class="ey"><span class="en">the sprint layer · optional</span><span class="th">เลเยอร์ sprint · ออปชัน</span></div>
+  <h2><span class="en">Wrap the phases in sprints</span><span class="th">ห่อ phase ไว้ใน sprint</span></h2>
+  <p class="muted" style="margin-bottom:10px">
+    <span class="en">An optional Scrum wrapper sits between the plan and the build loop: <b style="color:var(--txt)">PLAN → SPRINT → PHASE</b>. A few phases are grouped behind one sprint goal and ship one demoable increment, with the full ceremony set around them.</span>
+    <span class="th">ตัวห่อแบบ Scrum (เลือกใช้หรือไม่ก็ได้) คั่นระหว่างแผนกับลูปสร้างงาน: <b style="color:var(--txt)">PLAN → SPRINT → PHASE</b> รวมไม่กี่ phase ไว้ใต้เป้าหมาย sprint เดียว ส่งมอบ increment ที่เดโมได้ พร้อมพิธีการครบชุดรอบๆ</span>
+  </p>
+  <p class="muted" style="margin-bottom:26px">
+    <span class="en"><b style="color:var(--txt)">Runs itself.</b> Planning only slices the <i>already-approved</i> plan, so <code class="chip">/sprint run</code> drives a whole sprint — or every remaining one — hands-off, pausing only at the real hard-stops. The "daily" standup is rebound to one tick <i>per phase close</i> — the AI loop has no calendar days.</span>
+    <span class="th"><b style="color:var(--txt)">รันเอง.</b> การวางแผนแค่ตัดแผนที่<i>อนุมัติแล้ว</i>ออกเป็นช่วง <code class="chip">/sprint run</code> จึงขับทั้ง sprint — หรือทุก sprint ที่เหลือ — แบบไม่ต้องคุม หยุดเฉพาะจุด hard-stop จริงๆ ส่วน standup "รายวัน" เปลี่ยนเป็นหนึ่งครั้ง<i>ต่อการปิด phase</i> — ลูป AI ไม่มีวันตามปฏิทิน</span>
+  </p>
+  <div class="loop">
+    <svg class="flowsvg" viewBox="0 0 720 112" role="img" aria-label="The sprint ceremony cycle: plan, standup, review, retro — repeating each sprint">
+      <line class="track" x1="36" y1="40" x2="684" y2="40"/>
+      <line class="flowline" x1="36" y1="40" x2="684" y2="40"/>
+      <g class="fn"><circle cx="36" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="252" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="468" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="684" cy="40" r="8"/></g>
+      <text class="flab" x="36" y="70">plan</text>
+      <text class="flab" x="252" y="70">standup ×N</text>
+      <text class="flab" x="468" y="70">review</text>
+      <text class="flab" x="684" y="70">retro</text>
+      <path class="rback" d="M684 50 C 706 98, 14 98, 36 50"/>
+      <text class="rep" x="360" y="106" text-anchor="middle">↻ next sprint</text>
+      <g class="dot"><circle class="halo" cx="36" cy="40" r="13"/><circle class="core" cx="36" cy="40" r="5.5"/></g>
+    </svg>
+  </div>
+  <p class="sub" style="text-align:center;margin-top:16px"><b>tracks</b> · <span class="en">burndown · velocity · one</span><span class="th">burndown · velocity · ไฟล์</span> <code>docs/sprints/sprint-&lt;n&gt;.md</code> <span class="en">per sprint</span><span class="th">ต่อหนึ่ง sprint</span></p>
 </div></section>
 
 <section id="why"><div class="wrap">
@@ -335,7 +367,8 @@
       </summary><div class="stepbody">
         <p><span class="en">The AUTO dev loop: implement → blind tests → UX + security gates → close. Follows the plan without stopping to ask; logs every decision, issue, and fix.</span><span class="th">AUTO dev loop: implement → blind test → เกต UX + security → ปิด ทำตามแผนไม่หยุดถาม และ log ทุก decision/ปัญหา/การแก้</span></p>
         <p class="sub"><b>inside</b> · implement → blind tests → UX + security gates → <b>deploy</b> (final phase) → close</p>
-        <p class="sub"><b>produces</b> · code · tests · ENDPOINTS.md · HISTORY.md</p>
+        <p class="sub"><b>optional</b> · <span class="en">wrap phases in sprints —</span><span class="th">ห่อ phase ด้วย sprint —</span> <code class="chip">/sprint run</code> <span class="en">drives plan → standups → review → retro → close, hands-off</span><span class="th">ขับ plan → standup → review → retro → close แบบไม่ต้องคุม</span></p>
+        <p class="sub"><b>produces</b> · code · tests · ENDPOINTS.md · HISTORY.md · <span class="en">(sprints)</span><span class="th">(sprint)</span> sprints/</p>
       </div></details>
     </li>
     <li><div class="stepno">5</div>
@@ -374,7 +407,7 @@
   <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.claude/</code></h2>
   <div class="grid g2" style="margin-top:24px">
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5M20.5 20a5.5 5.5 0 0 0-4.5-5.4"/></svg> <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
-    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">17 commands</span><span class="th">17 คำสั่ง</span></h3><p><code class="flat">/overview /propose /phase /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">18 commands</span><span class="th">18 คำสั่ง</span></h3><p><code class="flat">/overview /propose /phase /sprint /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7z"/></svg> <span class="en">6 skills</span><span class="th">6 สกิล</span></h3>
       <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg> <span class="en">3 hooks</span><span class="th">3 ฮุก</span></h3>
