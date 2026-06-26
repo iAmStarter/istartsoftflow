@@ -3,10 +3,6 @@ description: Run one phase end-to-end. TDD phases run SCAFFOLD -> RED -> GREEN; 
 argument-hint: [phase number · "dry-run" to preview what the phase would do]
 ---
 
-DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, do the analysis but EXECUTE
-NOTHING — print the ACTION PLAN (what would change / run / deploy + the impact) and
-STOP. Nothing is written, run, or committed. (METHODOLOGY → Dry-run.)
-
 
 Caveman ULTRA mode. You are the ORCHESTRATOR. Route work to subagents —
 you do NOT implement or debug yourself.
