@@ -43,6 +43,12 @@ window. If a phase feels big, split it.
   money, or PII), add a `security:` note: threat-model it (STRIDE) and fold abuse
   cases into the acceptance criteria as negative cases; set the ASVS level (default
   L2). This is the design stage of the Secure SDLC (`security` skill).
+- SPRINT-READY (so the optional `/sprint` layer needs no rework): give every phase a
+  relative effort estimate `[N pts]` (Fibonacci 1/2/3/5/8) in its header, and group
+  consecutive phases under `## Sprint <n>: <name>  [goal: <one-line increment>]`
+  headers — each sprint a coherent, demoable theme of a few phases. If you cannot
+  size a sprint yet, still tag the points; `/sprint plan` will do the grouping from
+  the points + capacity. A phase that feels `>8 pts` is too big — split it.
 
 LAST PHASE RULE — the final code phase (the highest-numbered phase you write)
 MUST contain a deployment task block:
@@ -61,11 +67,19 @@ docs/PLAN.md format:
 
 # Plan: <project>
 <!-- infra: managed (Phase 0 N/A) | self-managed (Phase 0 below) -->
+> Approval: PENDING  (hard rule 13 — PLAN-APPROVAL gate; no phase/sprint runs until a human signs this off via the `/overview` gate)
+
+Keep the header VALUE a single leading token — `PENDING` here, later
+`approved <date> v<n>` — so the gate readers (`/phase`, `/sprint`) match the first
+token unambiguously. Do not put prose containing the word `approved` after a
+`PENDING` value, or a substring check could false-pass the gate.
 
 ## Phase 0: infra setup  [status: pending]   ← omit entirely if infra is managed
 
 
-## Phase 1: <name>  [status: pending]
+## Sprint 1: <name>  [goal: <one-line user-visible increment>]   ← sprint headers optional; group a few phases
+
+## Phase 1: <name>  [5 pts]  [status: pending]
 
 - slice: <what works end-to-end after this phase>
 - rationale: <why this slice, why now — the user / business value (from the PRD)>
@@ -90,4 +104,5 @@ docs/PLAN.md format:
 
 ```
 Order phases by dependency. Phase 0 first IF infra is self-managed; otherwise
-start at Phase 1. Stop. Do not implement.
+start at Phase 1. Always write the `> Approval: PENDING` header — the plan is unapproved
+until the `/overview` PLAN-APPROVAL gate stamps it (hard rule 13). Stop. Do not implement.

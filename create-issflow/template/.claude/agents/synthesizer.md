@@ -21,6 +21,9 @@ Do NOT touch docs/ENDPOINTS.md — owned by implementer.
    - what was just completed (1-3 bullets)
    - the immediate next action
    - any open blocker
+   PRESERVE verbatim (never blank on rewrite): the `plan:` line (the PLAN-APPROVAL
+   sign-off record, hard rule 13) and the `sprint:` line (active-sprint marker) if
+   present — load-bearing gate/standup state, not transient progress.
    Target: under 25 lines.
 
 2. ISSUES.md — dedup + compress:

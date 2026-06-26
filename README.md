@@ -49,7 +49,7 @@ silently vanish.
 | Group | Items |
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
-| **commands** | `/overview` `/propose` `/phase` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
+| **commands** | `/overview` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
 | **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** (naming-per-language + architecture) — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
 | **hooks** | session-start · context-guard (token-budget watchdog) · pre-compact · subagent-stop (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
@@ -68,6 +68,23 @@ per phase. Implement AND test a phase before the next; the last phase includes
 deployment. Planning source of truth stays in your PRD / architecture / stories
 (e.g. BMAD / iSSM); iStartSoftFlow is the execution loop layered on top.
 
+## Sprint layer (optional Scrum wrapper)
+
+Between the PLAN (the product backlog) and the PHASE (the build loop) sits an
+optional sprint layer (`/sprint`): consecutive phases are grouped behind one sprint
+goal and ship one demoable increment, wrapped in the full ceremony set — planning →
+standups → review/demo → retrospective — with burndown + velocity. The hierarchy is
+**PLAN → SPRINT → PHASE**; phases run unchanged inside a sprint.
+
+It is **AUTO-facilitated**: sprint planning only slices the *already-approved* PLAN
+(the requirements gate happened at `/overview`), so `/sprint run` drives a whole
+sprint — or every remaining sprint — hands-off (plan → loop `/phase` → a standup tick
+per phase close → review + boundary audits → retro → close → next sprint), pausing
+only at the real hard-stops (prod deploy, security-sensitive change, contradictory
+spec). The "daily" standup is rebound to a per-phase-close tick — the AI dev loop has
+no calendar days, so the phase boundary is the real unit of progress. Skip the layer
+and drive phases straight off the PLAN exactly as before; it's opt-in.
+
 ## Workflow best practices
 
 Distilled from how teams actually run coding agents well (full sourced notes in
@@ -79,7 +96,8 @@ return only a summary. Keep instruction files small — the methodology is read 
 demand, not injected every turn.
 
 **Spec-first** — write the acceptance criteria before code; a human approves the
-plan (`/overview`, `/replan`) before implementation. Decompose into thin vertical
+plan at the **PLAN-APPROVAL gate** (hard rule 13: `/overview`, `/replan`) before any
+phase or sprint runs. Decompose into thin vertical
 slices, never horizontal layers.
 
 **TDD, blind** — `test-author` writes tests from the spec without seeing the

@@ -1,5 +1,6 @@
 ---
 name: e2e-runner
+description: Writes and runs functional browser E2E (your declared E2E runner, e.g. Playwright) BLIND — reads only the acceptance spec + docs/ENDPOINTS.md, never the implementation. Writes a trace to docs/research/e2e-<phase-slug>.md; returns a terse summary.
 tools: Read, Grep, Glob, Write, Bash
 model: opus
 ---

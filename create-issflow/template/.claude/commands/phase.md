@@ -14,12 +14,17 @@ Target phase: $ARGUMENTS  (default: the phase marked pending in docs/PLAN.md)
 
 ## 0. PRE-FLIGHT
 
-a. INFRA CHECK (phases > 0): Read the declared infra in docs/OVERVIEW.md.
+a. PLAN-APPROVAL CHECK (hard rule 13): Read the docs/PLAN.md `> Approval:` header.
+   Still `PENDING` (or no header) -> STOP. The plan is not signed off; no phase may
+   start. Route me to the `/overview` PLAN-APPROVAL gate (or `/replan` then re-approve).
+   Approved -> continue.
+
+b. INFRA CHECK (phases > 0): Read the declared infra in docs/OVERVIEW.md.
    - Managed infra -> confirm it is reachable; no provisioning step is needed.
    - Self-managed infra -> confirm Phase 0 (infra) ran and is healthy.
    Surface infra + auth status before any work. Blocked infra -> STOP.
 
-b. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
+c. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
    - No phase in progress, requested is next pending -> START at step 1.
    - Same phase in-progress -> RESUME from STATE.md "next action".
    - Different phase in-progress -> STOP. Tell me which phase is open.
@@ -27,7 +32,7 @@ b. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
      phase in PLAN order. GUIDED: STOP, warn, proceed only if I confirm.
    - Phase not in PLAN.md -> STOP. Suggest /overview or /replan.
 
-c. FINAL PHASE CHECK: Read docs/PLAN.md. Is this the last phase (no further
+d. FINAL PHASE CHECK: Read docs/PLAN.md. Is this the last phase (no further
    pending phases after this one)? Record this as IS_FINAL_PHASE=true/false.
 
 
@@ -181,6 +186,12 @@ SECURITY GATE (rule 11 — Secure SDLC build stage):
 
 Mark phase `done` in docs/PLAN.md.
 
+SPRINT STANDUP (if a sprint is active — STATE.md shows `sprint: <n> (active)`):
+fire the `/sprint standup` tick — append the one-line standup to
+docs/sprints/sprint-<n>.md and update the burndown (rule: SPRINT-STANDUP ritual).
+If all the sprint's committed phases are now done/blocked, recommend `/sprint review`
+(or, under `/sprint run`, the driver proceeds to review automatically).
+
 ARCHITECTURE SELF-CHECK: did this phase add/remove/rename an agent, hook, or
 command, or change a workflow rule? YES -> run `/log-decision`. NO -> state why not.
 
@@ -221,10 +232,12 @@ After each step, update docs/STATE.md:
 ```
 
 phase: <n> (in progress)
+plan: approved <date>          ← carry forward; never drop the rule-13 sign-off record
 tdd: <true|false>
 completed: <steps done so far>
 next: <exact next step>
 blocker: <none or open issue>
 
 ```
-Keep STATE.md small — overwrite, do not append.
+Keep STATE.md small — overwrite, do not append. Preserve the `plan:` line on every
+overwrite (the PLAN-APPROVAL record, hard rule 13); do not blank it.
