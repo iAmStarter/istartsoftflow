@@ -67,7 +67,12 @@ docs/PLAN.md format:
 
 # Plan: <project>
 <!-- infra: managed (Phase 0 N/A) | self-managed (Phase 0 below) -->
-> Approval: PENDING — no phase may start until a human signs this plan off (PLAN-APPROVAL gate, hard rule 13). The `/overview` gate stamps this `approved <date> v1` on sign-off.
+> Approval: PENDING  (hard rule 13 — PLAN-APPROVAL gate; no phase/sprint runs until a human signs this off via the `/overview` gate)
+
+Keep the header VALUE a single leading token — `PENDING` here, later
+`approved <date> v<n>` — so the gate readers (`/phase`, `/sprint`) match the first
+token unambiguously. Do not put prose containing the word `approved` after a
+`PENDING` value, or a substring check could false-pass the gate.
 
 ## Phase 0: infra setup  [status: pending]   ← omit entirely if infra is managed
 

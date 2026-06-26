@@ -96,7 +96,8 @@ return only a summary. Keep instruction files small — the methodology is read 
 demand, not injected every turn.
 
 **Spec-first** — write the acceptance criteria before code; a human approves the
-plan (`/overview`, `/replan`) before implementation. Decompose into thin vertical
+plan at the **PLAN-APPROVAL gate** (hard rule 13: `/overview`, `/replan`) before any
+phase or sprint runs. Decompose into thin vertical
 slices, never horizontal layers.
 
 **TDD, blind** — `test-author` writes tests from the spec without seeing the

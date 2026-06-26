@@ -211,7 +211,7 @@ function agentsMd() {
     '## Roles — `.claude/agents/`', '',
     'planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer', '',
     '## Procedures — `.claude/commands/` (run as `/name`)', '',
-    '/overview · /propose · /phase · /ui-audit · /qa-audit · /security-audit · /release ·',
+    '/overview · /propose · /phase · /sprint · /ui-audit · /qa-audit · /security-audit · /release ·',
     '/uat · /change-request · /replan · /quick · /synthesize · /runbook · /store-wisdom ·',
     '/log-issue · /log-decision · /unstuck', '',
     '## Skills — `.claude/skills/` (loaded on demand)', '',
@@ -230,7 +230,8 @@ function agentsMd() {
     'change · 9 UI conforms to the `ux-design` cookbook + wireframe frame · 10 no-rationalization ·',
     '11 Secure SDLC: threat-model → secure coding → SAST/SCA/secrets each phase → pentest',
     'gate + security review before deploy (`security` skill) · 12 code-standards gate:',
-    'lint/format clean + naming per language idiom + declared architecture (`code-standards`).', '',
+    'lint/format clean + naming per language idiom + declared architecture (`code-standards`) ·',
+    '13 PLAN-APPROVAL gate: no phase/sprint starts until `docs/PLAN.md` is human-approved.', '',
     '## Your stack', '',
     'Declare your stack (language, framework, infra, auth, test + E2E runner,',
     'planning source) once in `docs/OVERVIEW.md`. Every rule references *your declared',
@@ -288,6 +289,13 @@ function main() {
   for (const src of walk(path.join(TPL, '.claude'))) {
     const rel = path.relative(TPL, src);
     writeFile(rel, fs.readFileSync(src, 'utf8'));
+  }
+
+  // 1b. integrity: confirm the methodology resolved on disk (load-bearing sentinel).
+  const methPath = path.join(CWD, '.claude', 'istartsoft-flow', 'METHODOLOGY.md');
+  const SENTINEL = 'ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0';
+  if (!DRY && (!fs.existsSync(methPath) || !fs.readFileSync(methPath, 'utf8').includes(SENTINEL))) {
+    warnings.push(`integrity: ${SENTINEL} not found in installed METHODOLOGY.md — the kit may be incomplete; re-run create-issflow (or npm run build from source).`);
   }
 
   // 2. AGENTS.md — the open-standard entry point.

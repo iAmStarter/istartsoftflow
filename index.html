@@ -314,7 +314,7 @@
       <th scope="col"><span class="en">Subagents</span><span class="th">ซับเอเจนต์</span></th>
       <th scope="col"><span class="en">Lifecycle hooks</span><span class="th">ฮุก</span></th>
     </tr>
-    <tr><td>Claude Code <span class="tag">ref</span></td><td><code>AGENTS.md</code> + <code>.claude/</code></td><td><code>.claude/commands/</code></td><td class="ok"><span class="en">native</span><span class="th">เนทีฟ</span></td><td class="ok"><span class="en">all 3, with injection</span><span class="th">ครบ 3 + inject</span></td></tr>
+    <tr><td>Claude Code <span class="tag">ref</span></td><td><code>CLAUDE.md (@AGENTS.md)</code> + <code>.claude/</code></td><td><code>.claude/commands/</code></td><td class="ok"><span class="en">native</span><span class="th">เนทีฟ</span></td><td class="ok"><span class="en">all 4, with injection</span><span class="th">ครบ 4 + inject</span></td></tr>
     <tr><td>Codex CLI</td><td><code>AGENTS.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
     <tr><td>Cursor</td><td><code>.cursor/rules/</code></td><td><code>.cursor/commands/</code></td><td class="ok"><span class="en">reads</span><span class="th">อ่าน</span> <code>.claude/agents</code></td><td class="ok"><code>hooks.json</code></td></tr>
     <tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
@@ -347,8 +347,9 @@
         <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </summary><div class="stepbody">
         <p><span class="en">Tell it your idea. It <b>grills you</b> (2 passes, to convergence — 5-whys depth on shallow answers), runs design-research, picks the stack &amp; architecture, and writes <code>OVERVIEW.md</code> + <code>PLAN.md</code>. Planning is interactive — asking is good here.</span><span class="th">เล่าไอเดียให้ฟัง มันจะ <b>ซักคุณ</b> (2 รอบ จนตกผลึก — เจาะลึกแบบ 5-whys ถ้าคำตอบยังตื้น) ทำ design-research เลือก stack/architecture แล้วเขียน <code>OVERVIEW.md</code> + <code>PLAN.md</code> ขั้นวางแผนถามได้เต็มที่</span></p>
-        <p class="sub"><b>inside</b> · discover → PRD → stack &amp; architecture → grill ×2 → plan</p>
-        <p class="sub"><b>produces</b> · OVERVIEW.md · PLAN.md</p>
+        <p class="sub"><b>inside</b> · discover → PRD → stack &amp; architecture → grill ×2 → plan → <b>sign-off</b></p>
+        <p><span class="en">Ends at the <b>PLAN-APPROVAL gate</b> — you sign off the plan before any build starts (the planning twin of the <code class="chip">/propose</code> commercial gate). Recorded in <code>PLAN.md</code>; <code>/phase</code> and <code>/sprint</code> stay blocked until then.</span><span class="th">จบที่ <b>ด่านอนุมัติแผน</b> — คุณเซ็นอนุมัติแผนก่อนเริ่มสร้าง (คู่แฝดฝั่งวางแผนของด่านราคา <code class="chip">/propose</code>) บันทึกใน <code>PLAN.md</code>; <code>/phase</code> และ <code>/sprint</code> ถูกล็อกจนกว่าจะอนุมัติ</span></p>
+        <p class="sub"><b>produces</b> · OVERVIEW.md · PLAN.md (approved)</p>
       </div></details>
     </li>
     <li><div class="stepno">3</div>
@@ -410,8 +411,8 @@
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">18 commands</span><span class="th">18 คำสั่ง</span></h3><p><code class="flat">/overview /propose /phase /sprint /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7z"/></svg> <span class="en">6 skills</span><span class="th">6 สกิล</span></h3>
       <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
-    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg> <span class="en">3 hooks</span><span class="th">3 ฮุก</span></h3>
-      <p><span class="en">session-start · pre-compact · subagent-stop — pure-Node, cross-platform, wired per tool.</span><span class="th">session-start · pre-compact · subagent-stop — Node ล้วน ข้ามแพลตฟอร์ม ต่อสายตามเครื่องมือ</span></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg> <span class="en">4 hooks</span><span class="th">4 ฮุก</span></h3>
+      <p><span class="en">session-start · context-guard · pre-compact · subagent-stop — pure-Node, cross-platform, wired per tool.</span><span class="th">session-start · context-guard · pre-compact · subagent-stop — Node ล้วน ข้ามแพลตฟอร์ม ต่อสายตามเครื่องมือ</span></p></div>
   </div>
 </div></section>
 

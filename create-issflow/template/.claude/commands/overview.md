@@ -98,8 +98,7 @@ blocker: none
 
 9. Create empty docs/HISTORY.md.
 
-
-11. Create docs/ENDPOINTS.md:
+10. Create docs/ENDPOINTS.md:
  ```
  # Endpoints — <project name>
  > Maintained by implementer. Updated each phase.
@@ -110,14 +109,15 @@ blocker: none
 
 ### PLAN-APPROVAL gate (hard rule 13 — always interactive, both modes)
 
-12. The plan is the contract the whole AUTO dev loop builds against, so it ends with a
+11. The plan is the contract the whole AUTO dev loop builds against, so it ends with a
     human sign-off — the planning twin of the `/propose` commercial gate.
 
     - SHOW me PLAN.md (and note any open risks the planner flagged). **STOP for approval.**
     - On **approval**: record the sign-off in three places —
       1. stamp the PLAN.md header `> Approval: approved <YYYY-MM-DD> v1`;
       2. set `plan: approved <YYYY-MM-DD>` in docs/STATE.md;
-      3. append `plan v1 approved` to docs/HISTORY.md.
+      3. append `<YYYY-MM-DD> plan v1 approved` to docs/HISTORY.md (date-first, to
+         match the other HISTORY lines).
       Only now may `/phase` / `/sprint` run.
     - On **rejection / change**: revise (re-run the `planner`, or `/replan`), bump the
       version, and re-show. The header stays `PENDING` until I approve.

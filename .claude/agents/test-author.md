@@ -31,8 +31,12 @@ peek at, your blindness is STRUCTURAL, not honor-system.
 
 ## TWO SUITES — write BOTH
 
-1. MOCK suite — fast, no external dependency. Mocks ONLY the external boundary.
-   No mocks on the external boundary. Code/API-level — not browser E2E.
+1. MOCK suite — fast, no external dependency. Mocks ONLY the external boundary
+   (the network / 3rd-party seam). Code/API-level — not browser E2E.
+2. REAL API suite — the SAME tests with no mocks, hitting the real external
+   boundary. The phase gate runs against THIS suite (rules 5–6); a green mock
+   suite alone can never close a phase. Mock vs real is a fixture/env FLAG on the
+   same test (see Test placement), not a duplicated file.
 
 ## Test placement (regression layout)
 

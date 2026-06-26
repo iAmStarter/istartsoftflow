@@ -192,7 +192,8 @@ can. Escalation is at most two hops.
   structural, not honor-system. Writes a MOCK suite + a REAL API suite.
 - **e2e-runner** — writes/runs functional browser E2E (your declared E2E runner,
   e.g. Playwright) BLIND. Reads only the acceptance spec + `docs/ENDPOINTS.md`,
-  never the implementation.
+  never the implementation. Writes a trace to `docs/research/e2e-<phase-slug>.md`;
+  returns a terse summary.
 - **debugger** — debugs in an ISOLATED context. Writes a trace to
   `docs/research/debug-<slug>.md`; returns a summary.
 - **synthesizer** — compresses `docs/STATE.md` / `docs/ISSUES.md`, prunes
@@ -241,7 +242,10 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 - **synthesize** — compress STATE.md, dedup ISSUES.md, prune snapshots. Run
   before a context reset.
 - **replan** — revise `PLAN.md` (add/cut/split/merge/reorder pending phases) and
-  reconcile the regression corpus in step.
+  reconcile the regression corpus in step. Reshaping unbuilt scope reverts the plan
+  to `PENDING` and re-runs the PLAN-APPROVAL gate (rule 13).
+- **runbook** — capture an operational / incident scenario in `docs/RUNBOOK.md` so
+  prod-debug knowledge isn't re-derived under pressure.
 - **log-issue** — append an error to `ISSUES.md` with root cause + failed attempts.
 - **log-decision** — record an architectural change in `docs/DESIGN_LOG.md`.
 - **store-wisdom** — promote resolved issues + research to the shared KB.
@@ -478,9 +482,11 @@ the KB. The kit works normally without a KB.
   E2E target.
 - `docs/ENDPOINTS.md` — API/service endpoint catalogue. Maintained by implementer
   each phase. Drives the CLOSE coverage gate.
+- `docs/RUNBOOK.md` — operational / incident runbook (grep-able): per-scenario
+  symptoms, diagnosis, and recovery steps. Maintained by `/runbook`.
 - `docs/research/` — full research + debug files. `INDEX.md` is the searchable map.
   `design-<slug>.md` (design research), `<slug>.md` (impl research),
-  `debug-<slug>.md` (debugger traces).
+  `debug-<slug>.md` (debugger traces), `e2e-<slug>.md` (e2e-runner traces).
 - `docs/.snapshots/` — pre-compact recovery markers (auto-pruned, gitignored).
   Holds no secrets.
 - your E2E stack — runner config + any ephemeral test services (e.g. `e2e/`,

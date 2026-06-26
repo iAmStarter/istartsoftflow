@@ -39,6 +39,21 @@ if (state !== null) {
   emit('');
 }
 
+// 2b. active sprint (sprint layer) — surface goal + burndown if one is active
+const sprintMatch = (state || '').match(/^\s*sprint:\s*(\d+)\s*\(active\)/m);
+if (sprintMatch) {
+  const sf = read(`docs/sprints/sprint-${sprintMatch[1]}.md`);
+  if (sf !== null) {
+    emit(`## Sprint ${sprintMatch[1]} (active)`);
+    const goal = (sf.match(/goal:\s*(.+)/i) || [])[1];
+    if (goal) emit('goal: ' + goal.trim());
+    const burn = sf.split('\n').find((l) => /burndown|remaining|pts? left|[▁▂▃▄▅▆▇█]/i.test(l));
+    if (burn) emit('burndown: ' + burn.trim());
+    emit(`see docs/sprints/sprint-${sprintMatch[1]}.md for the full sprint.`);
+    emit('');
+  }
+}
+
 // 3. issue log — inject only OPEN issues (resolved ones stay in the file for
 //    grep, but are NOT re-paid in tokens every session). Capped.
 const issues = read('docs/ISSUES.md');
@@ -120,6 +135,8 @@ emit('- AUTO mode (default) governs the DEV loop: follow the plan — decide + l
 emit('  continue, do NOT stop to ask. (Planning / grill still asks — that part is fine.)');
 emit('  Hard-stops only: security / irreversible-or-outbound actions / contradictory spec.');
 emit('- caveman ULTRA mode is active.');
+emit('- PLAN-APPROVAL gate (rule 13): no /phase or /sprint while STATE `plan:` reads');
+emit('  PENDING — the plan needs a human sign-off via /overview first.');
 emit('- before debugging ANY error: grep ISSUES.md AND research/INDEX.md first.');
 emit('- debug attempts: WARN at 2; cap 3. AUTO: log + park the slice + continue (batched');
 emit('  report at the phase boundary). GUIDED: stop and ask you.');

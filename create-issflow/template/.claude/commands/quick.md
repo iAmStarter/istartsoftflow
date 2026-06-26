@@ -14,7 +14,7 @@ Use `/quick` when ALL hold:
 - not mid-phase
 
 If any fail -> STOP, tell me, recommend `/phase`.
-(Hard rule 11: never route phase-worthy work through `/quick` to dodge the RED gate.)
+(Hard rule 10: never route phase-worthy work through `/quick` to dodge the RED gate.)
 
 Steps:
 1. grep docs/ISSUES.md for anything related.

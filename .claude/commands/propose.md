@@ -13,6 +13,12 @@ A proposal is a commercial gate: always interactive (both AUTO and GUIDED).
 Read `docs/OVERVIEW.md` (scope, stack, success criteria) and `docs/PRD.md` if
 present (else the PRD in your BMAD/iSSM). No OVERVIEW -> run `/overview` first.
 
+PLAN-APPROVAL CHECK (hard rule 13): the proposal prices the *approved* phases, so
+the plan is signed off first (lifecycle: plan → proposal). If `docs/PLAN.md` exists
+and its `> Approval:` header still reads `PENDING` (or is missing), STOP and route me
+to the `/overview` PLAN-APPROVAL gate before quoting — pricing an unapproved plan
+re-prices on every revision.
+
 ## STEP 1 — SCOPE
 List the deliverables (features / epics) from OVERVIEW / PRD. Mark each
 **in-scope** or **out-of-scope** explicitly — naming out-of-scope items now is what
