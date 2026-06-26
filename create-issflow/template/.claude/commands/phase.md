@@ -181,6 +181,12 @@ SECURITY GATE (rule 11 — Secure SDLC build stage):
 
 Mark phase `done` in docs/PLAN.md.
 
+SPRINT STANDUP (if a sprint is active — STATE.md shows `sprint: <n> (active)`):
+fire the `/sprint standup` tick — append the one-line standup to
+docs/sprints/sprint-<n>.md and update the burndown (rule: SPRINT-STANDUP ritual).
+If all the sprint's committed phases are now done/blocked, recommend `/sprint review`
+(or, under `/sprint run`, the driver proceeds to review automatically).
+
 ARCHITECTURE SELF-CHECK: did this phase add/remove/rename an agent, hook, or
 command, or change a workflow rule? YES -> run `/log-decision`. NO -> state why not.
 

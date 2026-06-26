@@ -59,6 +59,37 @@ non-TDD before SCAFFOLD fires.
 
 -----
 
+## Sprint layer (the Scrum wrapper — optional)
+
+Between the PLAN (the product backlog) and the PHASE (the build loop) sits an
+optional **sprint layer** (`/sprint`): consecutive PLAN phases are grouped behind ONE
+sprint goal and ship ONE deployable increment, wrapped in the full Scrum ceremony set.
+The hierarchy is **PLAN (backlog) → SPRINT (committed slice) → PHASE (loop)**. Phases
+run unchanged inside a sprint; the layer only adds cadence + inspect-and-adapt around them.
+
+Scrum maps onto the kit with no new vocabulary to learn:
+
+| Scrum | iStartSoftFlow |
+|-------|----------------|
+| Product Backlog | `docs/PLAN.md` (all phases) |
+| Sprint Backlog | `docs/sprints/sprint-<n>.md` (committed phases + goal) |
+| Scrum Master / Dev Team | the orchestrator (facilitates) / the subagent fleet (builds) |
+| Sprint Planning | `/sprint plan` — slice the approved PLAN into a capacity-bounded sprint |
+| Daily Scrum | `/sprint standup` — rebound to a **per-phase-close tick** (the AI loop has no calendar days) |
+| Sprint Review / demo | `/sprint review` — demo the increment + run the boundary audits |
+| Retrospective | `/sprint retro` — routed, concrete process actions |
+| Increment · Burndown · Velocity | the deployable slice · remaining-points table · completed pts/sprint |
+
+**AUTO-facilitated.** Sprint planning only SLICES an ALREADY-APPROVED plan (the
+requirements gate happened at `/overview` plan approval), so the ceremonies are
+AUTO-safe: `/sprint run` drives a whole sprint — or every remaining sprint — hands-off
+(plan → loop `/phase` → standup tick → review → retro → close → next sprint), pausing
+only at a methodology hard-stop. The PLAN-approval, commercial, and release gates are
+SEPARATE and stay interactive (see Autonomy). The layer is opt-in: skip it and drive
+phases directly off the PLAN exactly as before.
+
+-----
+
 ## Project lifecycle (real-world delivery)
 
 The loop above is the BUILD engine. Around it runs a full client-delivery lifecycle
@@ -77,6 +108,9 @@ from idea to closeout:
    projects skip straight from plan to build.
 6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop). Each phase's
    tests (unit + integration + e2e) are automated and MUST pass before the next phase.
+   Optionally wrap the phases in the **sprint layer** (`/sprint`): group them into
+   capacity-bounded sprints, each shipping one demoable increment with planning →
+   standups → review → retro. `/sprint run` drives this end-to-end (see Sprint layer).
 7. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
    change order (`docs/CHANGES.md`) + sign-off, then `/replan`. Scope and cost never
    change silently.
@@ -111,6 +145,7 @@ front-end. They compose — BMAD plans, iStartSoftFlow builds — with no duplic
 | Analyst / PM / Architect / PO agents | → | `/overview` grill + `researcher` + `planner` |
 | PRD + Architecture | → | `docs/OVERVIEW.md` (+ `docs/PRD.md`) |
 | sharded epics / story files | → | `docs/PLAN.md` phases (1 story ≈ 1 phase) |
+| epics / sprint grouping | → | the **sprint layer** (`/sprint`) — phases grouped behind one sprint goal |
 | SM "story with embedded context" | → | the phase **context package** (rationale + architecture + impl notes + qa focus + sharp acceptance) |
 | Dev → QA | → | `implementer` → `test-author` + the phase gates (TDD · UX · security · code-standards) |
 
@@ -177,7 +212,12 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
   a logged change order (`CHANGES.md`) + sign-off, then `replan`.
 - **phase [n]** — run one phase end-to-end with the circuit breaker. Chooses the
   TDD or non-TDD order at RESEARCH. CLOSE runs the regression guard + ENDPOINTS
-  coverage gate.
+  coverage gate. When a sprint is active, CLOSE also fires a `/sprint standup` tick.
+- **sprint [run|plan|standup|review|retro|close|status] [n]** — the Scrum wrapper
+  around the build loop: slice the approved PLAN into a capacity-bounded sprint, run
+  the ceremonies (planning → standups → review/demo + boundary audits → retro → close)
+  with burndown + velocity. `/sprint run` drives a whole sprint (or every remaining
+  one) AUTO end-to-end. Opt-in; phases run unchanged inside it.
 - **quick [change]** — small, obvious, non-phase change; no agent chain. Stays
   non-TDD. Runs the mock regression corpus after the change.
 - **ui-audit** — whole-product UI audit against the `ux-design` cookbook (a11y /
@@ -216,12 +256,21 @@ inject context, the model performs them itself.
 
 At the start of every session, before any other work, surface:
 1. git state (branch, uncommitted count, last 3 commits).
-2. `docs/STATE.md` — the current position. READ THIS FIRST.
+2. `docs/STATE.md` — the current position. READ THIS FIRST. If a sprint is active,
+   surface its goal + burndown from `docs/sprints/sprint-<n>.md`.
 3. open items in `docs/ISSUES.md`.
 4. `docs/research/INDEX.md` (research map) + infra/auth status.
 5. shared KB: pull latest + load `docs/.kb-snapshot.md` if `.claude/kb-config.json`
    exists.
 6. a one-line reminder of the hard rules below.
+
+### SPRINT-STANDUP (auto — at phase close inside an active sprint)
+
+When a sprint is active, every `/phase` CLOSE fires one standup tick: append a
+one-line entry to the active `docs/sprints/sprint-<n>.md` (done / next / blockers)
+and update the burndown (remaining points + the sparkline). The "daily" Scrum is
+rebound to per-phase-close because the AI dev loop has no calendar days — the phase
+boundary is the real unit of progress. Blockers surface immediately. See `/sprint`.
 
 ### COMPRESS (before a context compaction)
 
@@ -234,7 +283,8 @@ The cheapest token is the one never loaded. The kit is built to minimise context
 
 - **Phase boundary is the primary reset.** `/synthesize -> /clear` ends every
   phase so the next one starts with a small, fresh context instead of carrying
-  the whole history forward.
+  the whole history forward. The **sprint boundary** (`/sprint close`) is a second,
+  coarser reset — synthesize + clear there too before the next sprint plans.
 - **Lazy, not always-on.** This methodology + the skills load on demand; only the
   SessionStart hook output is paid every session, and it injects just the live
   STATE + *open* issues (resolved ones stay on disk for grep, not re-paid in tokens).
@@ -400,8 +450,15 @@ the KB. The kit works normally without a KB.
   — scored whole-product audit reports (from the `*-audit` commands).
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
-- `docs/PLAN.md` — the phase plan. The last phase has the deploy task.
-- `docs/HISTORY.md` — one line per finished phase.
+- `docs/PLAN.md` — the phase plan (the product backlog). The last phase has the
+  deploy task. Phases may carry a `[N pts]` estimate and be grouped under `## Sprint`
+  headers when the sprint layer is used.
+- `docs/sprints/sprint-<n>.md` — one per sprint (sprint layer): goal, committed phases
+  + points, burndown, standup log, review (demo + audit scores), retro. Maintained by
+  `/sprint`.
+- `docs/sprints/VELOCITY.md` — rolling velocity table (committed vs completed pts per
+  sprint). Drives the next sprint's capacity.
+- `docs/HISTORY.md` — one line per finished phase (and per closed sprint).
 - `docs/DESIGN_LOG.md` — kit architectural rationale (§5.x decision log).
 - `docs/OVERVIEW.md` — project scope. Written after the double-grill in `overview`.
   E2E target.
