@@ -75,6 +75,20 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 
 ---
 
+### Foundations sign-off (confirm BEFORE planning)
+
+5b. Before the `planner` runs, present the FOUNDATIONS for explicit human confirmation
+— the whole plan is built on these, so lock them first. Show a concise summary and
+STOP for sign-off (planning always asks, both modes):
+- **Tech stack** — language · framework · infra · auth · datastore · test + E2E runner
+- **Architecture** — the pattern (Feature-Based by default) + the folder layout
+- **UX direction** — design system / tokens + the wireframe baseline (the frame)
+- **Data & integrations** — core data model + external services + their limits
+- **Conventions** — naming idiom (`code-standards`) + autonomy mode (AUTO / GUIDED)
+- **Estimation config** — unit · rate card · currency · contingency (if quoting)
+On any "change X" → revise OVERVIEW.md and re-confirm. Only a signed-off foundation
+proceeds to the planner. (This is the planning confirmation gate.)
+
 ### Plan
 
 6. Hand OVERVIEW.md + design-research findings to the `planner` subagent.
