@@ -351,6 +351,18 @@ development run that follows the spec and logs every problem so it never recurs.
 
 -----
 
+## Dry-run (preview — change nothing)
+
+Pass `dry-run` (or `--dry-run`) to ANY command and it does the full analysis but
+EXECUTES NOTHING: it prints the ACTION PLAN — files it would create/change · agents
+it would dispatch · tests/gates it would run · the deploy target · cost / scope /
+risk impact — then STOPS. Nothing is written, run, committed, or deployed. A safe
+preview to see the blast radius first. Most useful before side-effecting commands:
+`/phase` · `/release` · `/change-request` · `/sprint` · `/propose` · `/quick`.
+Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it only reports.)
+
+-----
+
 ## Hard rules (1–13)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
