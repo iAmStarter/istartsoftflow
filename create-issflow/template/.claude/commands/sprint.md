@@ -1,12 +1,17 @@
 ---
 description: The Scrum sprint layer — group PLAN phases into time-/scope-boxed sprints and run the full ceremony set (planning → standups → review/demo → retrospective → close) with burndown + velocity. AUTO-facilitated: the orchestrator runs every ceremony itself and drives the sprint end-to-end without stopping, pausing only at the real hard-stops. The layer between PLAN (backlog) and PHASE (build loop).
-argument-hint: [run|plan|standup|review|retro|close|status] [sprint number]
+argument-hint: [run|plan|standup|review|retro|close|status] [sprint number · "dry-run"]
 ---
 
 Caveman ULTRA mode. You are the ORCHESTRATOR / SCRUM MASTER. You FACILITATE the
 ceremonies and ROUTE build work to subagents — you do NOT implement or debug yourself.
 
 Subcommand: $ARGUMENTS  (default: `status`)
+
+DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, do the full analysis but
+EXECUTE NOTHING — print the ACTION PLAN (which phases the sprint would commit,
+ceremonies it would run, points/capacity) and STOP. No sprint file is written, no
+phase runs. (METHODOLOGY → Dry-run.)
 
 Hierarchy: **PLAN (product backlog) → SPRINT (committed slice of phases) → PHASE
 (the build loop)**. A sprint groups consecutive PLAN phases behind ONE sprint goal

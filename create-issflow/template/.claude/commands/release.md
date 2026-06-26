@@ -10,6 +10,10 @@ AUTO runs all AUTOMATED stages without stopping; it STOPS only at the human gate
 UAT execution, sign-off, and the production promote (security/irreversible hard-stops).
 Record progress in STATE.md so a resumed session continues mid-pipeline.
 
+DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, do the full analysis but
+EXECUTE NOTHING — print the ACTION PLAN (stages, audits, deploy target, risk impact)
+and STOP. Nothing is run, signed, or promoted. (METHODOLOGY → Dry-run.)
+
 ## STAGE 1 — FULL REGRESSION (auto)
 Run the whole REAL corpus end-to-end: **functional + integration + e2e**
 (`scripts/regression.sh --real`, then the declared E2E runner via `e2e-runner`).

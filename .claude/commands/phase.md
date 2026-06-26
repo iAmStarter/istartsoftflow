@@ -12,6 +12,15 @@ Target phase: $ARGUMENTS  (default: the phase marked pending in docs/PLAN.md)
 
 ---
 
+## DRY-RUN CHECK (first — before PRE-FLIGHT)
+
+If `$ARGUMENTS` contains `dry-run` or `--dry-run`: do the full analysis but EXECUTE
+NOTHING. Print the ACTION PLAN — files you'd create/change · agents you'd dispatch ·
+tests/gates you'd run · deploy target · cost/scope/risk impact — then STOP. Write,
+run, commit, deploy nothing. (METHODOLOGY → Dry-run.)
+
+---
+
 ## 0. PRE-FLIGHT
 
 a. PLAN-APPROVAL CHECK (hard rule 13): Read the docs/PLAN.md `> Approval:` header.
