@@ -67,6 +67,7 @@ docs/PLAN.md format:
 
 # Plan: <project>
 <!-- infra: managed (Phase 0 N/A) | self-managed (Phase 0 below) -->
+> Approval: PENDING — no phase may start until a human signs this plan off (PLAN-APPROVAL gate, hard rule 13). The `/overview` gate stamps this `approved <date> v1` on sign-off.
 
 ## Phase 0: infra setup  [status: pending]   ← omit entirely if infra is managed
 
@@ -98,4 +99,5 @@ docs/PLAN.md format:
 
 ```
 Order phases by dependency. Phase 0 first IF infra is self-managed; otherwise
-start at Phase 1. Stop. Do not implement.
+start at Phase 1. Always write the `> Approval: PENDING` header — the plan is unapproved
+until the `/overview` PLAN-APPROVAL gate stamps it (hard rule 13). Stop. Do not implement.

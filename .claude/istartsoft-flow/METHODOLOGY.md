@@ -99,8 +99,10 @@ from idea to closeout:
 1. **Discover** — idea → requirements, captured by `/overview` (the double-grill).
 2. **PRD** — crystallised requirements in `docs/PRD.md` (or your BMAD/iSSM stories).
 3. **Stack & architecture** — decided in `/overview` design-research → `OVERVIEW.md`.
-4. **Plan** — `/overview`'s `planner` → `docs/PLAN.md` (the vertical-slice phases).
-   The plan exists before the proposal, because the proposal estimates *these* phases.
+4. **Plan** — `/overview`'s `planner` → `docs/PLAN.md` (the vertical-slice phases),
+   then the **PLAN-APPROVAL gate** (rule 13): build cannot start until a human signs the
+   plan off and the approval is recorded. The plan exists before the proposal, because
+   the proposal estimates *these* phases.
 5. **Proposal & estimate (OPTIONAL — depends on the job)** — for client / quoted
    work, `/propose` reads OVERVIEW + PLAN → `docs/PROPOSAL.md` + a rendered
    `docs/proposal.html`: scope, phase breakdown, effort + cost estimate, timeline,
@@ -129,9 +131,9 @@ requirements (PRD / OVERVIEW), commercial (PROPOSAL / CHANGES), execution
 Nothing important lives only in chat — it is on disk, so the project can always be
 reconstructed and summarised.
 
-**Commercial gates are always interactive** (both modes): the proposal sign-off and
-every change-order approval pause for the human. AUTO governs the *dev loop between*
-those gates, never the money decisions.
+**Approval gates are always interactive** (both modes): the **PLAN-APPROVAL** gate
+(rule 13), the proposal sign-off, and every change-order approval pause for the human.
+AUTO governs the *dev loop between* those gates, never the plan or the money decisions.
 
 -----
 
@@ -304,8 +306,8 @@ The cheapest token is the one never loaded. The kit is built to minimise context
 The kit runs in one of two modes, declared in `docs/OVERVIEW.md` (default: **AUTO**):
 
 **Planning always asks; development doesn't.** Asking is cheap and decisive while
-*planning* — so `/overview` (the double-grill) and plan approval stay interactive in
-both modes. AUTO governs only the **development loop** (implement → test → debug →
+*planning* — so `/overview` (the double-grill) and the **PLAN-APPROVAL gate** (rule 13,
+a recorded sign-off) stay interactive in both modes. AUTO governs only the **development loop** (implement → test → debug →
 close): there, interruptions are expensive, so it follows the plan instead of asking.
 
 - **AUTO (default) — during DEVELOPMENT, follow the plan, don't interrupt.** Once a
@@ -345,7 +347,7 @@ development run that follows the spec and logs every problem so it never recurs.
 
 -----
 
-## Hard rules (1–12)
+## Hard rules (1–13)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
@@ -399,6 +401,16 @@ development run that follows the spec and logs every problem so it never recurs.
     (the language's standard tool), names follow the language's OWN idiom, and the
     code conforms to the declared architecture (Feature-Based by default) — checked
     at CLOSE. Lint/format errors or idiom violations BLOCK the close. (`code-standards`.)
+13. **PLAN-APPROVAL gate.** No phase / sprint / build work starts until `docs/PLAN.md`
+    carries a human approval. `/overview` ends by presenting the plan and STOPPING for
+    sign-off; on approval the gate is RECORDED in three places — the PLAN.md
+    `> Approval:` header (`approved <date> v<n>`), `plan:` in `docs/STATE.md`, and a
+    `plan v<n> approved` line in `docs/HISTORY.md`. `/phase` and `/sprint` REFUSE to
+    start while that header still reads `PENDING`. Interactive in BOTH modes: AUTO
+    governs the dev loop that runs AFTER approval, never the approval itself — it is
+    the planning twin of the commercial sign-off gate (`/propose`). A `/replan` that
+    adds or reshapes UNBUILT scope reverts the affected plan to `PENDING` and
+    re-surfaces it for confirmation before those phases run.
 
 -----
 
@@ -450,9 +462,11 @@ the KB. The kit works normally without a KB.
   — scored whole-product audit reports (from the `*-audit` commands).
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
-- `docs/PLAN.md` — the phase plan (the product backlog). The last phase has the
-  deploy task. Phases may carry a `[N pts]` estimate and be grouped under `## Sprint`
-  headers when the sprint layer is used.
+- `docs/PLAN.md` — the phase plan (the product backlog). Carries an `> Approval:`
+  header — `PENDING` until the rule-13 PLAN-APPROVAL gate stamps `approved <date> v<n>`;
+  no phase runs while it reads `PENDING`. The last phase has the deploy task. Phases may
+  carry a `[N pts]` estimate and be grouped under `## Sprint` headers when the sprint
+  layer is used.
 - `docs/sprints/sprint-<n>.md` — one per sprint (sprint layer): goal, committed phases
   + points, burndown, standup log, review (demo + audit scores), retro. Maintained by
   `/sprint`.

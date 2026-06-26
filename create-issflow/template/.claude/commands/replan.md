@@ -58,8 +58,12 @@ commercial impact (split/merge/reorder, a discovered technical re-slice).
    reconciled corpus still passes against live services. A failure -> surface it
    and stop before approval.
 
-6. SHOW ME the revised phase list + the regression-corpus changes, and STOP for
-   approval.
+6. PLAN-APPROVAL gate (hard rule 13). A re-plan reshapes UNBUILT scope, so it reverts
+   the plan to unapproved: set the PLAN.md `> Approval:` header back to `PENDING`, SHOW
+   ME the revised phase list + the regression-corpus changes, and STOP for approval.
+   On approval: re-stamp the header `approved <date> v<n+1>`, update STATE.md `plan:`,
+   and append `plan v<n+1> approved (replan)` to docs/HISTORY.md. `/phase` and `/sprint`
+   stay blocked until this re-stamp.
 
 7. ARCHITECTURE SELF-CHECK: re-planning is not normally a kit-architecture
    change. Only run /log-decision if the workflow itself changed (rare).

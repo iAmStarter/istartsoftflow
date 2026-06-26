@@ -5,12 +5,48 @@ bugs → ISSUES.md. (See `/log-decision`.)
 
 ## 0. Changelog
 
+- 2026-06-26 — **Formalize the PLAN-APPROVAL gate** (hard rule 13): the plan→build
+  transition becomes a named, recorded sign-off gate symmetric with the `/propose`
+  commercial gate. `/overview` stamps the approval (PLAN.md `> Approval:` header +
+  STATE.md `plan:` + HISTORY line); `/phase` and `/sprint` refuse to start on a
+  `PENDING` plan; `/replan` reverts to `PENDING` and re-stamps on re-approval; the
+  `planner` emits the `PENDING` header. Methodology rule 13 + Autonomy/lifecycle/file-
+  contract wording. See §5.2.
+
 - 2026-06-26 — **Add the sprint layer** (`/sprint`): an optional Scrum wrapper between
   PLAN and PHASE. New command `.claude/commands/sprint.md`; methodology, planner, and
   `/phase` CLOSE wired for it; new artifacts `docs/sprints/sprint-<n>.md` +
   `docs/sprints/VELOCITY.md`; `sprint.defaultCapacity` knob in flow-config. See §5.1.
 
 ## 5. Decisions
+
+### 5.2 PLAN-APPROVAL gate — formalize the plan→build sign-off
+
+The kit had a rigorous, recorded sign-off for the COMMERCIAL gate (`/propose` STEP 6:
+stamp the approved version + date into PROPOSAL.md + STATE.md + a HISTORY line) but the
+PLANNING gate — arguably more load-bearing, since the whole AUTO dev loop builds against
+the plan — was only loose prose at the end of `/overview` ("stop and show me PLAN.md for
+approval"). Nothing recorded it, nothing enforced it: `/phase` would happily run against
+an unapproved plan. That asymmetry is the defect this fixes.
+
+**Chosen: a full formal gate (hard rule 13), symmetric with the commercial gate.**
+Options weighed: (a) light prose tighten; (b) rule only, no enforcement; (c) **full gate
+— named rule + recorded sign-off + hard preconditions.** Chosen (c) per the maintainer's
+request. Design moves:
+
+1. **Recorded in three places, like the proposal gate.** Approval stamps the PLAN.md
+   `> Approval:` header (`approved <date> v<n>`), STATE.md `plan:`, and a HISTORY line —
+   so the sign-off is durable and grep-able, not a chat artifact.
+2. **Enforced as a precondition, not just documented.** `/phase` PRE-FLIGHT and `/sprint`
+   planning REFUSE to start while the header reads `PENDING`. The marker is the single
+   checkable source of truth; commands reference rule 13, they don't restate it
+   (anti-drift invariant preserved).
+3. **`/replan` re-opens it.** A re-plan reshapes unbuilt scope, so it reverts the header
+   to `PENDING` and re-stamps a bumped version on re-approval — the gate tracks plan
+   churn instead of going stale after the first sign-off.
+4. **Interactive in both modes, by design.** This is a planning gate; AUTO governs only
+   the dev loop AFTER it. No new config knob (the proposal gate has none either) — keeps
+   it lean.
 
 ### 5.1 Sprint layer — full Scrum ceremonies, AUTO-facilitated
 

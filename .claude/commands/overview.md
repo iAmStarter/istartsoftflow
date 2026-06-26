@@ -89,6 +89,7 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 # STATE
 
 phase: 0 (pending)
+plan: PENDING
 completed: project bootstrapped — design research done, double grill done
 blocker: none
 
@@ -105,9 +106,23 @@ blocker: none
  > Base URL: (populated after deployment phase)
  ```
 
-Then stop and show me PLAN.md for approval before any phase starts. Planning ends
-with a human sign-off in both modes; AUTO only governs the development loop that
-runs AFTER the plan is approved.
+---
+
+### PLAN-APPROVAL gate (hard rule 13 — always interactive, both modes)
+
+12. The plan is the contract the whole AUTO dev loop builds against, so it ends with a
+    human sign-off — the planning twin of the `/propose` commercial gate.
+
+    - SHOW me PLAN.md (and note any open risks the planner flagged). **STOP for approval.**
+    - On **approval**: record the sign-off in three places —
+      1. stamp the PLAN.md header `> Approval: approved <YYYY-MM-DD> v1`;
+      2. set `plan: approved <YYYY-MM-DD>` in docs/STATE.md;
+      3. append `plan v1 approved` to docs/HISTORY.md.
+      Only now may `/phase` / `/sprint` run.
+    - On **rejection / change**: revise (re-run the `planner`, or `/replan`), bump the
+      version, and re-show. The header stays `PENDING` until I approve.
+
+    AUTO governs the development loop that runs AFTER this gate, never the gate itself.
 
 Optional next step (client / quoted work only): run `/propose` to turn this
 OVERVIEW + PLAN into a proposal + estimate for sign-off before building. Internal or

@@ -45,7 +45,9 @@ velocity table). Create `docs/sprints/` if absent. STATE.md carries the active s
 =====================================================================
 ## §1 — SPRINT PLANNING  (ceremony)
 
-Pre: `docs/PLAN.md` exists and is approved. If not → STOP, suggest `/overview`.
+Pre: `docs/PLAN.md` exists AND its `> Approval:` header reads `approved …` (the
+PLAN-APPROVAL gate, hard rule 13). Still `PENDING` / missing → STOP, route to the
+`/overview` plan-approval gate. A sprint only SLICES an already-signed-off plan.
 
 a. **Estimate (one-time, lazy).** Every pending PLAN phase needs a points estimate
    (Fibonacci `1 2 3 5 8`, relative effort from the phase `slice` + `acceptance`
