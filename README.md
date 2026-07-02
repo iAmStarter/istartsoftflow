@@ -24,8 +24,10 @@ npx create-issflow --tool=claude    # claude | codex | cursor | gemini | aider |
 /overview                           # bootstrap the project
 ```
 
-Flags: `--tool=<name>` (skip the prompt) · `--dry-run` (write nothing) · `--force`
-(overwrite kit files; default keeps yours and writes conflicts as `<file>.issflow-new`).
+Flags: `--tool=<name>` (skip the prompt) · `--ci` (headless feature lane via GitHub
+Actions) · `--docker` (headless feature lane in a container) · `--dry-run` (write
+nothing) · `--force` (overwrite kit files; default keeps yours and writes conflicts
+as `<file>.issflow-new`).
 
 ## Supported tools
 
@@ -37,7 +39,7 @@ silently vanish.
 
 | Tool | Entry | Commands | Subagents | Lifecycle hooks |
 |------|-------|----------|-----------|-----------------|
-| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse · PreCompact · SubagentStop |
+| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse · PreCompact · SubagentStop · Stop |
 | **Codex CLI** | `AGENTS.md` (native) | read as prompts | reference | model-run |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | read as prompts | reference | model-run |
@@ -49,9 +51,9 @@ silently vanish.
 | Group | Items |
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
-| **commands** | `/overview` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
+| **commands** | `/overview` `/feature` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
 | **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** (naming-per-language + architecture) — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
-| **hooks** | session-start · context-guard (token-budget watchdog) · pre-compact · subagent-stop (Node scripts, wired per tool) |
+| **hooks** | session-start · context-guard (token-budget watchdog) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`) (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
 ## Core idea
@@ -84,6 +86,30 @@ only at the real hard-stops (prod deploy, security-sensitive change, contradicto
 spec). The "daily" standup is rebound to a per-phase-close tick — the AI dev loop has
 no calendar days, so the phase boundary is the real unit of progress. Skip the layer
 and drive phases straight off the PLAN exactly as before; it's opt-in.
+
+## Feature lane (near-100% hands-off — `/feature`)
+
+The brownfield lane: one APPROVED Feature doc in, a tested + hardened + documented
+feature branch out. Pipeline: spec completion → adversarial doc-review → mini-plan
+→ contract surface probe → blind-TDD build loop → review & harden → manual test
+plan → docs + token stamp + summary → memory queue → delivery. Humans remain at
+exactly three points: approve the doc, run UAT (against the generated
+`TEST-PLAN.md`), and merge. A `Stop` hook (`feature-gate.js`) blocks the session
+from ending while any gate in `docs/features/<slug>/GATES.md` is unchecked —
+enforcement, not a request.
+
+Runs interactive, or **headless** with nobody at the keyboard (`ISSFLOW_HEADLESS=1`
+— every hard-stop degrades to a `BLOCKED.md` report + clean exit, never a guess):
+
+```bash
+npx create-issflow --ci       # GitHub Action: label an issue `feature:approved` → the lane runs
+npx create-issflow --docker   # container runner: Dockerfile.issflow + scripts/feature-docker.js
+node scripts/feature-docker.js docs/features/<slug>/FEATURE.md
+```
+
+The Docker lane runs Claude Code inside an unprivileged, ephemeral container with
+the repo mounted — the container is the sandbox that makes an unattended run safe.
+Merge and production deploy can never be pre-authorized; those stay human.
 
 ## Workflow best practices
 

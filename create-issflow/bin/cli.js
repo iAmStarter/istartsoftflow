@@ -15,6 +15,8 @@ const CWD = process.cwd();
 const argv = process.argv.slice(2);
 const DRY = argv.includes('--dry-run');
 const FORCE = argv.includes('--force');
+const CI = argv.includes('--ci');
+const DOCKER = argv.includes('--docker');
 const HELP = argv.includes('-h') || argv.includes('--help');
 const toolArg = (argv.find(a => a.startsWith('--tool=')) || '').split('=')[1];
 
@@ -42,6 +44,8 @@ Tools (--tool=, interactive prompt if omitted):`);
   for (const [k, v] of Object.entries(TOOLS)) log(`  ${k.padEnd(7)} ${v}`);
   log(`
 Flags:
+  --ci        also write .github/workflows/issflow-feature.yml (headless /feature via GitHub Actions)
+  --docker    also write Dockerfile.issflow + scripts/feature-docker.js (headless /feature in a container)
   --dry-run   print what would happen, write nothing
   --force     overwrite existing kit files (default keeps yours -> <file>.issflow-new)
   -h, --help  this message
@@ -124,6 +128,7 @@ function adapterClaude() {
     PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .claude/hooks/context-guard.js' }] }],
     PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .claude/hooks/pre-compact.js' }] }],
     SubagentStop: [{ hooks: [{ type: 'command', command: 'node .claude/hooks/subagent-stop.js' }] }],
+    Stop:         [{ hooks: [{ type: 'command', command: 'node .claude/hooks/feature-gate.js' }] }],
   };
   const sp = path.join(CWD, '.claude', 'settings.json');
   let settings = {};
@@ -211,8 +216,8 @@ function agentsMd() {
     '## Roles — `.claude/agents/`', '',
     'planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer', '',
     '## Procedures — `.claude/commands/` (run as `/name`)', '',
-    '/overview · /propose · /phase · /sprint · /ui-audit · /qa-audit · /security-audit · /release ·',
-    '/uat · /change-request · /replan · /quick · /synthesize · /runbook · /store-wisdom ·',
+    '/overview · /feature · /propose · /phase · /sprint · /ui-audit · /qa-audit · /security-audit ·',
+    '/release · /uat · /change-request · /replan · /quick · /synthesize · /runbook · /store-wisdom ·',
     '/log-issue · /log-decision · /unstuck', '',
     '## Skills — `.claude/skills/` (loaded on demand)', '',
     'caveman · grill-me · karpathy-guidelines · ux-design · security (Secure SDLC) · code-standards', '',
@@ -310,6 +315,14 @@ function main() {
   // 3. per-tool adapters
   for (const t of targets) ADAPTERS[t]();
 
+  // 3b. headless feature lane (opt-in): materialize the automation templates.
+  const autoDir = path.join(TPL, '.claude', 'templates', 'automation');
+  if (CI) writeFile(path.join('.github', 'workflows', 'issflow-feature.yml'), fs.readFileSync(path.join(autoDir, 'issflow-feature.yml'), 'utf8'));
+  if (DOCKER) {
+    writeFile('Dockerfile.issflow', fs.readFileSync(path.join(autoDir, 'Dockerfile'), 'utf8'));
+    writeFile(path.join('scripts', 'feature-docker.js'), fs.readFileSync(path.join(autoDir, 'feature-docker.js'), 'utf8'), { exec: true });
+  }
+
   // 4. .gitignore: track the workflow dirs if .claude/* is ignored
   const gi = path.join(CWD, '.gitignore');
   if (fs.existsSync(gi)) {
@@ -326,6 +339,7 @@ function main() {
   if (conflicts) log('Review *.issflow-new files and merge manually (your originals were untouched).');
   for (const w of warnings) log(`  ! ${w}`);
   log(NEXT_STEPS[TOOL] || NEXT_STEPS.claude);
+  if (!CI && !DOCKER) log('Headless feature lane: re-run with --ci (GitHub Action) and/or --docker (container runner).');
 }
 
 main();

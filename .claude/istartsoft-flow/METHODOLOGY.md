@@ -137,6 +137,50 @@ AUTO governs the *dev loop between* those gates, never the plan or the money dec
 
 -----
 
+## Feature lane (hands-off delivery — `/feature`)
+
+The lifecycle above is the GREENFIELD lane (a whole project). The **feature lane**
+is the BROWNFIELD lane: one APPROVED Feature doc in → a tested + hardened +
+documented feature branch out, near-100% hands-off. Humans remain at exactly three
+points: **approve the doc** (entry) · **UAT** (`/uat` against the generated
+TEST-PLAN) · **merge**. Production deploy is never in this lane (`/release` owns it).
+
+Pipeline (canonical body in `.claude/commands/feature.md`):
+spec completion → adversarial doc-review → mini-plan → contract surface probe →
+build loop (the `/phase` machinery, feature-scoped) → review & harden → manual
+test plan → docs + token stamp + summary → memory queue → delivery.
+
+Three layers make "hands-off" real — each uses the mechanism suited to its job:
+
+1. **Judgment → the orchestrator + subagents.** `/feature` routes the pipeline
+   through the standard roles under AUTO; the circuit breaker, rules 11/12, and
+   blind TDD apply unchanged.
+2. **Must-happen-every-time → a lifecycle hook.** `docs/features/<slug>/GATES.md`
+   is the run's gate checklist; the `Stop` hook (`.claude/hooks/feature-gate.js`)
+   BLOCKS session end while the feature is `(active)` in STATE with unchecked
+   gates. A prompt can be ignored; the hook cannot. Hosts without lifecycle hooks
+   run this as a model-run ritual: before ending a feature session, read GATES.md
+   and refuse to stop on an unchecked gate.
+3. **No-human-at-the-keyboard → a headless runner.** `ISSFLOW_HEADLESS=1` tells the
+   lane no human is present: every hard-stop degrades to a `BLOCKED.md` report +
+   clean exit — never a guess. Two shipped runners (`create-issflow --ci|--docker`,
+   sources in `.claude/templates/automation/`):
+   - **GitHub Actions** — label an issue `feature:approved` (or dispatch with a doc
+     path); the workflow runs the lane on an ephemeral runner.
+   - **Docker** — `node scripts/feature-docker.js <FEATURE.md>` builds
+     `Dockerfile.issflow` and runs the lane in an unprivileged container with the
+     repo mounted; the container is the sandbox that makes a skip-permissions run
+     acceptable. Works for any host that ships a headless CLI.
+
+**Approval semantics (rule-13 scoped).** The doc header
+`> Approval: APPROVED <name> <date>` is the human sign-off, scoped to that doc
+only; the mini-plan inherits it while it stays inside the doc's stated scope —
+scope creep hard-stops to `/change-request`. The `> Automation: none|push|push+pr`
+header pre-authorizes outbound git actions for THAT run (hard-stop 1 satisfied by
+recorded consent). Merge and prod deploy can never be pre-authorized.
+
+-----
+
 ## BMAD integration (planning front-end)
 
 iStartSoftFlow is the EXECUTION loop; **BMAD-METHOD** is an optional PLANNING
@@ -209,6 +253,11 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 
 - **overview** — bootstrap a project: design-research → grill r1 → design-research
   → re-grill r2 → `OVERVIEW.md` → planner → `PLAN.md`.
+- **feature [doc]** — the brownfield feature lane: one APPROVED Feature doc →
+  spec completion → adversarial doc-review → mini-plan → contract probe → build
+  loop → review & harden → manual test plan → docs/stamps/memory → delivery.
+  Gate checklist in `docs/features/<slug>/GATES.md`, enforced by the `Stop` hook.
+  Headless-capable (CI / Docker, `ISSFLOW_HEADLESS=1`). See "Feature lane".
 - **propose** — turn approved requirements + stack into `PROPOSAL.md` (scope, phase
   breakdown, effort + cost estimate, assumptions) with a client sign-off gate.
 - **change-request** — a mid-project scope change: impact analysis + re-estimate +
@@ -476,6 +525,17 @@ the KB. The kit works normally without a KB.
   summary, known limitations, approver — the gate to promote to production.
 - `docs/ui-audit-<date>.md` · `docs/qa-audit-<date>.md` · `docs/security-audit-<date>.md`
   — scored whole-product audit reports (from the `*-audit` commands).
+- `docs/features/<slug>/` — one dir per feature-lane run: `FEATURE.md` (the doc:
+  approval header, acceptance criteria, assumptions, token stamp, summary),
+  `PLAN.md` (mini-plan), `CONTRACTS.md` (probed public surfaces), `TEST-PLAN.md`
+  (the UAT scenario sheet), `GATES.md` (the Stop-hook-enforced checklist),
+  `BLOCKED.md` (headless blocker reports).
+- `docs/WISDOM-QUEUE.md` — auto-appended wisdom candidates from feature runs;
+  `/store-wisdom` reads it before pushing to the shared KB (push stays human).
+- `.claude/templates/automation/` — headless-runner sources (GitHub Action ·
+  Dockerfile · docker wrapper), materialized by `create-issflow --ci` /
+  `--docker` as `.github/workflows/issflow-feature.yml` · `Dockerfile.issflow` ·
+  `scripts/feature-docker.js`.
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
 - `docs/PLAN.md` — the phase plan (the product backlog). Carries an `> Approval:`
@@ -527,7 +587,7 @@ the same everywhere — only the *wiring* differs.
 
 | Host | Entry file | Commands | Subagents | Lifecycle hooks | Shared KB |
 |------|-----------|----------|-----------|-----------------|-----------|
-| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse (context-budget watchdog) · PreCompact · SubagentStop | yes |
+| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse (context-budget watchdog) · PreCompact · SubagentStop · Stop (feature gate) | yes |
 | **Codex CLI** | `AGENTS.md` (native) | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` (sessionStart · subagentStop) | yes |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |

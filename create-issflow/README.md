@@ -15,6 +15,10 @@ npx create-issflow --tool=claude    # or pass it: claude | codex | cursor | gemi
 
 Flags:
 - `--tool=<name>` — pick the target tool (skips the prompt). `all` writes every adapter.
+- `--ci` — also write `.github/workflows/issflow-feature.yml` (headless `/feature`
+  via GitHub Actions: label an issue `feature:approved` → the lane runs).
+- `--docker` — also write `Dockerfile.issflow` + `scripts/feature-docker.js`
+  (headless `/feature` in an unprivileged container; the container is the sandbox).
 - `--dry-run` — print what would happen, write nothing.
 - `--force` — overwrite existing kit files (default keeps yours; conflicts are
   written as `<file>.issflow-new` for you to merge).
@@ -25,9 +29,9 @@ Flags:
 The portable kit (every tool) in `<project>/.claude/`:
 
 - `agents/` — planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer
-- `commands/` — `/overview` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck`
+- `commands/` — `/overview` `/feature` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck`
 - `skills/` — caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards
-- `hooks/` — session-start · context-guard · pre-compact · subagent-stop
+- `hooks/` — session-start · context-guard · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`)
 - `istartsoft-flow/METHODOLOGY.md` — the full methodology (single source of truth)
 
 Plus a root `AGENTS.md` (the open standard) and the per-tool adapter:
