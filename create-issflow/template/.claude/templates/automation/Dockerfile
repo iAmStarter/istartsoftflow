@@ -18,6 +18,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g @anthropic-ai/claude-code
 
+# sanity: the kit's lifecycle hooks are `node .claude/hooks/*.js` — a runner
+# image WITHOUT node runs claude fine but every hook silently dies (no
+# session-start context, no feature gate). Fail the build, not the run.
+RUN node --version && claude --version
+
 # unprivileged runner; /work is the mounted repo.
 RUN useradd --create-home --shell /bin/sh runner
 USER runner

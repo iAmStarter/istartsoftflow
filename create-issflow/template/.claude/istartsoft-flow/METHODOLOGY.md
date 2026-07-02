@@ -170,7 +170,11 @@ Three layers make "hands-off" real — each uses the mechanism suited to its job
    - **Docker** — `node scripts/feature-docker.js <FEATURE.md>` builds
      `Dockerfile.issflow` and runs the lane in an unprivileged container with the
      repo mounted; the container is the sandbox that makes a skip-permissions run
-     acceptable. Works for any host that ships a headless CLI.
+     acceptable. Works for any host that ships a headless CLI. The runner image
+     MUST contain Node ≥ 18 — the lifecycle hooks are `node .claude/hooks/*.js`,
+     and without node they die silently (no session context, no feature gate).
+     The shipped image is Node-based and the wrapper preflights `node` before
+     every run, including bring-your-own images (`ISSFLOW_IMAGE=<name>`).
 
 **Approval semantics (rule-13 scoped).** The doc header
 `> Approval: APPROVED <name> <date>` is the human sign-off, scoped to that doc

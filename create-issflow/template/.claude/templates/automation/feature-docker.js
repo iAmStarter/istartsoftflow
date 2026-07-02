@@ -42,10 +42,22 @@ if (!haveImage || rebuild) {
   if (run('docker', ['build', '-t', IMAGE, '-f', df, '.']).status !== 0) die('image build failed');
 }
 
+// preflight: the kit's hooks (session-start, the feature gate) are Node
+// scripts. An image without node — e.g. claude installed as a native binary,
+// or a bring-your-own ISSFLOW_IMAGE built on a non-Node base — runs claude
+// but every hook dies silently, so the gate enforcement is gone. Refuse early.
+const nodeCheck = spawnSync('docker', ['run', '--rm', '--entrypoint', 'node', IMAGE, '--version'], { stdio: 'ignore' });
+if (nodeCheck.status !== 0) die(
+  `image "${IMAGE}" has no usable node — the kit's lifecycle hooks are Node scripts and cannot run. ` +
+  `Use the shipped image (delete it + rerun with --rebuild), or base your custom image on Node >= 18 ` +
+  `(e.g. FROM issflow-runner).`
+);
+
 console.log(`feature-docker: running /feature ${doc} in ${IMAGE} (repo mounted at /work)`);
 const args = [
   'run', '--rm',
-  '-v', `${repo}:/work`,
+  '--entrypoint', 'claude',
+  '-v', `${repo}:/work`, '-w', '/work',
   '-e', 'ANTHROPIC_API_KEY',
   '-e', 'ISSFLOW_HEADLESS=1',
 ];

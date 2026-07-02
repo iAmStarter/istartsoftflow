@@ -111,6 +111,14 @@ The Docker lane runs Claude Code inside an unprivileged, ephemeral container wit
 the repo mounted — the container is the sandbox that makes an unattended run safe.
 Merge and production deploy can never be pre-authorized; those stay human.
 
+**Node in the container is load-bearing.** The kit's lifecycle hooks are Node
+scripts — in an image without `node` (claude installed as a native binary, or a
+non-Node base), claude runs but every hook dies silently and the feature gate is
+gone. The shipped `Dockerfile.issflow` is Node-based and checks `node --version`
+at build; the runner preflights `node` in the image (including a bring-your-own
+`ISSFLOW_IMAGE=<name>`) and refuses to start without it. Custom images: build
+`FROM issflow-runner` (or any Node ≥ 18 base) and add your project's toolchain.
+
 ## Workflow best practices
 
 Distilled from how teams actually run coding agents well (full sourced notes in

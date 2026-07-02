@@ -19,6 +19,8 @@ Flags:
   via GitHub Actions: label an issue `feature:approved` → the lane runs).
 - `--docker` — also write `Dockerfile.issflow` + `scripts/feature-docker.js`
   (headless `/feature` in an unprivileged container; the container is the sandbox).
+  The image must ship Node ≥ 18 — the kit's hooks are Node scripts; the shipped
+  Dockerfile is Node-based and the wrapper preflights `node` before every run.
 - `--dry-run` — print what would happen, write nothing.
 - `--force` — overwrite existing kit files (default keeps yours; conflicts are
   written as `<file>.issflow-new` for you to merge).
