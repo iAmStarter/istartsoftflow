@@ -53,7 +53,7 @@ silently vanish.
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
 | **commands** | `/overview` `/feature` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
 | **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** (naming-per-language + architecture) — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
-| **hooks** | session-start · context-guard (token-budget watchdog) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`) (Node scripts, wired per tool) |
+| **hooks** | session-start · context-guard (token-budget watchdog) · plan-gate (rule-13 PLAN-approval enforcement) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`, artifact-verified) (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
 ## Core idea
@@ -102,9 +102,11 @@ Runs interactive, or **headless** with nobody at the keyboard (`ISSFLOW_HEADLESS
 — every hard-stop degrades to a `BLOCKED.md` report + clean exit, never a guess):
 
 ```bash
+/feature new user-auth        # scaffold the Feature doc from the shipped template
 npx create-issflow --ci       # GitHub Action: label an issue `feature:approved` → the lane runs
 npx create-issflow --docker   # container runner: Dockerfile.issflow + scripts/feature-docker.js
-node scripts/feature-docker.js docs/features/<slug>/FEATURE.md
+node scripts/feature-docker.js docs/features/<slug>/FEATURE.md            # one feature
+node scripts/feature-docker.js docs/features/<slug>/FEATURE.md --worktree # parallel lanes
 ```
 
 The Docker lane runs Claude Code inside an unprivileged, ephemeral container with

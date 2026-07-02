@@ -9,6 +9,22 @@ you do NOT implement or debug yourself. Subagents cannot talk to the user; only 
 Target doc: $ARGUMENTS  (default: the single `docs/features/*/FEATURE.md` whose
 `> Status:` reads `approved, pending` — zero or multiple candidates -> STOP and list them.)
 
+---
+
+## ENTRY MODES (before the pipeline)
+
+- **`/feature new <name>`** — scaffold only. Copy
+  `.claude/templates/FEATURE-template.md` to `docs/features/<kebab-name>/FEATURE.md`,
+  fill `<feature name>`, then STOP: the human writes the spec and flips
+  `> Approval:` to APPROVED. Never auto-approve; never continue into the pipeline.
+- **`/feature from-story <key>`** — planning-stack bridge. If a story MCP is
+  connected (e.g. iSSM `load_story`), load the story and transform it into the
+  template's sections (story intent -> What & why, ACs -> Acceptance criteria,
+  the rest mapped or left as explicit gaps). Write it as `Approval: PENDING` and
+  STOP for human review + approval — a story is planning input, not a sign-off.
+  No story MCP connected -> say so and fall back to `/feature new`.
+- **`/feature <path>`** (or bare `/feature`) — run the pipeline below.
+
 HEADLESS DETECT: env `ISSFLOW_HEADLESS=1` (set by the CI workflow / Docker runner)
 means NO human is available this run. Every hard-stop below then degrades to:
 write the blocker to `docs/features/<slug>/BLOCKED.md` + mark the gate `parked`
@@ -33,7 +49,8 @@ b. APPROVAL GATE (the ONE human gate at entry): the Feature doc must carry a hea
    > Approval: APPROVED <name> <date>
    > Automation: <none | push | push+pr>
    ```
-   Missing/PENDING -> HARD-STOP: a human approves the DOC, not the run. Doc approval
+   Missing/PENDING -> HARD-STOP: a human approves the DOC, not the run (need a doc?
+   `/feature new <name>` scaffolds `.claude/templates/FEATURE-template.md`). Doc approval
    is the rule-13 sign-off *scoped to this doc only* — the mini-plan it produces
    inherits approval as long as it stays inside the doc's stated scope.
 

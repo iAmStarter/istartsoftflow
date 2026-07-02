@@ -125,7 +125,8 @@ function adapterClaude() {
   writeFile('.claude/flow-config.json', flowConfig());
   const HOOKS = {
     SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .claude/hooks/session-start.js' }] }],
-    PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .claude/hooks/context-guard.js' }] }],
+    PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .claude/hooks/context-guard.js' }] },
+                   { matcher: 'Edit|Write|MultiEdit|NotebookEdit', hooks: [{ type: 'command', command: 'node .claude/hooks/plan-gate.js' }] }],
     PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .claude/hooks/pre-compact.js' }] }],
     SubagentStop: [{ hooks: [{ type: 'command', command: 'node .claude/hooks/subagent-stop.js' }] }],
     Stop:         [{ hooks: [{ type: 'command', command: 'node .claude/hooks/feature-gate.js' }] }],

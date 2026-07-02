@@ -1,6 +1,6 @@
 {
   "name": "create-issflow",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Scaffold the iStartSoftFlow AI-coding workflow into a project. Stack-agnostic, tool-agnostic (Claude Code, Codex, Cursor, Gemini, Aider), non-destructive.",
   "bin": {
     "create-issflow": "bin/cli.js"

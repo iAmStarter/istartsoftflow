@@ -158,9 +158,15 @@ Three layers make "hands-off" real — each uses the mechanism suited to its job
 2. **Must-happen-every-time → a lifecycle hook.** `docs/features/<slug>/GATES.md`
    is the run's gate checklist; the `Stop` hook (`.claude/hooks/feature-gate.js`)
    BLOCKS session end while the feature is `(active)` in STATE with unchecked
-   gates. A prompt can be ignored; the hook cannot. Hosts without lifecycle hooks
-   run this as a model-run ritual: before ending a feature session, read GATES.md
-   and refuse to stop on an unchecked gate.
+   gates — and it verifies ARTIFACTS, not ticks: a checked `test-plan` /
+   `mini-plan` / `contract-probe` / `token-stamp` / `summary` / `memory-queued`
+   gate whose deliverable is missing on disk blocks too (also re-checked in the
+   `(done)` state). A prompt can be ignored; the hook cannot. Rule 13 gets the
+   same treatment: the `PreToolUse` plan gate (`.claude/hooks/plan-gate.js`)
+   denies source Edit/Write while `docs/PLAN.md` reads `> Approval: PENDING`
+   (docs/kit paths stay writable; an active feature lane is exempt — its doc
+   approval is its own scoped gate). Hosts without lifecycle hooks run these as
+   model-run rituals.
 3. **No-human-at-the-keyboard → a headless runner.** `ISSFLOW_HEADLESS=1` tells the
    lane no human is present: every hard-stop degrades to a `BLOCKED.md` report +
    clean exit — never a guess. Two shipped runners (`create-issflow --ci|--docker`,
@@ -175,6 +181,9 @@ Three layers make "hands-off" real — each uses the mechanism suited to its job
      and without node they die silently (no session context, no feature gate).
      The shipped image is Node-based and the wrapper preflights `node` before
      every run, including bring-your-own images (`ISSFLOW_IMAGE=<name>`).
+     `--worktree` isolates a run in its own `git worktree` + branch, so 2–3
+     features build in parallel without touching your checkout or each other
+     (path-identical mounts: Linux/macOS).
 
 **Approval semantics (rule-13 scoped).** The doc header
 `> Approval: APPROVED <name> <date>` is the human sign-off, scoped to that doc
@@ -255,13 +264,29 @@ The orchestrator ROUTES. It does not implement or debug.
 
 Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 
+**Lane routing — which entry point for which job:**
+
+| The job | Lane |
+|---------|------|
+| Brand-new project (no OVERVIEW yet) | `/overview` → `/phase` (optionally `/sprint`) |
+| New FEATURE on an existing product | `/feature` (scaffold the doc with `/feature new`) |
+| Small, obvious, non-phase change (a fix, a rename, a copy tweak) | `/quick` |
+| Scope change to already-approved work | `/change-request` |
+| Whole-product quality sweep / pre-release | `/ui-audit` · `/qa-audit` · `/security-audit` · `/release` |
+
+On ambiguity between `/quick` and `/feature`: does it add or change a public
+surface or need its own acceptance criteria? -> `/feature`. Otherwise `/quick`.
+
 - **overview** — bootstrap a project: design-research → grill r1 → design-research
   → re-grill r2 → `OVERVIEW.md` → planner → `PLAN.md`.
-- **feature [doc]** — the brownfield feature lane: one APPROVED Feature doc →
-  spec completion → adversarial doc-review → mini-plan → contract probe → build
-  loop → review & harden → manual test plan → docs/stamps/memory → delivery.
-  Gate checklist in `docs/features/<slug>/GATES.md`, enforced by the `Stop` hook.
-  Headless-capable (CI / Docker, `ISSFLOW_HEADLESS=1`). See "Feature lane".
+- **feature [new <name> | from-story <key> | doc]** — the brownfield feature lane:
+  one APPROVED Feature doc → spec completion → adversarial doc-review → mini-plan
+  → contract probe → build loop → review & harden → manual test plan →
+  docs/stamps/memory → delivery. `new` scaffolds the doc from
+  `.claude/templates/FEATURE-template.md`; `from-story` transforms a BMAD/iSSM
+  story into a PENDING doc (approval stays human). Gate checklist in
+  `docs/features/<slug>/GATES.md`, enforced by the `Stop` hook with artifact
+  verification. Headless-capable (CI / Docker, `ISSFLOW_HEADLESS=1`). See "Feature lane".
 - **propose** — turn approved requirements + stack into `PROPOSAL.md` (scope, phase
   breakdown, effort + cost estimate, assumptions) with a client sign-off gate.
 - **change-request** — a mid-project scope change: impact analysis + re-estimate +
@@ -540,6 +565,8 @@ the KB. The kit works normally without a KB.
   Dockerfile · docker wrapper), materialized by `create-issflow --ci` /
   `--docker` as `.github/workflows/issflow-feature.yml` · `Dockerfile.issflow` ·
   `scripts/feature-docker.js`.
+- `.claude/templates/FEATURE-template.md` — the Feature-doc form `/feature new`
+  scaffolds (Approval/Automation headers + spec sections).
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
 - `docs/PLAN.md` — the phase plan (the product backlog). Carries an `> Approval:`
@@ -591,7 +618,7 @@ the same everywhere — only the *wiring* differs.
 
 | Host | Entry file | Commands | Subagents | Lifecycle hooks | Shared KB |
 |------|-----------|----------|-----------|-----------------|-----------|
-| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse (context-budget watchdog) · PreCompact · SubagentStop · Stop (feature gate) | yes |
+| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse (context watchdog + rule-13 plan gate) · PreCompact · SubagentStop · Stop (feature gate) | yes |
 | **Codex CLI** | `AGENTS.md` (native) | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` (sessionStart · subagentStop) | yes |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |

@@ -77,13 +77,15 @@ if (issues !== null) {
   emit('');
 }
 
-// 3b. research index
+// 3b. research index — token economy: inject only the 5 newest rows, each
+// truncated; the full table stays on disk for grep, sessions don't re-pay it.
 const idx = read('docs/research/INDEX.md');
 if (idx !== null) {
   const rows = idx.split('\n').filter((l) => /^\|\s*\d{4}-\d{2}-\d{2}/.test(l));
   emit(`## research/INDEX.md (${rows.length} prior investigations)`);
   emit('grep this before any new research or debugging.');
-  for (const l of rows.slice(-15)) emit('  ' + l);
+  for (const l of rows.slice(-5)) emit('  ' + (l.length > 220 ? l.slice(0, 217) + '…' : l));
+  if (rows.length > 5) emit(`  … (+${rows.length - 5} older — grep docs/research/INDEX.md)`);
   emit('');
 }
 

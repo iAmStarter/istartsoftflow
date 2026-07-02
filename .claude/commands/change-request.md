@@ -18,6 +18,16 @@ Read `docs/PROPOSAL.md` (the approved baseline), `docs/PLAN.md`, `docs/STATE.md`
 and `docs/CHANGES.md` (create if missing). No approved proposal yet -> you're still
 pre-build; use `/propose` instead.
 
+**FEATURE-LANE VARIANT** — the change targets a feature-lane run (STATE has a
+`feature: <slug>` line, or `/feature` hard-stopped here on scope creep): the
+baseline is the APPROVED `docs/features/<slug>/FEATURE.md`, not the proposal.
+Run the same steps against the doc — impact on its slices, effort Δ if the
+project prices work — then log the CR and **amend the FEATURE doc** (scope +
+acceptance criteria) and reset its header to `> Approval: PENDING`: a changed
+doc needs a fresh human approval before the lane re-arms. Skip the PROPOSAL/
+plan-replan steps unless the change spills beyond the feature. No proposal in
+this project is fine for this variant — the feature doc is the commercial unit.
+
 ## STEP 1 — CLASSIFY
 Is this an in-scope **clarification** (no cost change) or a real **scope change**
 (add / remove / alter)? Clarification -> log it, proceed, no re-price. Scope change
