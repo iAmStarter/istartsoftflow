@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>iStartSoftFlow — a disciplined workflow for AI coding agents</title>
-<meta name="description" content="Install one command into any repo so your AI coding agent — Claude Code, Codex, Cursor, Gemini or Aider — follows a spec → plan → test → ship loop, enforced by hooks it can't skip. Cross-platform, zero-dependency." />
+<meta name="description" content="Install one command into any repo so your AI coding agent — Claude Code, Codex, Cursor, Gemini or Aider — follows a spec → plan → test → ship loop, enforced by hooks it can't skip. Or hand it one approved feature doc and get a tested feature branch back — headless, in CI or Docker. Cross-platform, zero-dependency." />
 <meta name="theme-color" content="#ffffff" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta property="og:type" content="website" />
@@ -174,6 +174,7 @@
   <span class="links">
     <a href="#loop"><span class="en">The loop</span><span class="th">ลูป</span></a>
     <a href="#sprint"><span class="en">Sprints</span><span class="th">สปรินต์</span></a>
+    <a href="#feature"><span class="en">Feature lane</span><span class="th">ฟีเจอร์เลน</span></a>
     <a href="#tools"><span class="en">Tools</span><span class="th">เครื่องมือ</span></a>
     <a href="#start"><span class="en">Start</span><span class="th">เริ่มต้น</span></a>
     <a href="#kit"><span class="en">What you get</span><span class="th">ในชุด</span></a>
@@ -203,6 +204,7 @@
     <span class="badge">macOS · Windows · Linux</span>
     <span class="badge"><span class="en">pure</span><span class="th">ใช้</span> <b>Node</b> <span class="en">zero deps</span><span class="th">ล้วน</span></span>
     <span class="badge"><span class="en">token&#8209;lean</span><span class="th">ประหยัด token</span></span>
+    <span class="badge"><span class="en">headless</span><span class="th">headless</span> <b>CI · Docker</b></span>
     <span class="badge">MIT</span>
   </div>
   <div class="cmd">
@@ -277,6 +279,57 @@
   <p class="sub" style="text-align:center;margin-top:16px"><b>tracks</b> · <span class="en">burndown · velocity · one</span><span class="th">burndown · velocity · ไฟล์</span> <code>docs/sprints/sprint-&lt;n&gt;.md</code> <span class="en">per sprint</span><span class="th">ต่อหนึ่ง sprint</span></p>
 </div></section>
 
+<section id="feature"><div class="wrap">
+  <div class="ey"><span class="en">the feature lane · near-100% hands-off</span><span class="th">ฟีเจอร์เลน · เกือบ 100% อัตโนมัติ</span></div>
+  <h2>
+    <span class="en">One approved doc in.<br>A tested feature branch out.</span>
+    <span class="th">โยนเอกสารฟีเจอร์ที่อนุมัติแล้วเข้าไป<br>ได้ feature branch ที่เทสต์ครบกลับมา</span>
+  </h2>
+  <p class="muted" style="max-width:780px;margin-bottom:10px">
+    <span class="en">Automated development for an existing product — for real. <code class="chip">/feature</code> runs the whole
+    pipeline itself: adversarial doc review before planning, a scoped mini-plan, a contract surface probe, a blind-TDD
+    build loop, adversarial hardening, a manual test plan for your testers, docs + a token-usage stamp — then delivers a
+    branch or opens a PR. Humans remain at exactly three points: <b style="color:var(--txt)">approve the doc · UAT · merge</b>.</span>
+    <span class="th">automate development สำหรับ product ที่มีอยู่แล้ว — ของจริง <code class="chip">/feature</code> รันทั้ง
+    pipeline เอง: รุมตรวจเอกสารแบบ adversarial ก่อนวางแผน, mini-plan เฉพาะ scope, ตรวจ contract surface, สร้างด้วยลูป
+    blind-TDD, harden แบบ adversarial, ทำ test plan ให้คนเทส, อัปเดตเอกสาร + ประทับ token usage — แล้วส่งมอบเป็น branch
+    หรือเปิด PR ให้ คนเหลือแค่ 3 จุด: <b style="color:var(--txt)">อนุมัติเอกสาร · UAT · merge</b></span>
+  </p>
+  <div class="loop" style="margin-top:20px">
+    <svg class="flowsvg" viewBox="0 0 720 112" role="img" aria-label="The feature lane: approved doc, adversarial review, mini-plan, blind TDD, harden, deliver — then the next feature">
+      <line class="track" x1="36" y1="40" x2="684" y2="40"/>
+      <line class="flowline" x1="36" y1="40" x2="684" y2="40"/>
+      <g class="fn"><circle cx="36" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="165.6" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="295.2" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="424.8" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="554.4" cy="40" r="8"/></g>
+      <g class="fn"><circle cx="684" cy="40" r="8"/></g>
+      <text class="flab" x="36" y="70">doc</text>
+      <text class="flab" x="165.6" y="70">attack doc</text>
+      <text class="flab" x="295.2" y="70">mini-plan</text>
+      <text class="flab" x="424.8" y="70">blind TDD</text>
+      <text class="flab" x="554.4" y="70">harden</text>
+      <text class="flab" x="684" y="70">deliver</text>
+      <path class="rback" d="M684 50 C 706 98, 14 98, 36 50"/>
+      <text class="rep" x="360" y="106" text-anchor="middle">↻ next feature</text>
+      <g class="dot"><circle class="halo" cx="36" cy="40" r="13"/><circle class="core" cx="36" cy="40" r="5.5"/></g>
+    </svg>
+  </div>
+  <div class="grid g3" style="margin-top:26px">
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2.5"/></svg> <span class="en">Gates it can't skip</span><span class="th">เกตที่ข้ามไม่ได้</span></h3>
+      <p><span class="en">Every run carries a 12-gate checklist (<code>GATES.md</code>). A <b>Stop hook</b> blocks the session from ending while any gate is unchecked — enforcement in code, not a request in a prompt.</span><span class="th">ทุกการรันมี checklist 12 เกต (<code>GATES.md</code>) และ <b>Stop hook</b> จะบล็อกไม่ให้ session จบถ้ายังมีเกตค้าง — บังคับด้วยโค้ด ไม่ใช่ขอร้องใน prompt</span></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M3 12h18M7.5 8V5.5h9V8M7.5 15.5h4"/></svg> <span class="en">Headless: CI or Docker</span><span class="th">Headless: CI หรือ Docker</span></h3>
+      <p><span class="en">Label an issue <code>feature:approved</code> and GitHub Actions runs the lane; or run it in an unprivileged container (Node-based image — the hooks are guaranteed to fire). Nobody at the keyboard: hard-stops become a <code>BLOCKED.md</code> report, never a guess.</span><span class="th">ติด label <code>feature:approved</code> ที่ issue แล้ว GitHub Actions รันให้เอง หรือรันใน container แบบ unprivileged (image เป็น Node — hooks ยิงแน่นอน) ไม่มีคนเฝ้า: เจอ hard-stop จะเขียนรายงาน <code>BLOCKED.md</code> ไม่เดามั่ว</span></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg> <span class="en">What stays human</span><span class="th">อะไรยังเป็นของคน</span></h3>
+      <p><span class="en">Approve the doc · run UAT from the generated <code>TEST-PLAN.md</code> · merge. A push/PR needs recorded consent in the doc; <b>merge and production deploy can never be pre-authorized</b>.</span><span class="th">อนุมัติเอกสาร · รัน UAT จาก <code>TEST-PLAN.md</code> ที่ระบบทำให้ · merge — ส่วน push/PR ต้องมี consent ระบุไว้ในเอกสาร และ <b>merge กับ deploy ขึ้น production ไม่มีทาง pre-authorize ได้</b></span></p></div>
+  </div>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px">
+    <div class="cmd"><code><span class="pp">$</span> npx create-issflow <span class="muted">--ci --docker</span></code></div>
+    <div class="cmd"><code><span class="pp">$</span> node scripts/feature-docker.js <span class="muted">docs/features/&lt;slug&gt;/FEATURE.md</span></code></div>
+  </div>
+</div></section>
+
 <section id="why"><div class="wrap">
   <div class="ey"><span class="en">why</span><span class="th">ทำไม</span></div>
   <h2><span class="en">Less babysitting. Fewer broken changes. A bill that stays flat.</span><span class="th">จ้ำจี้น้อยลง · งานพังน้อยลง · ค่าใช้จ่ายไม่บาน</span></h2>
@@ -314,7 +367,7 @@
       <th scope="col"><span class="en">Subagents</span><span class="th">ซับเอเจนต์</span></th>
       <th scope="col"><span class="en">Lifecycle hooks</span><span class="th">ฮุก</span></th>
     </tr>
-    <tr><td>Claude Code <span class="tag">ref</span></td><td><code>CLAUDE.md (@AGENTS.md)</code> + <code>.claude/</code></td><td><code>.claude/commands/</code></td><td class="ok"><span class="en">native</span><span class="th">เนทีฟ</span></td><td class="ok"><span class="en">all 4, with injection</span><span class="th">ครบ 4 + inject</span></td></tr>
+    <tr><td>Claude Code <span class="tag">ref</span></td><td><code>CLAUDE.md (@AGENTS.md)</code> + <code>.claude/</code></td><td><code>.claude/commands/</code></td><td class="ok"><span class="en">native</span><span class="th">เนทีฟ</span></td><td class="ok"><span class="en">all 5, with injection</span><span class="th">ครบ 5 + inject</span></td></tr>
     <tr><td>Codex CLI</td><td><code>AGENTS.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
     <tr><td>Cursor</td><td><code>.cursor/rules/</code></td><td><code>.cursor/commands/</code></td><td class="ok"><span class="en">reads</span><span class="th">อ่าน</span> <code>.claude/agents</code></td><td class="ok"><code>hooks.json</code></td></tr>
     <tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
@@ -322,8 +375,8 @@
     <tr><td><span class="en">Any AGENTS.md tool</span><span class="th">ทุก tool ที่อ่าน AGENTS.md</span></td><td><code>AGENTS.md</code></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
   </table></div>
   <p class="muted" style="margin-top:14px;font-size:.86rem">
-    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Non-destructive: conflicts are written as <code>&lt;file&gt;.issflow-new</code>.</span>
-    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> — ไม่ทับไฟล์เดิม: ที่ชนกันจะเขียนเป็น <code>&lt;file&gt;.issflow-new</code></span>
+    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> · <code>--ci</code> (headless via GitHub Actions) · <code>--docker</code> (headless in a container) · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Non-destructive: conflicts are written as <code>&lt;file&gt;.issflow-new</code>.</span>
+    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> · <code>--ci</code> (headless ผ่าน GitHub Actions) · <code>--docker</code> (headless ใน container) · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> — ไม่ทับไฟล์เดิม: ที่ชนกันจะเขียนเป็น <code>&lt;file&gt;.issflow-new</code></span>
   </p>
 </div></section>
 
@@ -369,6 +422,7 @@
         <p><span class="en">The AUTO dev loop: implement → blind tests → UX + security gates → close. Follows the plan without stopping to ask; logs every decision, issue, and fix.</span><span class="th">AUTO dev loop: implement → blind test → เกต UX + security → ปิด ทำตามแผนไม่หยุดถาม และ log ทุก decision/ปัญหา/การแก้</span></p>
         <p class="sub"><b>inside</b> · implement → blind tests → UX + security gates → <b>deploy</b> (final phase) → close</p>
         <p class="sub"><b>optional</b> · <span class="en">wrap phases in sprints —</span><span class="th">ห่อ phase ด้วย sprint —</span> <code class="chip">/sprint run</code> <span class="en">drives plan → standups → review → retro → close, hands-off</span><span class="th">ขับ plan → standup → review → retro → close แบบไม่ต้องคุม</span></p>
+        <p class="sub"><b>brownfield</b> · <span class="en">adding a feature to a live product —</span><span class="th">เพิ่มฟีเจอร์ให้ product ที่รันอยู่ —</span> <code class="chip">/feature FEATURE.md</code> <span class="en">runs the whole lane hands-off; you approve the doc, UAT, and merge</span><span class="th">รันทั้งเลนเองแบบไม่ต้องคุม คุณแค่อนุมัติเอกสาร, UAT และ merge</span></p>
         <p class="sub"><b>produces</b> · code · tests · ENDPOINTS.md · HISTORY.md · <span class="en">(sprints)</span><span class="th">(sprint)</span> sprints/</p>
       </div></details>
     </li>
@@ -408,11 +462,11 @@
   <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.claude/</code></h2>
   <div class="grid g2" style="margin-top:24px">
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5M20.5 20a5.5 5.5 0 0 0-4.5-5.4"/></svg> <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
-    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">18 commands</span><span class="th">18 คำสั่ง</span></h3><p><code class="flat">/overview /propose /phase /sprint /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">19 commands</span><span class="th">19 คำสั่ง</span></h3><p><code class="flat">/overview /feature /propose /phase /sprint /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7z"/></svg> <span class="en">6 skills</span><span class="th">6 สกิล</span></h3>
       <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
-    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg> <span class="en">4 hooks</span><span class="th">4 ฮุก</span></h3>
-      <p><span class="en">session-start · context-guard · pre-compact · subagent-stop — pure-Node, cross-platform, wired per tool.</span><span class="th">session-start · context-guard · pre-compact · subagent-stop — Node ล้วน ข้ามแพลตฟอร์ม ต่อสายตามเครื่องมือ</span></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg> <span class="en">5 hooks</span><span class="th">5 ฮุก</span></h3>
+      <p><span class="en">session-start · context-guard · pre-compact · subagent-stop · feature-gate (the /feature Stop gate) — pure-Node, cross-platform, wired per tool.</span><span class="th">session-start · context-guard · pre-compact · subagent-stop · feature-gate (Stop gate ของ /feature) — Node ล้วน ข้ามแพลตฟอร์ม ต่อสายตามเครื่องมือ</span></p></div>
   </div>
 </div></section>
 
