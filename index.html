@@ -158,6 +158,24 @@
   ul.clean li{padding:11px 0;border-bottom:1px solid var(--line);color:var(--muted)}
   ul.clean li:last-child{border:none} ul.clean b{color:var(--ink)}
 
+  /* feature-lane demo — input doc pane · terminal pane · artifact strip */
+  :root{--code-bg:#0f172a;--code-head:#111c33;--code-line:#22304a;--code-txt:#cbd5e1;--code-dim:#8296b2;--code-ok:#34d399;--code-hi:#fbbf24;--code-kw:#93c5fd}
+  .demo2{display:grid;grid-template-columns:1fr 1.2fr;gap:16px;margin-top:26px;text-align:left}
+  @media(max-width:820px){.demo2{grid-template-columns:1fr}}
+  .plab{font:700 .78rem/1 var(--sans);color:var(--muted);margin:0 0 8px;display:flex;align-items:center;gap:7px}
+  .plab b{color:var(--ink)}
+  .codewin{background:var(--code-bg);border:1px solid var(--code-line);border-radius:var(--radius);box-shadow:var(--card-sh);overflow:hidden}
+  .codewin-head{display:flex;align-items:center;gap:8px;background:var(--code-head);border-bottom:1px solid var(--code-line);padding:9px 14px;font:650 .74rem/1 var(--mono);color:var(--code-dim)}
+  .codewin-head .wdots{display:inline-flex;gap:5px}
+  .codewin-head .wdots i{width:9px;height:9px;border-radius:50%;background:var(--code-line);display:block}
+  .codewin-body{margin:0;padding:14px 16px;font:400 13px/1.65 var(--mono);color:var(--code-txt);overflow-x:auto;white-space:pre}
+  .codewin-body .cdim{color:var(--code-dim)} .codewin-body .cok{color:var(--code-ok);font-weight:600}
+  .codewin-body .chi{color:var(--code-hi);font-weight:700} .codewin-body .ckw{color:var(--code-kw)}
+  .artifact{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--card-sh);padding:14px 20px;font-size:.9rem;color:var(--muted)}
+  .artifact .chk{display:inline-flex;align-items:center;gap:7px;font-weight:650}
+  .artifact .chk svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+  .artifact b{color:var(--ink)}
+
   footer{padding:46px 0;border-top:1px solid var(--line);background:#101827;color:#aeb9ca;font-size:.9rem}
   footer .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
   footer .brand{color:#fff} footer .dot{background:var(--violet)}
@@ -295,26 +313,47 @@
     blind-TDD, harden แบบ adversarial, ทำ test plan ให้คนเทส, อัปเดตเอกสาร + ประทับ token usage — แล้วส่งมอบเป็น branch
     หรือเปิด PR ให้ คนเหลือแค่ 3 จุด: <b style="color:var(--txt)">อนุมัติเอกสาร · UAT · merge</b></span>
   </p>
-  <div class="loop" style="margin-top:20px">
-    <svg class="flowsvg" viewBox="0 0 720 112" role="img" aria-label="The feature lane: approved doc, adversarial review, mini-plan, blind TDD, harden, deliver — then the next feature">
-      <line class="track" x1="36" y1="40" x2="684" y2="40"/>
-      <line class="flowline" x1="36" y1="40" x2="684" y2="40"/>
-      <g class="fn"><circle cx="36" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="165.6" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="295.2" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="424.8" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="554.4" cy="40" r="8"/></g>
-      <g class="fn"><circle cx="684" cy="40" r="8"/></g>
-      <text class="flab" x="36" y="70">doc</text>
-      <text class="flab" x="165.6" y="70">attack doc</text>
-      <text class="flab" x="295.2" y="70">mini-plan</text>
-      <text class="flab" x="424.8" y="70">blind TDD</text>
-      <text class="flab" x="554.4" y="70">harden</text>
-      <text class="flab" x="684" y="70">deliver</text>
-      <path class="rback" d="M684 50 C 706 98, 14 98, 36 50"/>
-      <text class="rep" x="360" y="106" text-anchor="middle">↻ next feature</text>
-      <g class="dot"><circle class="halo" cx="36" cy="40" r="13"/><circle class="core" cx="36" cy="40" r="5.5"/></g>
-    </svg>
+  <div class="demo2">
+    <div>
+      <p class="plab"><b>1</b> · <span class="en">you write this</span><span class="th">คุณเขียนแค่นี้</span></p>
+      <div class="codewin">
+        <div class="codewin-head"><span class="wdots" aria-hidden="true"><i></i><i></i><i></i></span>docs/features/user-auth/FEATURE.md</div>
+        <pre class="codewin-body" aria-label="Example feature doc"><span class="chi">&gt; Approval: APPROVED somchai 2026-07-02</span>
+<span class="chi">&gt; Automation: push+pr</span>
+
+<span class="ckw">## User authentication</span>
+
+- Email + password login, JWT session
+- Password reset via email
+- Rate limit: 5 attempts / 5 min
+
+<span class="cdim">Done = every case in TEST-PLAN passes</span></pre>
+      </div>
+    </div>
+    <div>
+      <p class="plab"><b>2</b> · <span class="en">the agent runs the rest</span><span class="th">ที่เหลือ agent รันเอง</span></p>
+      <div class="codewin">
+        <div class="codewin-head"><span class="wdots" aria-hidden="true"><i></i><i></i><i></i></span><span class="en">terminal — headless run</span><span class="th">terminal — รันแบบ headless</span></div>
+        <pre class="codewin-body" aria-label="Example feature lane run output"><span class="cdim">$</span> /feature docs/features/user-auth/FEATURE.md
+<span class="cok">✔</span> approval header found — lane armed
+<span class="cdim">→</span> adversarial doc-review… 2 edge cases folded in
+<span class="cdim">→</span> mini-plan… 2 slices [5 pts]
+<span class="cdim">→</span> contract probe… ENDPOINTS.md +3 routes
+<span class="cdim">→</span> blind TDD… RED 12 → GREEN 12
+<span class="cdim">→</span> harden… adversarial review ×2 · security clean
+<span class="cdim">→</span> regression… 45/45 passed
+<span class="cok">✔</span> TEST-PLAN.md written (14 scenarios)
+<span class="cok">✔</span> gates 12/12 · token stamp · summary
+<span class="chi">↗ pushed feature/user-auth · PR #42 opened</span>
+<span class="cdim">  next: /uat docs/features/user-auth/TEST-PLAN.md</span></pre>
+      </div>
+    </div>
+  </div>
+  <div class="artifact">
+    <span class="chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l5 5L20 7"/></svg><span class="en">branch</span><span class="th">branch</span> <b>feature/user-auth</b></span>
+    <span class="chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l5 5L20 7"/></svg><b>PR #42</b> <span class="en">opened</span><span class="th">เปิดแล้ว</span></span>
+    <span class="chk"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13l5 5L20 7"/></svg><b>TEST-PLAN.md</b> <span class="en">ready for UAT</span><span class="th">พร้อมให้ UAT</span></span>
+    <span><span class="en">— you review &amp; merge. That's the job now.</span><span class="th">— งานของคุณเหลือแค่รีวิวแล้ว merge</span></span>
   </div>
   <div class="grid g3" style="margin-top:26px">
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2.5"/></svg> <span class="en">Gates it can't skip</span><span class="th">เกตที่ข้ามไม่ได้</span></h3>
