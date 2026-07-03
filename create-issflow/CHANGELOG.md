@@ -1,5 +1,26 @@
 # Changelog — create-issflow
 
+## 1.7.0 — 2026-07-03
+
+### Added
+- **Model routing** — each role pins a `model:` tier: heavy-reasoning roles
+  (planner · debugger · implementer · test-author) use `inherit` so the owner's
+  session model cascades; researcher/e2e-runner run `sonnet`; synthesizer runs
+  `haiku`. Pin a specific model by editing the role's `model:` line — the
+  installer never overwrites your edits.
+- **`/goal` command (goal layer)** — declare an OUTCOME with a measurable
+  Done-when + budget; `/goal run` loops pick-next-unit → route lane → tick until
+  done / budget / hard-stop. Goal-driven (stops on the finish line), composes
+  with host interval loops for recurrence. State in `docs/GOALS.md`; the
+  `Approved:` line arms headless passes. `--ci` now also installs a cron-ready
+  `issflow-goal.yml` workflow (disarmed by default).
+- **Hard rule 14 — UNDERSTAND-FIRST gate (brief-back)** — any new free-text task
+  (`/quick`, `/change-request`, `/goal set`, the grill) restates its
+  understanding (goal · scope · assumptions · blast radius) and WAITS for
+  explicit confirmation before executing. Approved artifacts (PLAN / FEATURE doc
+  / CR / goal) are the recorded confirmation for their lanes. Wrong
+  understanding burns tokens at 100× the cost of one confirm turn.
+
 ## 1.6.0 — 2026-07-02
 
 The **feature lane** release: near-100% hands-off feature delivery on an

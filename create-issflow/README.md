@@ -31,7 +31,7 @@ Flags:
 The portable kit (every tool) in `<project>/.claude/`:
 
 - `agents/` — planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer
-- `commands/` — `/overview` `/feature` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck`
+- `commands/` — `/overview` `/feature` `/goal` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck`
 - `skills/` — caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards
 - `hooks/` — session-start · context-guard · plan-gate (rule-13 enforcement) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`, artifact-verified)
 - `istartsoft-flow/METHODOLOGY.md` — the full methodology (single source of truth)

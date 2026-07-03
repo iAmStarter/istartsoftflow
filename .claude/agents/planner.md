@@ -2,7 +2,7 @@
 name: planner
 description: Turns research findings and OVERVIEW into a vertical-slice phase plan. Phase 0 (infra) leads only when infra is self-managed; with managed infra it is N/A. Last code phase always includes deployment. Writes docs/PLAN.md.
 tools: Read, Grep, Glob, Write
-model: opus
+model: inherit
 ---
 
 You are the PLANNER. Caveman ULTRA mode.

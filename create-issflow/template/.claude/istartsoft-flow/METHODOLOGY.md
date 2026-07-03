@@ -258,6 +258,20 @@ can. Escalation is at most two hops.
 
 The orchestrator ROUTES. It does not implement or debug.
 
+**Model routing (per-role tiers).** Each role's `.claude/agents/<role>.md` pins a
+`model:` tier suited to its work, so the RIGHT model runs each task by default:
+
+| Role | `model:` | Why |
+|------|----------|-----|
+| planner · debugger · implementer · test-author | `inherit` | hardest reasoning — follows the session model the OWNER picked (`/model` / `--model`), so one choice cascades |
+| researcher · e2e-runner | `sonnet` | judgment-heavy but mid-tier is the sweet spot |
+| synthesizer | `haiku` | mechanical compression — cheapest tier |
+
+Owner wants a SPECIFIC model? Edit the role's `model:` line — values `haiku` ·
+`sonnet` · `opus` · `inherit` · or a full model id. The installer is
+non-destructive, so your pins survive kit updates. Hosts without per-agent model
+support run everything on the session model (graceful degrade).
+
 -----
 
 ## Procedures (the slash-command set)
@@ -272,6 +286,7 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 | New FEATURE on an existing product | `/feature` (scaffold the doc with `/feature new`) |
 | Small, obvious, non-phase change (a fix, a rename, a copy tweak) | `/quick` |
 | Scope change to already-approved work | `/change-request` |
+| An OUTCOME spanning several units ("clear the feature queue") | `/goal` (drives the lanes above) |
 | Whole-product quality sweep / pre-release | `/ui-audit` · `/qa-audit` · `/security-audit` · `/release` |
 
 On ambiguity between `/quick` and `/feature`: does it add or change a public
@@ -287,6 +302,12 @@ surface or need its own acceptance criteria? -> `/feature`. Otherwise `/quick`.
   story into a PENDING doc (approval stays human). Gate checklist in
   `docs/features/<slug>/GATES.md`, enforced by the `Stop` hook with artifact
   verification. Headless-capable (CI / Docker, `ISSFLOW_HEADLESS=1`). See "Feature lane".
+- **goal [set|run|status|done|drop]** — the goal layer: declare an OUTCOME with a
+  measurable Done-when + budget (`set`, behind the rule-14 brief-back), then
+  `run` loops pick-next-unit → route lane → tick until done / budget / hard-stop.
+  Goal-driven, not time-driven: it stops itself on the finish line. Recurrence is
+  host-level (interval loop or the cron-ready `issflow-goal.yml`). `docs/GOALS.md`
+  holds state; its `Approved:` line arms headless passes.
 - **propose** — turn approved requirements + stack into `PROPOSAL.md` (scope, phase
   breakdown, effort + cost estimate, assumptions) with a client sign-off gate.
 - **change-request** — a mid-project scope change: impact analysis + re-estimate +
@@ -441,7 +462,7 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
 
 -----
 
-## Hard rules (1–13)
+## Hard rules (1–14)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
@@ -505,6 +526,16 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
     the planning twin of the commercial sign-off gate (`/propose`). A `/replan` that
     adds or reshapes UNBUILT scope reverts the affected plan to `PENDING` and
     re-surfaces it for confirmation before those phases run.
+14. **UNDERSTAND-FIRST gate (brief-back).** No new task starts executing on an
+    unconfirmed understanding. Any command that takes free-text work (`/quick`,
+    `/change-request`, `/goal set`, the `/overview` grill) BRIEFS BACK first:
+    restate the task — goal · scope · out-of-scope · assumptions · plan sketch ·
+    blast radius — then WAIT for explicit confirmation before touching anything.
+    A recorded approval artifact IS the confirmation for its lane (approved
+    PLAN → phases · APPROVED FEATURE doc → the feature lane · approved CR → the
+    change · `Approved:` goal → goal runs) — that is exactly what arms headless.
+    Rationale: a wrong understanding burns tokens and context at 100× the cost
+    of one confirm turn. AUTO governs execution AFTER intake, never instead of it.
 
 -----
 
@@ -561,10 +592,13 @@ the KB. The kit works normally without a KB.
   `BLOCKED.md` (headless blocker reports).
 - `docs/WISDOM-QUEUE.md` — auto-appended wisdom candidates from feature runs;
   `/store-wisdom` reads it before pushing to the shared KB (push stays human).
-- `.claude/templates/automation/` — headless-runner sources (GitHub Action ·
+- `.claude/templates/automation/` — headless-runner sources (GitHub Actions ·
   Dockerfile · docker wrapper), materialized by `create-issflow --ci` /
-  `--docker` as `.github/workflows/issflow-feature.yml` · `Dockerfile.issflow` ·
-  `scripts/feature-docker.js`.
+  `--docker` as `.github/workflows/issflow-feature.yml` +
+  `.github/workflows/issflow-goal.yml` (cron-ready, disarmed by default) ·
+  `Dockerfile.issflow` · `scripts/feature-docker.js`.
+- `docs/GOALS.md` — the goal layer's state: one `## G<n>` block per goal
+  (Done-when · Budget · `Approved:` line · progress ticks). Maintained by `/goal`.
 - `.claude/templates/FEATURE-template.md` — the Feature-doc form `/feature new`
   scaffolds (Approval/Automation headers + spec sections).
 - `docs/STATE.md` — current position. Small. Rewritten, not appended.

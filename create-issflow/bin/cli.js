@@ -217,9 +217,9 @@ function agentsMd() {
     '## Roles — `.claude/agents/`', '',
     'planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer', '',
     '## Procedures — `.claude/commands/` (run as `/name`)', '',
-    '/overview · /feature · /propose · /phase · /sprint · /ui-audit · /qa-audit · /security-audit ·',
-    '/release · /uat · /change-request · /replan · /quick · /synthesize · /runbook · /store-wisdom ·',
-    '/log-issue · /log-decision · /unstuck', '',
+    '/overview · /feature · /goal · /propose · /phase · /sprint · /ui-audit · /qa-audit ·',
+    '/security-audit · /release · /uat · /change-request · /replan · /quick · /synthesize ·',
+    '/runbook · /store-wisdom · /log-issue · /log-decision · /unstuck', '',
     '## Skills — `.claude/skills/` (loaded on demand)', '',
     'caveman · grill-me · karpathy-guidelines · ux-design · security (Secure SDLC) · code-standards', '',
     '## Autonomy', '',
@@ -237,7 +237,9 @@ function agentsMd() {
     '11 Secure SDLC: threat-model → secure coding → SAST/SCA/secrets each phase → pentest',
     'gate + security review before deploy (`security` skill) · 12 code-standards gate:',
     'lint/format clean + naming per language idiom + declared architecture (`code-standards`) ·',
-    '13 PLAN-APPROVAL gate: no phase/sprint starts until `docs/PLAN.md` is human-approved.', '',
+    '13 PLAN-APPROVAL gate: no phase/sprint starts until `docs/PLAN.md` is human-approved ·',
+    '14 UNDERSTAND-FIRST gate: brief back any new free-text task and wait for confirm',
+    'before executing (an approved PLAN/FEATURE/CR/goal is the recorded confirmation).', '',
     '## Your stack', '',
     'Declare your stack (language, framework, infra, auth, test + E2E runner,',
     'planning source) once in `docs/OVERVIEW.md`. Every rule references *your declared',
@@ -318,7 +320,10 @@ function main() {
 
   // 3b. headless feature lane (opt-in): materialize the automation templates.
   const autoDir = path.join(TPL, '.claude', 'templates', 'automation');
-  if (CI) writeFile(path.join('.github', 'workflows', 'issflow-feature.yml'), fs.readFileSync(path.join(autoDir, 'issflow-feature.yml'), 'utf8'));
+  if (CI) {
+    writeFile(path.join('.github', 'workflows', 'issflow-feature.yml'), fs.readFileSync(path.join(autoDir, 'issflow-feature.yml'), 'utf8'));
+    writeFile(path.join('.github', 'workflows', 'issflow-goal.yml'), fs.readFileSync(path.join(autoDir, 'issflow-goal.yml'), 'utf8'));
+  }
   if (DOCKER) {
     writeFile('Dockerfile.issflow', fs.readFileSync(path.join(autoDir, 'Dockerfile'), 'utf8'));
     writeFile(path.join('scripts', 'feature-docker.js'), fs.readFileSync(path.join(autoDir, 'feature-docker.js'), 'utf8'), { exec: true });

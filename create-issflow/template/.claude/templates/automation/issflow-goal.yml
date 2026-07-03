@@ -1,0 +1,47 @@
+# iStartSoftFlow — scheduled goal pass (GitHub Actions).
+# Installed by `npx create-issflow --ci` as .github/workflows/issflow-goal.yml.
+#
+# Runs ONE `/goal run` pass headless: pick next actionable unit -> route lane ->
+# tick -> repeat until Done-when / budget / hard-stop. The goal's `> Approved:`
+# line in docs/GOALS.md is the recorded consent that arms the run; a lane
+# hard-stop writes BLOCKED.md and exits cleanly. It never merges, never deploys.
+#
+# DISARMED BY DEFAULT: uncomment `schedule:` to run on cron. Manual dispatch
+# always works. Setup: secret ANTHROPIC_API_KEY + Actions write permissions
+# (same as issflow-feature.yml).
+
+name: issflow-goal
+
+on:
+  workflow_dispatch:
+    inputs:
+      goal_id:
+        description: Goal id to run (blank = the single active goal)
+        required: false
+        type: string
+  # schedule:
+  #   - cron: '0 1 * * 1-5'   # 01:00 UTC weekdays — one pass per night
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  goal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run one goal pass
+        uses: anthropics/claude-code-action@v1
+        env:
+          ISSFLOW_HEADLESS: "1"
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: "/goal run ${{ inputs.goal_id }}"
+          claude_args: "--dangerously-skip-permissions"

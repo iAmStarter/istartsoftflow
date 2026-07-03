@@ -139,6 +139,8 @@ emit('  Hard-stops only: security / irreversible-or-outbound actions / contradic
 emit('- caveman ULTRA mode is active.');
 emit('- PLAN-APPROVAL gate (rule 13): no /phase or /sprint while STATE `plan:` reads');
 emit('  PENDING — the plan needs a human sign-off via /overview first.');
+emit('- UNDERSTAND-FIRST (rule 14): new free-text task -> brief back your understanding');
+emit('  (goal · scope · assumptions · blast radius) and WAIT for confirm before executing.');
 emit('- before debugging ANY error: grep ISSUES.md AND research/INDEX.md first.');
 emit('- debug attempts: WARN at 2; cap 3. AUTO: log + park the slice + continue (batched');
 emit('  report at the phase boundary). GUIDED: stop and ask you.');
