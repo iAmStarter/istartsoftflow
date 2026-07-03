@@ -1,5 +1,7 @@
 # iStartSoftFlow
 
+> **New here? Start with the plain-language guide:** [HOW-TO-USE.md](./HOW-TO-USE.md) · [ฉบับภาษาไทย](./HOW-TO-USE.th.md)
+
 A reusable, hook-enforced AI-coding workflow. Codifies a
 `design-research → grill → plan → implement → test → deploy` loop with
 vertical-slice phases, agent orchestration, and automatic context hygiene — so the
