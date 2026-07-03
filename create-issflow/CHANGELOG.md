@@ -21,6 +21,24 @@
   / CR / goal) are the recorded confirmation for their lanes. Wrong
   understanding burns tokens at 100× the cost of one confirm turn.
 
+### Fixed (usability review — verified against official Claude Code docs)
+- Docker: `git config --global --add safe.directory '*'` for the runner user —
+  without it every git command on the host-owned mount fails ("dubious
+  ownership"), which silently killed the whole lane.
+- Docker `--worktree`: mount the main repo AND the worktree at their host
+  paths (worktree git metadata points both ways by absolute path; the old
+  /work mount broke git inside the container).
+- CI workflows: `--allowedTools <list>` (documented) instead of
+  `--dangerously-skip-permissions` (undocumented in the Actions context).
+- `/feature` + `/quick`: regression fallback for brownfield repos without
+  `scripts/regression.sh` — run the project's own suite; a repo with nothing
+  runnable hard-stops instead of pretending green.
+- Integration facts verified against code.claude.com docs: subagent
+  `model: inherit`, Stop-hook `decision:block` + `stop_hook_active`,
+  PreToolUse `permissionDecision:deny`, multiple PreToolUse matcher groups,
+  `claude -p "/custom-command"`, non-root `--dangerously-skip-permissions` +
+  `ANTHROPIC_API_KEY` headless auth.
+
 ## 1.6.0 — 2026-07-02
 
 The **feature lane** release: near-100% hands-off feature delivery on an

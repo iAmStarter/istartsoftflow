@@ -44,4 +44,5 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt: "/goal run ${{ inputs.goal_id }}"
-          claude_args: "--dangerously-skip-permissions"
+          # Documented --allowedTools flag; the ephemeral runner is the sandbox.
+          claude_args: "--allowedTools Bash,Edit,Write,Read,Glob,Grep,Task,WebFetch,WebSearch,TodoWrite"
