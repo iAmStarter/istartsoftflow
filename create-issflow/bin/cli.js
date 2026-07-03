@@ -346,7 +346,7 @@ function main() {
   for (const w of warnings) log(`  ! ${w}`);
   log(NEXT_STEPS[TOOL] || NEXT_STEPS.claude);
   if (!CI && !DOCKER) log('Headless feature lane: re-run with --ci (GitHub Action) and/or --docker (container runner).');
-  log('New to the kit? Plain-language guide: https://github.com/iAmStarter/istartsoftflow/blob/main/HOW-TO-USE.md (TH: HOW-TO-USE.th.md)');
+  log('New to the kit? Plain-language guide (EN/TH): https://iamstarter.github.io/istartsoftflow/how-to-use.html');
 }
 
 main();
