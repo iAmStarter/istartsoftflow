@@ -28,6 +28,10 @@ RUN useradd --create-home --shell /bin/sh runner
 USER runner
 WORKDIR /work
 
+# the mounted repo is owned by the HOST uid, not `runner` — without this every
+# git command fails with "detected dubious ownership in repository".
+RUN git config --global --add safe.directory '*'
+
 # headless marker — /feature degrades every hard-stop to a BLOCKED report + clean exit.
 ENV ISSFLOW_HEADLESS=1
 

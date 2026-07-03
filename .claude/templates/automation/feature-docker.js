@@ -82,16 +82,17 @@ if (useWorktree) {
   console.log(`feature-docker: parallel lane — this run is isolated in ${wt}; your checkout stays untouched.`);
 }
 
-console.log(`feature-docker: running /feature ${doc} in ${IMAGE} (repo mounted at /work)`);
-const args = [
-  'run', '--rm',
-  '--entrypoint', 'claude',
-  '-v', `${mountDir}:/work`, '-w', '/work',
-];
-// a worktree's .git is a FILE pointing at the main repo's .git by absolute host
-// path — mount the main repo at that same path so git resolves inside the
-// container. (Path-identical mounts: Linux/macOS; on Windows use the default mode.)
-if (useWorktree) args.push('-v', `${repo}:${repo}`);
+console.log(`feature-docker: running /feature ${doc} in ${IMAGE}`);
+const args = ['run', '--rm', '--entrypoint', 'claude'];
+if (useWorktree) {
+  // a worktree's git metadata references BOTH trees by absolute HOST path
+  // (.git file -> main .git/worktrees/<n>; gitdir file -> back to the worktree).
+  // Mount both at their host paths so every pointer resolves in-container.
+  // (Path-identical mounts: Linux/macOS; on Windows use the default mode.)
+  args.push('-v', `${repo}:${repo}`, '-v', `${mountDir}:${mountDir}`, '-w', mountDir);
+} else {
+  args.push('-v', `${mountDir}:/work`, '-w', '/work');
+}
 args.push(
   '-e', 'ANTHROPIC_API_KEY',
   '-e', 'ISSFLOW_HEADLESS=1'
