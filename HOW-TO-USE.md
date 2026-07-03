@@ -111,7 +111,7 @@ smallest change that works — with a regression check so nothing else breaks.
 
 ---
 
-## All commands, translated to human
+## All commands
 
 | Type | It means |
 |---|---|
