@@ -1,8 +1,8 @@
-# How to use iStartSoftFlow (plain-language guide)
+# How to use iStartSoftFlow
 
 > ฉบับภาษาไทย: [HOW-TO-USE.th.md](./HOW-TO-USE.th.md)
 
-## What is this, in plain words?
+## What is this?
 
 When you ask an AI to write code, it usually "guesses and goes" — fast, but
 things break, it loops on fixes, and your AI bill grows.

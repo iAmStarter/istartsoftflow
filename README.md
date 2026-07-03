@@ -31,7 +31,7 @@ Actions) · `--docker` (headless feature lane in a container) · `--dry-run` (wr
 nothing) · `--force` (overwrite kit files; default keeps yours and writes conflicts
 as `<file>.issflow-new`).
 
-## How to use (plain language)
+## How to use
 
 You don't need all 20 commands — **three cover most days**. Full beginner
 guides: [English](./HOW-TO-USE.md) · [ภาษาไทย](./HOW-TO-USE.th.md)
