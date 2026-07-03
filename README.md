@@ -31,6 +31,28 @@ Actions) · `--docker` (headless feature lane in a container) · `--dry-run` (wr
 nothing) · `--force` (overwrite kit files; default keeps yours and writes conflicts
 as `<file>.issflow-new`).
 
+## How to use (plain language)
+
+You don't need all 20 commands — **three cover most days**. Full beginner
+guides: [English](./HOW-TO-USE.md) · [ภาษาไทย](./HOW-TO-USE.th.md)
+
+1. **Brand-new project** → `/overview` — it interviews you like a good PM,
+   writes a plan, and stops for **your approval** (a real lock: source files
+   can't be edited while the plan is unapproved). Then `/phase` builds it slice
+   by slice, tests first.
+2. **Add a feature to an existing product** → `/feature new <name>` gives you a
+   form; fill it in normal human language; flip `Approval: PENDING` →
+   `APPROVED <you> <date>`; run `/feature` and walk away. You come back to a
+   tested branch plus a human test sheet (`TEST-PLAN.md`) — click through it,
+   then merge.
+3. **Tiny fix** → `/quick <describe it>` — it repeats its understanding back,
+   waits for your confirm, then makes the smallest change with a regression check.
+
+It stops to ask you at exactly four kinds of moments: confirming it understood a
+new task · approvals (plan / feature doc / price) · dangerous actions (prod
+deploy, deletions, pushes) · final UAT + the merge. Everything in between runs
+itself.
+
 ## Supported tools
 
 One source of truth (`.claude/` + `AGENTS.md`); the installer writes the right
