@@ -146,6 +146,12 @@ All slices done + full feature suite green -> check gate `build-green`.
 - Self-review: reread the diff against FEATURE.md acceptance criteria — every
   criterion maps to a test; every assumption still holds.
 - Run the regression corpus (`scripts/regression.sh`) + the full real suite.
+  No regression corpus in this repo (fresh brownfield install)? -> run the
+  project's OWN full test suite (the test command declared in OVERVIEW.md, or
+  the repo's obvious one — package.json test script, make test, pytest, …) and
+  note "corpus: n/a (brownfield)" in the summary. NOTHING runnable at all ->
+  that is a hard-stop: a feature cannot be verified green on a repo with no
+  tests; say so instead of pretending.
   Green -> check gates `review-harden` + `regression-green`.
 
 ## 7. MANUAL TEST PLAN

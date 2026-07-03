@@ -21,11 +21,16 @@ If any fail -> STOP, tell me, recommend `/phase`.
 (Hard rule 10: never route phase-worthy work through `/quick` to dodge the RED gate.)
 
 Steps:
+0. UNDERSTAND-FIRST (hard rule 14): brief back in 2–3 lines — the change as you
+   understand it · file(s) you'll touch · blast radius — and WAIT for my confirm.
+   One cheap turn beats redoing a misunderstood edit. (Already confirmed in this
+   conversation? say so and proceed — don't re-ask the same understanding.)
 1. grep docs/ISSUES.md for anything related.
 2. Make the change. Smallest diff that works.
 3. Run it — lint/typecheck/smoke. Show me result.
-4. REGRESSION GUARD: run `scripts/regression.sh` (mock corpus). A break BLOCKS the
-   `/quick` — surface it to me and stop. No agent chain is added.
+4. REGRESSION GUARD: run `scripts/regression.sh` (mock corpus). No corpus in this
+   repo? run the project's own test suite instead (or the touched area's tests).
+   A break BLOCKS the `/quick` — surface it to me and stop. No agent chain is added.
 5. Error you cannot fix in 2 tries -> STOP. Recommend `/phase`.
 6. Change revealed a bug -> `/log-issue`.
 7. ARCHITECTURE SELF-CHECK: touched an agent, hook, command, or workflow rule?

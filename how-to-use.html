@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>How to use iStartSoftFlow — plain-language guide</title>
+<meta name="description" content="The plain-language guide to iStartSoftFlow: what it is, install in 1 minute, the three everyday commands, every command in one human sentence, and an honest FAQ." />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<style>
+  :root{
+    --bg:#f6f8fb; --surface:#ffffff; --surface-2:#eef3f8; --line:#dbe3ee;
+    --ink:#162033; --muted:#5d6a7d; --dim:#8a95a6;
+    --violet:#635bff; --violet-deep:#4b45cc; --teal-deep:#0a6b60; --green:#15803d;
+    --shadow:0 18px 50px rgba(22,32,51,.12); --card-sh:0 8px 22px rgba(22,32,51,.05);
+    --radius:8px; --maxw:860px;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif;
+  }
+  *{box-sizing:border-box;min-width:0}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--violet-deep)} a:hover{color:var(--violet)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  code{font-family:var(--mono);font-size:.88em;background:var(--surface-2);color:#243049;padding:.1em .42em;border-radius:6px;border:1px solid var(--line)}
+  h1{font-size:clamp(30px,5vw,44px);line-height:1.1;margin:.2em 0 .4em;font-weight:800}
+  h2{font-size:clamp(22px,3vw,28px);margin:2.2em 0 .5em;font-weight:800}
+  h3{font-size:1.05rem;margin:1.4em 0 .4em;font-weight:800}
+  .muted{color:var(--muted)}
+  a:focus-visible{outline:2px solid var(--violet);outline-offset:2px;border-radius:6px}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+  .langradio{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+  .en{display:inline} .th{display:none}
+  #lang-th:checked ~ * .en{display:none}
+  #lang-th:checked ~ * .th{display:inline}
+
+  nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(18px);background:rgba(255,255,255,.9);border-bottom:1px solid rgba(219,227,238,.84)}
+  nav .wrap{display:flex;align-items:center;gap:14px;padding-top:14px;padding-bottom:14px;max-width:1180px}
+  .brand{font-weight:800;display:flex;align-items:center;gap:10px;font-size:1rem;color:var(--ink);text-decoration:none}
+  .dot{width:30px;height:30px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:#fff;font:800 10px/1 var(--sans);letter-spacing:-.3px}
+  nav .sp{margin-left:auto}
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+  .lang label{color:var(--muted);font:700 .78rem/1 var(--sans);padding:8px 13px;cursor:pointer;user-select:none}
+  #lang-en:checked ~ * label[for="lang-en"],
+  #lang-th:checked ~ * label[for="lang-th"]{background:var(--ink);color:#fff}
+
+  header.top{padding:52px 0 6px}
+  .ey{display:inline-flex;align-items:center;gap:8px;border:1px solid #c8f3ed;border-radius:999px;background:#ecfbf8;color:#087c70;padding:7px 12px;font-size:.8rem;font-weight:800}
+
+  .cmd{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-family:var(--mono);font-size:.92rem;box-shadow:var(--card-sh);margin:14px 0;overflow-x:auto}
+  .cmd code{background:none;border:none;padding:0;white-space:nowrap}
+  .cmd .pp{color:var(--teal-deep)}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--card-sh);margin:14px 0}
+  ol.big{padding-left:1.3em;margin:.4em 0}
+  ol.big>li{margin:.55em 0}
+  ul.tick{list-style:none;padding:0;margin:.4em 0}
+  ul.tick li{padding:7px 0 7px 26px;position:relative;color:var(--muted)}
+  ul.tick li::before{content:"";position:absolute;left:2px;top:.95em;width:12px;height:7px;border-left:2.4px solid var(--green);border-bottom:2.4px solid var(--green);transform:rotate(-45deg) translateY(-50%)}
+  ul.tick b{color:var(--ink)}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:.9rem;border-radius:8px;border:1px solid var(--line);overflow:hidden;background:#fff;box-shadow:var(--card-sh)}
+  .tbl th,.tbl td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{background:#f0f4f9;color:#39465a;font-weight:800;font-size:.74rem;letter-spacing:.03em;text-transform:uppercase}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl td:first-child{white-space:nowrap;font-family:var(--mono);font-size:.84rem;color:var(--teal-deep);font-weight:700}
+  .scroll{overflow-x:auto;margin:14px 0}
+
+  details.faq{border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:var(--card-sh);margin:10px 0}
+  details.faq summary{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;list-style:none;font-weight:800}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq .caret{margin-left:auto;color:var(--dim);transition:transform .22s;display:flex}
+  details.faq[open] .caret{transform:rotate(90deg)}
+  details.faq .body{padding:0 18px 16px;color:var(--muted)}
+
+  .note{border-left:3px solid var(--violet);background:#f4f3ff;border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0;color:#3d3a7a}
+  footer{margin-top:64px;padding:38px 0;border-top:1px solid var(--line);background:#101827;color:#aeb9ca;font-size:.9rem}
+  footer .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center;max-width:1180px}
+  footer a{color:#aeb9ca} footer a:hover{color:#fff} footer .sp{margin-left:auto}
+</style>
+</head>
+<body>
+<input type="radio" name="lang" id="lang-en" class="langradio" checked>
+<input type="radio" name="lang" id="lang-th" class="langradio">
+
+<nav><div class="wrap">
+  <a class="brand" href="./index.html"><span class="dot">iSS</span>iStartSoftFlow</a>
+  <span class="muted" style="font-size:.9rem">/ <span class="en">How to use</span><span class="th">คู่มือใช้งาน</span></span>
+  <span class="sp"></span>
+  <span class="lang" role="group" aria-label="language">
+    <label for="lang-en">EN</label><label for="lang-th">ไทย</label>
+  </span>
+</div></nav>
+
+<main class="wrap">
+<header class="top">
+  <div class="ey"><span class="en">plain-language guide</span><span class="th">คู่มือฉบับภาษาคน</span></div>
+  <h1><span class="en">How to use iStartSoftFlow</span><span class="th">วิธีใช้งาน iStartSoftFlow</span></h1>
+  <p class="muted" style="font-size:1.05rem">
+    <span class="en">No jargon without an explanation. Ten minutes here and you can run the whole kit.</span>
+    <span class="th">ไม่มีศัพท์ยากที่ไม่อธิบาย อ่านสิบนาทีก็ใช้งานได้ทั้งชุด</span>
+  </p>
+</header>
+
+<h2><span class="en">What is this, in plain words?</span><span class="th">นี่คืออะไร (อธิบายแบบบ้าน ๆ)</span></h2>
+<p><span class="en">When you ask an AI to write code, it usually "guesses and goes" — fast, but things break, it loops on fixes, and your AI bill grows.</span>
+<span class="th">ปกติเวลาให้ AI เขียนโค้ด มันมักจะ "เดาแล้วลุย" — ทำเร็วแต่พังบ่อย วนแก้ไปเรื่อย เปลืองค่า AI ขึ้นเรื่อย ๆ</span></p>
+<p><span class="en"><b>iStartSoftFlow is a rulebook + a team of helpers that makes the AI work like a professional team:</b> understand first → plan → <b>get your approval</b> → build one slice at a time → test everything → deliver with a test sheet for you.</span>
+<span class="th"><b>iStartSoftFlow คือชุดกฎ + ทีมผู้ช่วย ที่จับ AI มาทำงานแบบมืออาชีพ:</b> ถามให้เข้าใจก่อน → วางแผน → <b>ให้คุณอนุมัติ</b> → ลงมือทำทีละส่วน → เทสต์ทุกครั้ง → ส่งงานพร้อมใบทดสอบ</span></p>
+<div class="note"><span class="en">Think of it as upgrading from "an intern who guesses" to "a team with a project manager" — and the important rules are enforced by small programs (hooks) the AI <b>cannot skip</b>, not by politely asking it. Free (MIT); you pay only for the AI you already use.</span>
+<span class="th">เปรียบง่าย ๆ: เหมือนเปลี่ยนจาก "เด็กฝึกงานที่เดางานเก่ง" เป็น "ทีมที่มีหัวหน้าโปรเจกต์คุมงาน" — โดยกฎสำคัญถูกบังคับด้วยโปรแกรมเล็ก ๆ (เรียกว่า hook) ที่ AI <b>แอบข้ามไม่ได้</b> ไม่ใช่แค่ขอร้องปากเปล่า ของฟรี (MIT) จ่ายแค่ค่า AI ที่ใช้อยู่แล้ว</span></div>
+
+<h2><span class="en">What you need first</span><span class="th">ต้องมีอะไรก่อนเริ่ม</span></h2>
+<ul class="tick">
+  <li><span class="en"><b>Node.js 18+</b> — check with <code>node -v</code> (get it at nodejs.org)</span><span class="th"><b>Node.js เวอร์ชัน 18 ขึ้นไป</b> — ตรวจด้วย <code>node -v</code> (ยังไม่มีโหลดที่ nodejs.org)</span></li>
+  <li><span class="en"><b>Claude Code</b> — install with <code>npm install -g @anthropic-ai/claude-code</code>, log in when it asks. (Codex / Cursor / Gemini / Aider also work; Claude Code gets the most features.)</span><span class="th"><b>Claude Code</b> — ติดตั้งด้วย <code>npm install -g @anthropic-ai/claude-code</code> แล้วล็อกอินตามที่มันถาม (ใช้ Codex / Cursor / Gemini / Aider ก็ได้ แต่ Claude Code ได้ครบสุด)</span></li>
+  <li><span class="en"><b>A project folder</b> — brand new or an existing codebase, both fine.</span><span class="th"><b>โฟลเดอร์โปรเจกต์</b> — งานใหม่ถอดด้ามหรือของเดิมที่มีโค้ดแล้วก็ได้</span></li>
+</ul>
+
+<h2><span class="en">Install (1 minute)</span><span class="th">ติดตั้ง (1 นาที)</span></h2>
+<p><span class="en">In your project folder:</span><span class="th">เปิด Terminal เข้าโฟลเดอร์โปรเจกต์ แล้วพิมพ์:</span></p>
+<div class="cmd"><code><span class="pp">$</span> npx create-issflow</code></div>
+<p><span class="en">Pick your AI tool (usually <code>claude</code>). It <b>never overwrites your files</b> — conflicts are written next to yours. Re-run any time to update. Then open your AI tool there:</span>
+<span class="th">เลือกเครื่องมือ AI ของคุณ (ส่วนใหญ่คือ <code>claude</code>) มัน<b>ไม่ทับไฟล์เดิมเด็ดขาด</b> — ถ้าชนกันจะเขียนไฟล์ใหม่แยกไว้ให้ดู ติดตั้งซ้ำเพื่ออัปเดตได้ตลอด จากนั้นเปิดเครื่องมือ AI ในโฟลเดอร์นั้น:</span></p>
+<div class="cmd"><code><span class="pp">$</span> claude</code></div>
+
+<h2><span class="en">Pick your situation</span><span class="th">ใช้ยังไง — เลือกตามสถานการณ์</span></h2>
+
+<div class="card">
+  <h3><span class="en">1 · Starting a brand-new project → </span><span class="th">1 · เริ่มโปรเจกต์ใหม่ทั้งอัน → </span><code>/overview</code></h3>
+  <p class="muted"><span class="en">It <b>interviews you</b> like a good PM: what are we building, for whom, what constraints. Answer honestly — "I don't know" is fine (it will research). Then it writes a <b>plan</b> and stops: <b>read and approve it first.</b> This is a real lock — while the plan is unapproved, the AI physically cannot edit source files. After approval, build slice by slice with <code>/phase</code>: tests written first → code until green → security check → close. Repeat until done.</span>
+  <span class="th">มันจะ<b>สัมภาษณ์คุณ</b>เหมือน PM มืออาชีพ: สร้างอะไร ให้ใครใช้ ติดข้อจำกัดอะไร ตอบตามจริง ไม่รู้บอกไม่รู้ได้ (เดี๋ยวมันไปหาข้อมูลเอง) จบแล้วมันเขียน<b>แผนงาน</b>มาให้ — <b>อ่านแล้วอนุมัติก่อน</b> นี่คือตัวล็อกจริง ๆ: แผนยังไม่อนุมัติ AI แก้ไฟล์โค้ดไม่ได้เลย อนุมัติแล้วสั่ง <code>/phase</code> สร้างทีละช่วง: เขียนเทสต์ก่อน → เขียนโค้ดจนผ่าน → ตรวจความปลอดภัย → ปิดงาน วนจนจบแผน</span></p>
+</div>
+
+<div class="card">
+  <h3><span class="en">2 · Adding a feature to an existing product → </span><span class="th">2 · เพิ่มฟีเจอร์ให้ระบบที่มีอยู่ → </span><code>/feature</code></h3>
+  <ol class="big">
+    <li><span class="en"><b>Get the work-order form:</b> <code>/feature new my-feature</code> → creates <code>docs/features/my-feature/FEATURE.md</code></span>
+        <span class="th"><b>ขอฟอร์มใบสั่งงาน:</b> <code>/feature new ชื่อฟีเจอร์</code> → ได้ไฟล์ <code>docs/features/ชื่อ/FEATURE.md</code></span></li>
+    <li><span class="en"><b>Fill it in normal human language:</b> what you want, why, what it must do, what is NOT included. Then change the top line <code>Approval: PENDING</code> → <code>Approval: APPROVED yourname date</code> — that's your signature.</span>
+        <span class="th"><b>เขียนอธิบายด้วยภาษาคนธรรมดา:</b> อยากได้อะไร ทำไม ต้องทำอะไรได้ อะไรที่<b>ไม่</b>เอา แล้วแก้บรรทัดบน <code>Approval: PENDING</code> เป็น <code>Approval: APPROVED ชื่อคุณ วันที่</code> — นี่คือลายเซ็นของคุณ</span></li>
+    <li><span class="en"><b>Release the work:</b> <code>/feature</code> — then walk away. It attacks the spec for holes → mini-plans → writes tests first, then code → hardens with adversarial review → produces a <b>human test sheet</b> → delivers a branch.</span>
+        <span class="th"><b>ปล่อยงาน:</b> <code>/feature</code> — แล้วไปทำอย่างอื่นได้เลย มันจะรุมตรวจใบสั่งงานหาช่องโหว่ → วางแผนย่อย → เขียนเทสต์ก่อนค่อยเขียนโค้ด → ตรวจซ้ำแบบโหด ๆ → ทำ<b>ใบทดสอบสำหรับมนุษย์</b> → ส่งงานกลับมาเป็น branch</span></li>
+    <li><span class="en"><b>Your only job:</b> open the generated <code>TEST-PLAN.md</code>, click through the scenarios, merge when everything passes.</span>
+        <span class="th"><b>งานของคุณมีแค่นี้:</b> เปิด <code>TEST-PLAN.md</code> ที่มันทำให้ กดทดสอบตามทีละข้อ ผ่านหมดก็รวมงาน (merge) จบ</span></li>
+  </ol>
+</div>
+
+<div class="card">
+  <h3><span class="en">3 · A tiny fix → </span><span class="th">3 · แก้งานเล็ก ๆ → </span><code>/quick</code></h3>
+  <p class="muted"><span class="en"><code>/quick describe what to change</code> — it <b>repeats its understanding back and waits for your confirm</b>, then makes the smallest change that works, with a regression check so nothing else breaks.</span>
+  <span class="th"><code>/quick อธิบายสิ่งที่อยากแก้</code> — มันจะ<b>ทวนความเข้าใจให้ฟังก่อน รอคุณยืนยัน</b> แล้วค่อยแก้ให้เล็กที่สุดเท่าที่งานสำเร็จ พร้อมรันเทสต์กันของเดิมพัง</span></p>
+</div>
+
+<h2><span class="en">All commands, translated to human</span><span class="th">คำสั่งทั้งหมด แปลเป็นภาษาคน</span></h2>
+<p class="muted"><span class="en">You only need three to be productive: <code>/overview</code> to start · <code>/feature</code> to add · <code>/quick</code> to fix.</span>
+<span class="th">จำแค่ 3 ตัวก็ทำงานได้: <code>/overview</code> เริ่มงานใหม่ · <code>/feature</code> เพิ่มของ · <code>/quick</code> แก้จุกจิก</span></p>
+<div class="scroll"><table class="tbl">
+  <tr><th><span class="en">Type</span><span class="th">พิมพ์ว่า</span></th><th><span class="en">It means</span><span class="th">มันคือ</span></th></tr>
+  <tr><td>/overview</td><td><span class="en">new project — interview + plan + your sign-off</span><span class="th">เริ่มโปรเจกต์ใหม่ — สัมภาษณ์ + วางแผน + ขอลายเซ็นคุณ</span></td></tr>
+  <tr><td>/feature new &lt;name&gt;</td><td><span class="en">get the feature work-order form</span><span class="th">ขอฟอร์มใบสั่งงานฟีเจอร์</span></td></tr>
+  <tr><td>/feature</td><td><span class="en">build the feature end-to-end, deliver branch + test sheet</span><span class="th">ทำฟีเจอร์จนจบ ส่ง branch + ใบทดสอบกลับมา</span></td></tr>
+  <tr><td>/quick …</td><td><span class="en">small fast fix</span><span class="th">แก้เล็ก ๆ เร็ว ๆ</span></td></tr>
+  <tr><td>/phase</td><td><span class="en">build the next slice of the plan</span><span class="th">สร้างงานช่วงถัดไปตามแผน</span></td></tr>
+  <tr><td>/goal set "…"</td><td><span class="en">set a big goal ("clear the feature backlog") for it to chase</span><span class="th">ตั้งเป้าใหญ่ (เช่น "เคลียร์ฟีเจอร์ค้างให้หมด") ให้มันไล่ทำเอง</span></td></tr>
+  <tr><td>/goal run</td><td><span class="en">work toward the goal until done / budget spent</span><span class="th">ไล่ทำตามเป้าจนเสร็จหรือหมดโควตาที่ตั้งไว้</span></td></tr>
+  <tr><td>/sprint run</td><td><span class="en">organize phases into Scrum sprints, driven automatically</span><span class="th">จัดงานเป็นรอบแบบ Scrum แล้วขับให้อัตโนมัติ</span></td></tr>
+  <tr><td>/propose</td><td><span class="en">client proposal with scope + price (freelance/agency work)</span><span class="th">ทำใบเสนอราคาให้ลูกค้า (งานรับจ้าง)</span></td></tr>
+  <tr><td>/change-request …</td><td><span class="en">mid-project change — impact + fair re-price, transparently</span><span class="th">ขอเปลี่ยนงานกลางทาง — คิดผลกระทบ + ราคาใหม่แบบโปร่งใส</span></td></tr>
+  <tr><td>/release</td><td><span class="en">big pre-production check (full tests + audits + human UAT)</span><span class="th">ตรวจใหญ่ก่อนขึ้นระบบจริง (เทสต์รวม + ตรวจครบ + คนทดสอบ)</span></td></tr>
+  <tr><td>/uat</td><td><span class="en">generate a human test sheet + collect results</span><span class="th">สร้างชุดทดสอบให้มนุษย์กด + เก็บผล</span></td></tr>
+  <tr><td>/ui-audit · /qa-audit · /security-audit</td><td><span class="en">whole-product health checks: UI / quality / security</span><span class="th">ตรวจสุขภาพทั้งระบบ: หน้าตา / คุณภาพ / ความปลอดภัย</span></td></tr>
+  <tr><td>/replan</td><td><span class="en">change the plan (needs your sign-off again)</span><span class="th">แก้แผน (ต้องขอลายเซ็นคุณใหม่)</span></td></tr>
+  <tr><td>/synthesize</td><td><span class="en">compress notes to keep the AI bill down</span><span class="th">สรุปย่องานเก็บไว้ ประหยัดค่า AI รอบถัดไป</span></td></tr>
+  <tr><td>/log-issue · /log-decision · /runbook</td><td><span class="en">write down problems / decisions / recovery steps</span><span class="th">จดปัญหา / จดการตัดสินใจ / จดวิธีกู้ระบบ</span></td></tr>
+  <tr><td>/store-wisdom</td><td><span class="en">keep lessons for future projects</span><span class="th">เก็บบทเรียนไปใช้ข้ามโปรเจกต์</span></td></tr>
+  <tr><td>/unstuck</td><td><span class="en">it's stuck — force a proper research retreat</span><span class="th">มันตันแล้ว — สั่งถอยไปหาข้อมูลใหม่แบบจริงจัง</span></td></tr>
+</table></div>
+
+<h2><span class="en">When does it stop and ask YOU?</span><span class="th">มันจะ "หยุดถามคุณ" เมื่อไหร่บ้าง</span></h2>
+<ul class="tick">
+  <li><span class="en"><b>Before starting any new task</b> — it briefs its understanding back; you confirm first (a wrong understanding wastes far more money than one question).</span><span class="th"><b>ก่อนเริ่มงานใหม่ทุกครั้ง</b> — มันเล่าความเข้าใจให้ฟังก่อน คุณยืนยันแล้วค่อยลงมือ (เข้าใจผิดแล้วทำ เสียเงินกว่าถาม 1 คำถามหลายเท่า)</span></li>
+  <li><span class="en"><b>Approvals</b> — the plan, the feature doc, the price. No signature, no build.</span><span class="th"><b>การอนุมัติ</b> — แผนงาน ใบสั่งฟีเจอร์ ราคา — ไม่มีลายเซ็นคุณ = ไม่เริ่ม</span></li>
+  <li><span class="en"><b>Dangerous things</b> — production deploys, deleting data, sending things out.</span><span class="th"><b>ของอันตราย</b> — ขึ้นระบบจริง ลบข้อมูล ส่งอะไรออกนอกบ้าน — หยุดรอคุณเสมอ</span></li>
+  <li><span class="en"><b>Final testing (UAT) + the merge</b> — the last gate is always a person.</span><span class="th"><b>ทดสอบรอบสุดท้าย (UAT) + กด merge</b> — ด่านสุดท้ายเป็นของมนุษย์ตลอด</span></li>
+</ul>
+
+<h2><span class="en">FAQ</span><span class="th">คำถามที่เจอบ่อย</span></h2>
+<details class="faq"><summary><span class="en">Do I need to know how to code?</span><span class="th">ไม่เขียนโค้ดเป็น ใช้ได้ไหม?</span><span class="caret">›</span></summary><div class="body"><span class="en">No — your job is describing what you want, clicking through the test sheet, and approving. Reading code helps you review deeper, but isn't required.</span><span class="th">ได้ — หน้าที่คุณคืออธิบายสิ่งที่อยากได้ กดทดสอบตามใบที่มันทำให้ และตัดสินใจอนุมัติ อ่านโค้ดออกจะยิ่งตรวจได้ลึก แต่ไม่บังคับ</span></div></details>
+<details class="faq"><summary><span class="en">What does it cost?</span><span class="th">เสียเงินเท่าไหร่?</span><span class="caret">›</span></summary><div class="body"><span class="en">The kit is free (MIT). You pay only your existing AI usage — and it's built frugal: loads only what's needed, compresses notes between phases, routes work to cheaper models where safe.</span><span class="th">ชุดนี้ฟรี (MIT) จ่ายแค่ค่า AI ตามแพ็กเกจที่ใช้อยู่แล้ว และมันถูกออกแบบมาประหยัด: โหลดเฉพาะที่ใช้ สรุปย่อระหว่างทาง ส่งงานให้โมเดลถูกกว่าเมื่อปลอดภัย</span></div></details>
+<details class="faq"><summary><span class="en">Which languages/frameworks?</span><span class="th">ใช้กับภาษา/เฟรมเวิร์กอะไรได้บ้าง?</span><span class="caret">›</span></summary><div class="body"><span class="en">All of them. It pins a <i>process</i>, not a stack — you declare your stack once during <code>/overview</code>.</span><span class="th">ทุกอัน — มันคุม "วิธีทำงาน" ไม่ผูกกับภาษาไหน ประกาศ stack ของคุณครั้งเดียวตอน <code>/overview</code></span></div></details>
+<details class="faq"><summary><span class="en">What if the AI makes mistakes?</span><span class="th">ถ้า AI ทำพลาดล่ะ?</span><span class="caret">›</span></summary><div class="body"><span class="en">Tests are written before code so mistakes get caught; after 3 failed fix attempts it must stop and report; every problem is logged so it isn't repeated; and all work lives on a separate branch — nothing is real until you merge.</span><span class="th">มันเขียนเทสต์ก่อนโค้ดเสมอ พลาดจึงมีตัวจับ · แก้เกิน 3 ครั้งต้องหยุดรายงาน · ทุกปัญหาถูกจดกันซ้ำ · งานอยู่บน branch แยก — ของจริงไม่พังจนกว่าคุณ merge</span></div></details>
+<details class="faq"><summary><span class="en">Can it work while I sleep?</span><span class="th">อยากให้มันทำงานเองตอนกลางคืน / ตอนไม่อยู่?</span><span class="caret">›</span></summary><div class="body"><span class="en">Yes — install with <code>npx create-issflow --ci</code> (GitHub: label an issue <code>feature:approved</code> and it runs) or <code>--docker</code> (a safe box on your machine: <code>node scripts/feature-docker.js docs/features/&lt;name&gt;/FEATURE.md</code>). Needs an Anthropic API key.</span><span class="th">ได้ — ติดตั้งด้วย <code>npx create-issflow --ci</code> (ผ่าน GitHub: ติดป้าย <code>feature:approved</code> ที่ issue แล้วมันทำเอง) หรือ <code>--docker</code> (รันในกล่องปลอดภัยบนเครื่องคุณ: <code>node scripts/feature-docker.js docs/features/ชื่อ/FEATURE.md</code>) ต้องมี API key ของ Anthropic</span></div></details>
+<details class="faq"><summary><span class="en">How do I uninstall?</span><span class="th">เลิกใช้ยังไง?</span><span class="caret">›</span></summary><div class="body"><span class="en">Delete the <code>.claude/</code> folder and <code>AGENTS.md</code>. Your code is untouched.</span><span class="th">ลบโฟลเดอร์ <code>.claude/</code> กับไฟล์ <code>AGENTS.md</code> ทิ้ง — โค้ดของคุณไม่ถูกแตะ</span></div></details>
+
+<h2><span class="en">Read next</span><span class="th">อ่านต่อ</span></h2>
+<ul class="tick">
+  <li><a href="./index.html"><span class="en">Back to the overview page</span><span class="th">กลับหน้าหลัก</span></a></li>
+  <li><span class="en"><a href="https://github.com/iAmStarter/istartsoftflow">GitHub</a> — the full rulebook lives at <code>.claude/istartsoft-flow/METHODOLOGY.md</code> after install</span><span class="th"><a href="https://github.com/iAmStarter/istartsoftflow">GitHub</a> — กฎฉบับเต็มอยู่ที่ <code>.claude/istartsoft-flow/METHODOLOGY.md</code> หลังติดตั้ง</span></li>
+</ul>
+</main>
+
+<footer><div class="wrap">
+  <a class="brand" href="./index.html" style="color:#fff"><span class="dot" style="background:var(--violet)">iSS</span>iStartSoftFlow</a>
+  <a href="https://github.com/iAmStarter/istartsoftflow">GitHub</a>
+  <a href="https://www.npmjs.com/package/create-issflow">npm</a>
+  <span class="sp">© 2026 iStartSoft</span>
+</div></footer>
+
+<script>
+  /* same language persistence as index.html — the choice carries across pages */
+  (function(){
+    var en = document.getElementById('lang-en'), th = document.getElementById('lang-th');
+    if (!en || !th) return;
+    var saved = null;
+    try { saved = localStorage.getItem('issflow-lang'); } catch(e){}
+    var lang = saved || ((navigator.language||'en').toLowerCase().indexOf('th')===0 ? 'th' : 'en');
+    if (lang === 'th') th.checked = true; else en.checked = true;
+    function persist(){ try { localStorage.setItem('issflow-lang', th.checked ? 'th' : 'en'); } catch(e){} document.documentElement.lang = th.checked ? 'th' : 'en'; }
+    en.addEventListener('change', persist); th.addEventListener('change', persist);
+    document.documentElement.lang = lang;
+  })();
+</script>
+</body>
+</html>
