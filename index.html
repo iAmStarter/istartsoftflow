@@ -216,7 +216,7 @@
     <a href="#howto"><code>/quick</code> <span class="en">tiny fix</span><span class="th">แก้จุกจิก</span></a>
   </div>
   <div class="cmd">
-    <code><span class="pp">$</span> npx create-issflow <span class="muted">--tool=claude</span></code>
+    <code><span class="pp">$</span> npx create-issflow</code>
     <button class="copy" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText('npx create-issflow').then(()=>{this.textContent='copied';setTimeout(()=>this.textContent='copy',1200)})">copy</button>
   </div>
   <div class="cta">
@@ -404,8 +404,8 @@
     <tr><td><span class="en">Any AGENTS.md tool</span><span class="th">ทุก tool ที่อ่าน AGENTS.md</span></td><td><code>AGENTS.md</code></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
   </table></div>
   <p class="muted" style="margin-top:14px;font-size:.86rem">
-    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> · <code>--ci</code> (headless via GitHub Actions) · <code>--docker</code> (headless in a container) · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Non-destructive: conflicts are written as <code>&lt;file&gt;.issflow-new</code>.</span>
-    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> · <code>--ci</code> (headless ผ่าน GitHub Actions) · <code>--docker</code> (headless ใน container) · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> — ไม่ทับไฟล์เดิม: ที่ชนกันจะเขียนเป็น <code>&lt;file&gt;.issflow-new</code></span>
+    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>omit = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Primary entry <code>AGENTS.md</code>; Claude Code also gets a thin <code>CLAUDE.md</code> shim. Non-destructive: conflicts → <code>&lt;file&gt;.issflow-new</code>.</span>
+    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>ไม่ใส่ = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> จุดเข้าหลัก <code>AGENTS.md</code> · Claude Code ได้ <code>CLAUDE.md</code> บาง ๆ ด้วย — ไม่ทับไฟล์เดิม: ชนกัน → <code>&lt;file&gt;.issflow-new</code></span>
   </p>
 </div></section>
 
@@ -442,7 +442,7 @@
   <ol class="steps">
     <li><div class="stepno">1</div>
       <details class="stepd" open><summary>
-        <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow --tool=claude</code></span>
+        <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow</code></span>
         <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </summary><div class="stepbody">
         <p><span class="en">Scaffolds <code>.claude/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.claude/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>

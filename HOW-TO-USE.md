@@ -34,10 +34,13 @@ Free (MIT). You only pay for the AI you already use.
 In your project folder:
 
 ```bash
-npx create-issflow
+npx create-issflow                  # omit --tool = all adapters
+npx create-issflow --tool=cursor    # or: claude | codex | gemini | aider | all
 ```
 
-Pick your AI tool (usually `claude`). Done.
+Done. Shared entry is **`AGENTS.md`** (plus the portable kit in `.claude/`).
+Claude Code also gets a thin `CLAUDE.md` shim (`@AGENTS.md`) because that host
+only auto-loads that filename.
 
 - **It never overwrites your files** — conflicts are written next to yours for review.
 - Re-run any time to update.

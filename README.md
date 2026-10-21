@@ -19,17 +19,16 @@ the first vertical slice; otherwise Phase 0 provisions it first.
 
 ```bash
 cd my-project
-npx create-issflow                  # non-destructive: never clobbers your files
-#   ↳ prompts for your AI tool, or pass it directly:
-npx create-issflow --tool=claude    # claude | codex | cursor | gemini | aider | all
-# then open your tool — Claude Code fires the SessionStart hook automatically
+npx create-issflow                  # omit --tool = install EVERY adapter (all)
+npx create-issflow --tool=cursor    # claude | codex | cursor | gemini | aider | all
+# then open your tool and run:
 /overview                           # bootstrap the project
 ```
 
-Flags: `--tool=<name>` (skip the prompt) · `--ci` (headless feature lane via GitHub
-Actions) · `--docker` (headless feature lane in a container) · `--dry-run` (write
-nothing) · `--force` (overwrite kit files; default keeps yours and writes conflicts
-as `<file>.issflow-new`).
+Flags: `--tool=<name>` (omit = all adapters) · `--ci` (headless feature lane via
+GitHub Actions) · `--docker` (headless feature lane in a container) · `--dry-run`
+(write nothing) · `--force` (overwrite kit files; default keeps yours and writes
+conflicts as `<file>.issflow-new`).
 
 ## How to use
 
@@ -60,20 +59,20 @@ runs itself.
 
 ## Supported tools
 
-One source of truth (`.claude/` + `AGENTS.md`); the installer writes the right
-adapter per tool. Claude Code only auto-loads `CLAUDE.md`, so the installer writes
-a one-line `CLAUDE.md` that imports `AGENTS.md` (`@AGENTS.md`) — full methodology,
-still one source. Unsupported features degrade to model-run rituals — they never
-silently vanish.
+**Primary entry: `AGENTS.md` (open standard) + portable kit in `.claude/`.**
+The installer writes a per-tool adapter on top. Claude Code only auto-loads
+`CLAUDE.md`, so when that adapter is included the installer also writes a thin
+`CLAUDE.md` that imports `@AGENTS.md` — one source of truth, host-required filename.
+Unsupported features degrade to model-run rituals — they never silently vanish.
 
 | Tool | Entry | Commands | Subagents | Lifecycle hooks |
 |------|-------|----------|-----------|-----------------|
-| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse · PreCompact · SubagentStop · Stop |
+| **Any AGENTS.md host** | `AGENTS.md` | reference | model-run | model-run |
 | **Codex CLI** | `AGENTS.md` (native) | read as prompts | reference | model-run |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | read as prompts | reference | model-run |
 | **Aider** | `.aider.conf.yml` → `AGENTS.md` | reference | model-run | model-run |
-| **Any AGENTS.md tool** | `AGENTS.md` | reference | model-run | model-run |
+| **Claude Code** | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse · PreCompact · SubagentStop · Stop |
 
 ## What you get (in `<project>/.claude/`)
 
