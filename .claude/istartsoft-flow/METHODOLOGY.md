@@ -1,16 +1,20 @@
 # iStartSoftFlow — portable agent methodology (single source of truth)
 
-> **The iStartSoft execution loop.** Namespaced under `.claude/istartsoft-flow/`
-> so it coexists with a repo's own agent-instruction files (`CLAUDE.md`,
-> `AGENTS.md`, `GEMINI.md`, …) — it does NOT replace them. The kit is
-> **stack-agnostic and tool-agnostic**: it pins a *process*, not a *stack*.
-> Declare your stack (language, framework, infra, auth, test + E2E runner,
-> planning source) once in `docs/OVERVIEW.md`; every rule below references *your
-> declared stack* and hardcodes none. If infra is **managed** (a PaaS + a managed
-> datastore), Phase 0 (infra) is N/A and phases begin at the first vertical slice;
-> otherwise Phase 0 provisions infra first. Planning source of truth stays in your
-> PRD / architecture / stories (e.g. BMAD / iSSM); iStartSoftFlow is the execution
-> loop layered on top.
+> **The iStartSoft execution loop.** Lives under `.claude/istartsoft-flow/` as
+> part of the **portable kit**. The directory name `.claude/` is a **host
+> convention** (several agents load commands/hooks from that path) — not
+> Claude-only branding. Primary human entry is root **`AGENTS.md`** (open
+> standard). `CLAUDE.md` / `GEMINI.md` / … are thin host adapters that point
+> here; they do NOT replace this file.
+>
+> The kit is **stack-agnostic and tool-agnostic**: it pins a *process*, not a
+> *stack*. Declare your stack (language, framework, infra, auth, test + E2E
+> runner, planning source) once in `docs/OVERVIEW.md`; every rule below
+> references *your declared stack* and hardcodes none. If infra is **managed**
+> (a PaaS + a managed datastore), Phase 0 (infra) is N/A and phases begin at the
+> first vertical slice; otherwise Phase 0 provisions infra first. Planning source
+> of truth stays in your PRD / architecture / stories (e.g. BMAD / iSSM);
+> iStartSoftFlow is the execution loop layered on top.
 
 <!-- ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0 -->
 > **SENTINEL.** The HTML comment above (`ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0`) is a
@@ -23,10 +27,11 @@
 > open `AGENTS.md` standard, get the full methodology from here.
 
 > **Anti-drift invariant (load-bearing).** Every rule lives in exactly ONE place:
-> this file. `CLAUDE.md` restates NO rule — it only maps roles to Claude-native
-> files and says "native mechanism X performs ritual Y automatically." A rule and
-> its automation may never contradict. Duplication between files is an
-> architectural defect, not a convenience.
+> this file. Host entry files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, …) restate
+> NO rule — they only index this file and wire host-native mechanisms
+> ("mechanism X performs ritual Y automatically"). A rule and its automation may
+> never contradict. Duplication between files is an architectural defect, not a
+> convenience.
 
 Caveman ULTRA mode always on. Apply the `karpathy-guidelines` skill (engineering
 discipline) on every coding and debugging task. Apply the `ux-design` skill (the UX
@@ -694,19 +699,19 @@ the KB. The kit works normally without a KB.
 
 ## Capability matrix (which host gets what)
 
-The kit is single-source (`.claude/` + this file). `create-issflow --tool=<host>`
-writes the right adapter; unsupported features degrade to model-run rituals, never
-silently vanish. The portable assets (agents, commands, skills, methodology) are
-the same everywhere — only the *wiring* differs.
+Single-source kit: **`.claude/` tree** (portable) + **this file** (rules) + root
+**`AGENTS.md`** (open-standard entry). `create-issflow --tool=<host>` (omit =
+all) writes adapters; unsupported features degrade to model-run rituals, never
+silently vanish. Assets are the same everywhere — only the *wiring* differs.
 
 | Host | Entry file | Commands | Subagents | Lifecycle hooks | Shared KB |
 |------|-----------|----------|-----------|-----------------|-----------|
-| **Claude Code** (reference) | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse (context watchdog + rule-13 plan gate) · PreCompact · SubagentStop · Stop (feature gate) | yes |
+| **Any AGENTS.md host** | `AGENTS.md` | read as reference | model-run | model-run | yes |
 | **Codex CLI** | `AGENTS.md` (native) | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |
 | **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` (sessionStart · subagentStop) | yes |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | `.claude/commands/` (read as prompts) | read as reference | model-run | yes |
 | **Aider** | `.aider.conf.yml` → `AGENTS.md` | read as reference | model-run | model-run | yes |
-| **Any AGENTS.md host** | `AGENTS.md` | read as reference | model-run | model-run | yes |
+| **Claude Code** | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse (context watchdog + plan gate) · PreCompact · SubagentStop · Stop | yes |
 
 "model-run" = the host can't automate the ritual, so the model performs it by hand
 (SESSION-OPEN at the top of each session; the COMPRESS snapshot before a reset).

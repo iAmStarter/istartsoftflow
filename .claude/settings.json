@@ -26,7 +26,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/scripts/claude-md-notice.js"
+            "command": "node .claude/scripts/entry-notice.js"
           }
         ]
       }
