@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// build.js — rebuild template/ from the repo-root .claude kit.
+// build.js — rebuild template/ from the repo-root .issflow kit.
 // Pure Node, cross-platform (works in cmd / PowerShell / sh / bash).
 // Runs automatically on `npm publish` (prepublishOnly) and via `npm run build`.
 'use strict';
@@ -7,10 +7,10 @@ const fs = require('fs');
 const path = require('path');
 
 const HERE = __dirname;
-const SRC = path.join(HERE, '..', '.claude');   // repo-root .claude (source of truth)
-const TPL = path.join(HERE, 'template', '.claude');
+const SRC = path.join(HERE, '..', '.issflow');   // repo-root portable kit (SoT)
+const TPL = path.join(HERE, 'template', '.issflow');
 const DIRS = ['agents', 'commands', 'skills', 'hooks', 'istartsoft-flow', 'templates'];
-const ROOT_FILES = ['README.md']; // human map of the kit (why .claude/, layout)
+const ROOT_FILES = ['README.md', 'flow-config.json']; // map + knobs
 
 fs.rmSync(path.join(HERE, 'template'), { recursive: true, force: true });
 fs.mkdirSync(TPL, { recursive: true });

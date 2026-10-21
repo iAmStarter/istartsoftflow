@@ -385,8 +385,8 @@
   <div class="ey"><span class="en">install</span><span class="th">ติดตั้ง</span></div>
   <h2><span class="en">One kit, six tools</span><span class="th">หนึ่งชุด ใช้ได้ 6 เครื่องมือ</span></h2>
   <p class="muted">
-    <span class="en">Single source of truth (<code>.claude/</code> + <code>AGENTS.md</code>); the installer writes the right adapter. Unsupported features degrade to model-run rituals — never silently dropped.</span>
-    <span class="th">แหล่งความจริงเดียว (<code>.claude/</code> + <code>AGENTS.md</code>); installer เขียน adapter ให้ตรงเครื่องมือ ฟีเจอร์ที่ไม่รองรับจะ degrade เป็น ritual แบบ model-run — ไม่หายเงียบ</span>
+    <span class="en">Single source of truth (<code>.issflow/</code> + <code>AGENTS.md</code>); the installer writes the right adapter. Unsupported features degrade to model-run rituals — never silently dropped.</span>
+    <span class="th">แหล่งความจริงเดียว (<code>.issflow/</code> + <code>AGENTS.md</code>); installer เขียน adapter ให้ตรงเครื่องมือ ฟีเจอร์ที่ไม่รองรับจะ degrade เป็น ritual แบบ model-run — ไม่หายเงียบ</span>
   </p>
   <div class="scroll" style="margin-top:22px"><table class="tbl">
     <tr>
@@ -396,16 +396,16 @@
       <th scope="col"><span class="en">Subagents</span><span class="th">ซับเอเจนต์</span></th>
       <th scope="col"><span class="en">Lifecycle hooks</span><span class="th">ฮุก</span></th>
     </tr>
-    <tr><td>Claude Code <span class="tag">ref</span></td><td><code>CLAUDE.md (@AGENTS.md)</code> + <code>.claude/</code></td><td><code>.claude/commands/</code></td><td class="ok"><span class="en">native</span><span class="th">เนทีฟ</span></td><td class="ok"><span class="en">all 6, with injection</span><span class="th">ครบ 6 + inject</span></td></tr>
+    <tr><td>Claude Code <span class="tag">ref</span></td><td><code>CLAUDE.md (@AGENTS.md)</code> + <code>.claude/</code> mirror</td><td><code>.claude/commands/</code> (mirror)</td><td class="ok"><span class="en">native</span><span class="th">เนทีฟ</span></td><td class="ok"><span class="en">all 6 → <code>.issflow/hooks</code></span><span class="th">ครบ 6 → <code>.issflow/hooks</code></span></td></tr>
     <tr><td>Codex CLI</td><td><code>AGENTS.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
-    <tr><td>Cursor</td><td><code>.cursor/rules/</code></td><td><code>.cursor/commands/</code></td><td class="ok"><span class="en">reads</span><span class="th">อ่าน</span> <code>.claude/agents</code></td><td class="ok"><code>hooks.json</code></td></tr>
+    <tr><td>Cursor</td><td><code>.cursor/rules/</code></td><td><code>.cursor/commands/</code></td><td class="ok"><span class="en">reads</span><span class="th">อ่าน</span> <code>.issflow/agents</code></td><td class="ok"><code>hooks.json</code></td></tr>
     <tr><td>Gemini CLI</td><td><code>GEMINI.md</code></td><td><span class="en">read as prompts</span><span class="th">อ่านเป็น prompt</span></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td></tr>
     <tr><td>Aider</td><td><code>.aider.conf.yml</code></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
     <tr><td><span class="en">Any AGENTS.md tool</span><span class="th">ทุก tool ที่อ่าน AGENTS.md</span></td><td><code>AGENTS.md</code></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
   </table></div>
   <p class="muted" style="margin-top:14px;font-size:.86rem">
-    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>omit = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Primary entry <code>AGENTS.md</code>; Claude Code also gets a thin <code>CLAUDE.md</code> shim. Non-destructive: conflicts → <code>&lt;file&gt;.issflow-new</code>.</span>
-    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>ไม่ใส่ = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> จุดเข้าหลัก <code>AGENTS.md</code> · Claude Code ได้ <code>CLAUDE.md</code> บาง ๆ ด้วย — ไม่ทับไฟล์เดิม: ชนกัน → <code>&lt;file&gt;.issflow-new</code></span>
+    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>omit = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Every tool gets <code>.issflow/</code> + <code>AGENTS.md</code>; <b>Claude Code only</b> also gets a <code>.claude/</code> mirror + thin <code>CLAUDE.md</code>. Non-destructive: conflicts → <code>&lt;file&gt;.issflow-new</code>.</span>
+    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>ไม่ใส่ = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> ทุกเครื่องมือได้ <code>.issflow/</code> + <code>AGENTS.md</code> · <b>เฉพาะ Claude Code</b> ได้ mirror <code>.claude/</code> + <code>CLAUDE.md</code> — ไม่ทับไฟล์เดิม: ชนกัน → <code>&lt;file&gt;.issflow-new</code></span>
   </p>
 </div></section>
 
@@ -445,8 +445,8 @@
         <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow</code></span>
         <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </summary><div class="stepbody">
-        <p><span class="en">Scaffolds <code>.claude/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.claude/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>
-        <p class="sub"><b>produces</b> · .claude/ (agents · commands · skills · hooks) · AGENTS.md</p>
+        <p><span class="en">Scaffolds <code>.issflow/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.issflow/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>
+        <p class="sub"><b>produces</b> · .issflow/ (agents · commands · skills · hooks) · AGENTS.md</p>
       </div></details>
     </li>
     <li><div class="stepno">2</div>
@@ -514,7 +514,7 @@
 
 <section id="kit"><div class="wrap">
   <div class="ey"><span class="en">what you get</span><span class="th">ในชุด</span></div>
-  <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.claude/</code></h2>
+  <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.issflow/</code></h2>
   <div class="grid g2" style="margin-top:24px">
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5M20.5 20a5.5 5.5 0 0 0-4.5-5.4"/></svg> <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">20 commands</span><span class="th">20 คำสั่ง</span></h3><p><code class="flat">/overview /feature /goal /propose /phase /sprint /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>

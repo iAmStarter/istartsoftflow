@@ -59,7 +59,7 @@ runs itself.
 
 ## Supported tools
 
-**Primary entry: `AGENTS.md` (open standard) + portable kit in `.claude/`.**
+**Primary entry: `AGENTS.md` (open standard) + portable kit in `.issflow/`.**
 The installer writes a per-tool adapter on top. Claude Code only auto-loads
 `CLAUDE.md`, so when that adapter is included the installer also writes a thin
 `CLAUDE.md` that imports `@AGENTS.md` — one source of truth, host-required filename.
@@ -69,17 +69,17 @@ Unsupported features degrade to model-run rituals — they never silently vanish
 |------|-------|----------|-----------|-----------------|
 | **Any AGENTS.md host** | `AGENTS.md` | reference | model-run | model-run |
 | **Codex CLI** | `AGENTS.md` (native) | read as prompts | reference | model-run |
-| **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.claude/agents/` | `.cursor/hooks.json` |
+| **Cursor** | `.cursor/rules/` + `AGENTS.md` | `.cursor/commands/` | reads `.issflow/agents/` | `.cursor/hooks.json` |
 | **Gemini CLI** | `GEMINI.md` + `AGENTS.md` | read as prompts | reference | model-run |
 | **Aider** | `.aider.conf.yml` → `AGENTS.md` | reference | model-run | model-run |
-| **Claude Code** | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` | `.claude/commands/` | native | SessionStart · PreToolUse · PreCompact · SubagentStop · Stop |
+| **Claude Code** | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` mirror | `.claude/commands/` (mirror) | native | SessionStart · PreToolUse · PreCompact · SubagentStop · Stop (hooks from `.issflow/`) |
 
-## What you get (in `<project>/.claude/`)
+## What you get (in `<project>/.issflow/`)
 
-The folder name `.claude/` is a **host convention** (commands/agents/hooks load
-from that path on several tools) — the kit inside is **tool-agnostic**. See the
-installed [`.claude/README.md`](./.claude/README.md) map. Primary entry remains
-root **`AGENTS.md`**.
+**`.issflow/`** is the portable, tool-agnostic kit (every `--tool=` install).
+Claude Code additionally gets a **`.claude/` mirror** for host discovery — other
+tools do not. See [`.issflow/README.md`](./.issflow/README.md). Primary entry
+remains root **`AGENTS.md`**.
 
 | Group | Items |
 |-------|-------|
@@ -87,7 +87,7 @@ root **`AGENTS.md`**.
 | **commands** | `/overview` `/feature` `/quick` (default) · `/propose` `/design` `/support` `/goal` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
 | **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** · **support-triage** — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
 | **hooks** | session-start · context-guard (token-budget watchdog) · plan-gate (rule-13 PLAN-approval enforcement) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`, artifact-verified) (Node scripts, wired per tool) |
-| **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
+| **methodology** | `.issflow/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
 ## Core idea
 
@@ -196,22 +196,22 @@ UI is validated against the frame; a frontend phase can't close until it passes.
 
 ```
 istartsoftflow/
-├── .claude/                       # the kit (source of truth)
+├── .issflow/                       # the kit (source of truth)
 │   ├── agents/ commands/ skills/ hooks/
 │   ├── istartsoft-flow/METHODOLOGY.md
-│   └── settings.json              # hook wiring (Claude Code)
+│   └── settings.json              # optional Claude Code hooks (this repo)
 ├── docs/research/                 # design research behind the kit's choices
 ├── index.html                     # self-contained landing page (open in a browser)
 └── create-issflow/                # the npx installer
     ├── bin/cli.js                 # pure-Node, non-destructive, multi-tool
     ├── build.js                   # pure-Node template builder (cross-platform)
-    ├── template/                  # built from .claude by `npm run build`
+    ├── template/                  # built from .issflow/ by `npm run build`
     └── package.json · README.md
 ```
 
 ## Maintainers / publishing
 
-1. Edit the kit in `.claude/`.
+1. Edit the kit in `.issflow/`.
 2. `npm run build` in `create-issflow/` to refresh `template/` (pure Node,
    cross-platform — works in cmd / PowerShell / sh).
 3. Bump the version (`npm version patch`) and `npm publish` from `create-issflow/`.
