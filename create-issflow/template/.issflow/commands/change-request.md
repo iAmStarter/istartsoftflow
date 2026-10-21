@@ -77,7 +77,8 @@ Show me CR-<n> (impact + price delta + new total — no rate). **STOP for approv
 (commercial gate — always interactive).
 - **Approved** -> set CR status `approved`; bump PROPOSAL.md to a new version (vN+1)
   with the delta folded in (**totals only**); re-render `docs/proposal.html` from it
-  (same template + language; no contingency note / rate); then dispatch `/replan` to
+  (same `/propose` package rows + screen appendix — do not dump every PLAN phase
+  onto the sign table; same template + language; no contingency note / rate); then dispatch `/replan` to
   apply the phase changes to PLAN.md (done phases stay frozen). Update STATE.md.
   NOTE: `/replan` reverts PLAN.md to `> Approval: PENDING` and re-runs the
   PLAN-APPROVAL gate (hard rule 13) — the commercial CR sign-off is SEPARATE from

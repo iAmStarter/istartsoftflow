@@ -1,12 +1,51 @@
 <!doctype html>
 <!--
-  Client-facing proposal — ONE A4 PAGE (rendered by /propose from docs/PROPOSAL.md).
-  HOW TO USE (agent): copy to docs/proposal.html, replace every {{PLACEHOLDER}}, and
-  keep it to a SINGLE A4 page — be terse (≈3–6 phases, ≈4 assumptions). Localise the
-  CONTENT to the project language; the section labels are bilingual (TH / EN) already.
-  WHITE-LABEL: fill {{COMPANY}} / {{LOGO}} with the ISSUING company's brand (not the
-  kit's). {{LOGO}} optional: an <img src="…">, an SVG, or delete to keep the monogram.
-  Print: Ctrl/Cmd-P → A4 → "Save as PDF" (fits one page).
+  Client-facing proposal (rendered by /propose from docs/PROPOSAL.md).
+
+  PAGE 1 = the only signable A4 sheet (packages 3–6 rows, short scope). Trim
+  sign-page copy before it overflows. Screen sheets after the first page-break
+  may grow extra A4 pages.
+
+  HOW TO USE (agent): copy to docs/proposal.html, replace every {{PLACEHOLDER}}.
+  Localise CONTENT to the project language; section labels are bilingual (TH / EN).
+  WHITE-LABEL: fill {{COMPANY}} / {{LOGO}} with the ISSUING company's brand (not
+  the kit's). {{LOGO}} optional: an <img src="…">, an SVG, or delete the monogram.
+  {{BANK_COL}}: omit unless the human gave bank details (no kit default).
+  {{PACKAGE_TABLE}}: default head = ชุดงาน / Packages + Cost; if hours columns
+  were requested = ประเมิน / คิดเงิน / ยอด. Never leave sample amounts in the file.
+  {{SCREEN_SHEETS}}: one .sheet.screens per appendix page; cover every in-scope
+  module from PLAN + OVERVIEW; numbered captions; no emoji icons; not pixel-binding.
+  {{PAGE_FOOTER}}: real page count (sign page 1 of N).
+  Print: Ctrl/Cmd-P → A4 → "Save as PDF".
+
+  Example screen frame (fill {{SCREEN_SHEETS}}; placeholders only — no domain copy):
+  <div class="sheet screens">
+    <div class="head">… {{COMPANY}} · ตัวอย่างจอ — ไม่ผูกพิกเซล / Screens — not pixel-binding</div>
+    <div class="modbar"><span class="here">{{MODULE}}</span></div>
+    <p class="note">{{SCREEN_NOTE}}</p>
+    <div class="figs">
+      <figure>
+        <div class="desk">
+          <div class="top"><span class="mark">{{MARK}}</span><span class="brand">{{APP_NAME}}</span></div>
+          <div class="body">
+            <div class="nav"><span class="on">{{NAV_ON}}</span></div>
+            <div class="main">
+              <div class="kpis"><div class="card">{{CARD}}</div></div>
+              <table class="ui">{{UI_ROWS}}</table>
+            </div>
+          </div>
+        </div>
+        <figcaption><b>{{FRAME_N}}. {{FRAME_TITLE}}</b> — {{FRAME_CAPTION}}</figcaption>
+      </figure>
+      <figure>
+        <div class="phone">
+          <div class="top"><span class="mark">{{MARK}}</span><span class="brand">{{APP_NAME}}</span></div>
+          <div class="screen">{{PHONE_BODY}}</div>
+        </div>
+        <figcaption><b>{{FRAME_N}}. {{FRAME_TITLE}}</b> — {{FRAME_CAPTION}}</figcaption>
+      </figure>
+    </div>
+  </div>
 -->
 <html lang="{{LANG}}">
 <head>
@@ -16,23 +55,21 @@
   @page { size: A4; margin: 0 }
   :root{
     --ink:#162033; --muted:#5d6a7d; --line:#dbe3ee; --soft:#f6f8fb;
-    --violet:#635bff; --green:#15803d;
+    --violet:#635bff; --green:#15803d; --bad:#b42318;
     --sans:"Inter","Noto Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     --mono:ui-monospace,Menlo,Consolas,monospace;
   }
   *{box-sizing:border-box}
-  body{margin:0;background:#e9edf3;color:var(--ink);font-family:var(--sans);font-size:10.5px;line-height:1.45}
-  .sheet{width:210mm;min-height:297mm;margin:10mm auto;background:#fff;padding:15mm 16mm;display:flex;flex-direction:column;gap:11px}
-  .lbl{color:var(--muted);font-size:8.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin:0 0 3px}
+  body{margin:0;background:#e9edf3;color:var(--ink);font-family:var(--sans);font-size:10.5px;line-height:1.4}
+  .sheet{width:210mm;min-height:297mm;margin:10mm auto;background:#fff;padding:13mm 15mm;display:flex;flex-direction:column;gap:8px}
+  .lbl{color:var(--muted);font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin:0 0 3px}
   .lbl em{font-style:normal;opacity:.6;font-weight:600}
-  h1{font-size:21px;margin:0;letter-spacing:-.3px;line-height:1.1}
-  .muted{color:var(--muted)} ul{margin:0;padding-left:15px} li{margin:1.5px 0}
-  hr{border:none;border-top:1px solid var(--line);margin:0}
+  h1{font-size:19px;margin:0;letter-spacing:-.3px;line-height:1.15}
+  .muted{color:var(--muted)} ul{margin:0;padding-left:15px} li{margin:1px 0}
 
-  /* header */
-  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:11px}
+  .head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid var(--ink);padding-bottom:9px}
   .co{display:flex;align-items:center;gap:10px}
-  .logo{width:42px;height:42px;border-radius:9px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:0 0 auto;overflow:hidden}
+  .logo{width:40px;height:40px;border-radius:9px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:0 0 auto;overflow:hidden}
   .logo img{width:100%;height:100%;object-fit:contain}
   .co .name{font-weight:800;font-size:15px;line-height:1.15}
   .co .tag{color:var(--muted);font-size:9px}
@@ -40,19 +77,69 @@
   .head .meta .big{font:800 12px/1.2 var(--sans);letter-spacing:.12em;color:var(--violet)}
   .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 8px;font:800 8px/1 var(--mono);color:var(--muted);margin-top:4px}
 
-  .cols{display:flex;gap:18px} .cols>div{flex:1;min-width:0}
-  table{width:100%;border-collapse:collapse;font-size:10px}
-  th,td{text-align:left;padding:5px 7px;border-bottom:1px solid var(--line)}
-  th{background:var(--soft);font-size:8px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-  td.n,th.n{text-align:right;font-family:var(--mono)}
-  tfoot td{font-weight:800;border-top:1.5px solid var(--ink);border-bottom:none}
-  .total{display:flex;align-items:baseline;justify-content:space-between;background:var(--soft);border-radius:9px;padding:9px 13px}
-  .total .amt{font-size:19px;font-weight:800} .total .amt small{font-size:9px;color:var(--muted);font-weight:600}
+  .cols{display:flex;gap:16px} .cols>div{flex:1;min-width:0}
+  table.quote{width:100%;border-collapse:collapse;font-size:10px}
+  .quote th,.quote td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+  .quote th{background:var(--soft);font-size:8px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .quote td.n,.quote th.n{text-align:right;font-family:var(--mono)}
+  .quote tfoot td{font-weight:800;border-top:1.5px solid var(--ink);border-bottom:none}
+  .total{display:flex;align-items:flex-end;justify-content:space-between;background:var(--soft);border-radius:9px;padding:8px 12px;gap:12px}
+  .total .amt{font-size:18px;font-weight:800;text-align:right}
+  .total .amt small{display:block;font-size:9px;color:var(--muted);font-weight:600}
 
-  .sign{display:flex;gap:34px;margin-top:auto;padding-top:14px}
-  .sign>div{flex:1} .line{border-bottom:1px solid var(--ink);height:30px} .sign .lbl{margin-top:5px}
-  footer{border-top:1px solid var(--line);padding-top:8px;color:var(--muted);font-size:8.5px;display:flex;justify-content:space-between}
-  @media print{ body{background:#fff} .sheet{margin:0;min-height:auto;box-shadow:none} }
+  .sign{display:flex;gap:34px;margin-top:auto;padding-top:10px}
+  .sign>div{flex:1} .line{border-bottom:1px solid var(--ink);height:26px} .sign .lbl{margin-top:4px}
+  footer{border-top:1px solid var(--line);padding-top:7px;color:var(--muted);font-size:8px;display:flex;justify-content:space-between}
+
+  /* screen appendix — empty chrome; fill from PLAN + OVERVIEW */
+  .sheet.screens{padding:10mm 12mm;gap:6px}
+  .screens .head{padding-bottom:6px}
+  .screens .note{font-size:9px;margin:0;color:var(--muted)}
+  .modbar{display:flex;flex-wrap:wrap;gap:4px}
+  .modbar span{border:1px solid var(--line);border-radius:999px;padding:2px 7px;font-size:8px;font-weight:700;color:var(--muted)}
+  .modbar .here{background:#ecebff;border-color:#d4d1ff;color:var(--violet)}
+  .figs{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;flex:1}
+  figure{margin:0;display:flex;flex-direction:column;min-width:0}
+  figcaption{margin-top:3px;font-size:8px;color:var(--muted);line-height:1.35}
+  figcaption b{color:var(--ink);font-weight:700}
+  .desk,.phone{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:1;min-height:0}
+  .top{display:flex;align-items:center;gap:6px;padding:5px 8px;border-bottom:1px solid var(--line);background:var(--soft)}
+  .mark{width:16px;height:16px;border-radius:4px;background:var(--violet);color:#fff;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .brand{font-weight:800;font-size:10px;color:var(--violet)}
+  .sub{font-size:8px;color:var(--muted)}
+  .body{display:flex;min-height:148px}
+  .nav{width:64px;border-right:1px solid var(--line);padding:5px;font-size:8px}
+  .nav span{display:block;padding:2px 4px;border-radius:4px;margin-bottom:1px;color:#334155}
+  .nav .on{background:#ecebff;color:var(--violet);font-weight:700}
+  .nav .tail{margin-top:6px;padding-top:4px;border-top:1px solid var(--line)}
+  .main{flex:1;padding:6px;min-width:0}
+  .kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+  .kpis.two{grid-template-columns:1fr 1fr}
+  .card{border:1px solid var(--line);border-radius:6px;padding:4px 5px;font-size:8px;background:#fff}
+  .card .n{font-size:12px;font-weight:800}
+  .red{border-color:#f0c4c0;background:#fff7f6}
+  .red .n{color:var(--bad)}
+  .ok{border-color:#b7d4c2;background:#f4faf6}
+  .ok .n{color:var(--green)}
+  .warn{border-color:#ead8a4;background:#fffbeb}
+  .ui{width:100%;border-collapse:collapse;font-size:8px;margin-top:4px}
+  .ui th,.ui td{text-align:left;padding:2px 3px;border-bottom:1px solid var(--line)}
+  .ui th{color:var(--muted);font-weight:600}
+  .btn{display:inline-block;background:var(--violet);color:#fff;border-radius:4px;padding:3px 7px;font-size:8px;font-weight:700;margin-top:5px}
+  .btn.ghost{background:#fff;color:var(--violet);border:1px solid var(--violet)}
+  .field{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--line);padding:3px 0;font-size:8px}
+  .crumbs{font-size:8px;color:var(--muted);margin-bottom:3px}
+  .login{padding:12px;min-height:148px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px}
+  .login h3{margin:0;font-size:12px}
+  .phone{max-width:168px;margin:0 auto;width:100%}
+  .screen{padding:7px}
+  .tiny{font-size:7px;color:var(--muted)}
+
+  @media print{
+    body{background:#fff}
+    .sheet{margin:0;min-height:297mm;page-break-after:always;box-shadow:none}
+    .sheet:last-child{page-break-after:auto}
+  }
 </style>
 </head>
 <body>
@@ -81,12 +168,8 @@
   </div>
 
   <div>
-    <p class="lbl">เฟส &amp; ค่าใช้จ่าย <em>Phases &amp; cost</em></p>
-    <table>
-      <thead><tr><th>เฟส <em style="font-style:normal;opacity:.5">Phase</em></th><th>Complexity</th><th class="n">Effort</th><th class="n">Cost</th></tr></thead>
-      <tbody>{{PHASE_ROWS}}<!-- <tr><td>1. Auth</td><td>M</td><td class="n">2–3d</td><td class="n">฿16k–24k</td></tr> --></tbody>
-      <tfoot><tr><td colspan="2">รวม <em style="font-style:normal;opacity:.5">Total</em></td><td class="n">{{TOTAL_EFFORT}}</td><td class="n">{{TOTAL_COST}}</td></tr></tfoot>
-    </table>
+    <p class="lbl">ชุดงาน &amp; ค่าใช้จ่าย <em>Packages &amp; cost</em></p>
+    <table class="quote">{{PACKAGE_TABLE}}</table>
   </div>
 
   <div class="total">
@@ -100,14 +183,22 @@
     <div><p class="lbl">ข้อยกเว้น <em>Exclusions</em></p><ul>{{EXCLUSION_ITEMS}}</ul></div>
   </div>
 
-  <div><p class="lbl">เงื่อนไขการชำระเงิน <em>Payment</em></p><p class="muted" style="margin:0">{{PAYMENT_ITEMS}}</p></div>
+  <div class="cols">
+    <div>
+      <p class="lbl">เงื่อนไขการชำระเงิน <em>Payment</em></p>
+      <ul>{{PAYMENT_ITEMS}}</ul>
+    </div>
+    {{BANK_COL}}
+  </div>
 
   <div class="sign">
     <div><div class="line"></div><p class="lbl">ลงนามลูกค้า <em>Client sign-off</em></p></div>
     <div><div class="line"></div><p class="lbl">วันที่ <em>Date</em></p></div>
   </div>
 
-  <footer><span>{{COMPANY}} · {{FOOTER}}</span><span>{{VERSION}}</span></footer>
+  <footer><span>{{COMPANY}} · {{PAGE_FOOTER}}</span><span>{{VERSION}}</span></footer>
 </div>
+
+{{SCREEN_SHEETS}}
 </body>
 </html>

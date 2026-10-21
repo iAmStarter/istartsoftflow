@@ -1,5 +1,16 @@
 # Changelog — create-issflow
 
+## 1.9.1 — 2026-10-21
+
+### Changed
+- **`/propose` client quote:** sign page is one A4 sheet of **3–6 packages**
+  (PLAN phases stay internal). Same HTML then page-breaks into a screen
+  appendix covering every in-scope module. Totals only — no rate, no
+  contingency %, no sample amounts in the kit template. Hosting/database
+  exclusion and payment split are asked in chat; bank details only if given.
+  Software delivery payment wording (not construction). Dry-run still writes
+  nothing. Stop at sign-off — do not start `/design` or `/phase`.
+
 ## 1.9.0 — 2026-10-21
 
 ### Changed

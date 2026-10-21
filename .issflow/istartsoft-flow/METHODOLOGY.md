@@ -109,10 +109,12 @@ from idea to closeout:
    the proposal estimates *these* phases.
 5. **Proposal & estimate (OPTIONAL — depends on the job)** — for client / quoted
    work, `/propose` reads OVERVIEW + PLAN → `docs/PROPOSAL.md` + a rendered
-   `docs/proposal.html`: scope, phase breakdown, effort + cost estimate, timeline,
-   assumptions, with a **client sign-off gate** before build. **Ask rate +
-   contingency in chat** when missing — the kit stores **no** default rate (rates
-   are confidential). Client docs show **totals only** (never rate or contingency %).
+   `docs/proposal.html`: scope, **package** rows on the signable A4 page (not every
+   PLAN phase), effort + cost estimate, timeline, assumptions, and a screen
+   appendix in the **same HTML** after a page-break, with a **client sign-off gate**
+   before build. **Ask rate + contingency in chat** when missing — the kit stores
+   **no** default rate (rates are confidential). Client docs show **totals only**
+   (never rate or contingency %).
    Internal / personal projects skip straight from plan to build (and may set
    design/architecture gates to `n/a`).
 6. **Design + architecture gates (rule 15 — after proposal, before build)** —
@@ -620,10 +622,12 @@ the KB. The kit works normally without a KB.
 ## File contract
 
 - `docs/PRD.md` — crystallised product requirements (or your BMAD/iSSM stories).
-- `docs/PROPOSAL.md` — scope + phase breakdown + effort/cost totals + assumptions
-  + sign-off. Versioned; client-safe commercial baseline (no rate / contingency %).
+- `docs/PROPOSAL.md` — scope + package rows + effort/cost totals + assumptions
+  + screen-appendix page range + sign-off. Versioned; client-safe commercial
+  baseline (no rate / contingency %).
 - `docs/proposal.html` — the client-facing proposal, rendered from PROPOSAL.md via
-  `.issflow/templates/proposal.html`, in the project language; print-ready (PDF).
+  `.issflow/templates/proposal.html`, in the project language; page 1 is the
+  signable A4 sheet, then screen frames in the same file (print A4).
 - `docs/UX-PACK.md` · `docs/ARCHITECTURE.md` — pre-build design/arch frames
   (rule 15); templates under `.issflow/templates/`.
 - `.issflow/templates/` — document templates (proposal.html, UX-PACK, ARCHITECTURE,
