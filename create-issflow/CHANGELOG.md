@@ -12,6 +12,9 @@
   METHODOLOGY.
 
 ### Changed
+- **Installer:** omit `--tool` now installs **every** adapter (same as
+  `--tool=all`); typo alias `--tool=cusor` → `cursor`. Docs/landing lead with
+  **AGENTS.md** as primary entry; `CLAUDE.md` remains a thin Claude Code-only shim.
 - **`/propose` / `/change-request`:** ask rate + contingency in chat when missing;
   never ship kit default rates; client PROPOSAL / HTML show **totals only**
   (no rate, no contingency %). `proposal.html` `{{CONTINGENCY_NOTE}}` →
