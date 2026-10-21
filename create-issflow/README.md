@@ -28,7 +28,7 @@ Flags:
 
 ## What it installs
 
-The portable kit (every tool) in `<project>/.claude/`:
+The portable kit (every tool) in `<project>/.issflow/`:
 
 - `agents/` — planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer
 - `commands/` — `/overview` `/feature` `/goal` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck`
@@ -44,10 +44,10 @@ Plus a root **`AGENTS.md`** (open standard — primary entry) and the per-tool a
 | `cursor` | `.cursor/rules/` + `.cursor/commands/` + `.cursor/hooks.json` |
 | `gemini` | `GEMINI.md` pointer |
 | `aider` | `.aider.conf.yml` that loads the methodology |
-| `claude` | thin `CLAUDE.md` (`@AGENTS.md`) + merges hooks into `.claude/settings.json` |
+| `claude` | thin `CLAUDE.md` (`@AGENTS.md`) + `.claude/` kit mirror + merges hooks into `.claude/settings.json` (hooks run from `.issflow/`) |
 | `all` | every adapter above |
 
-It also un-ignores the workflow dirs in `.gitignore` if `.claude/*` was ignored.
+It also un-ignores the workflow dirs in `.gitignore` if `.issflow/*` was ignored.
 
 ## Loop
 
@@ -58,10 +58,10 @@ PRD / architecture / stories (e.g. BMAD / iSSM).
 
 ## Maintainers
 
-The kit lives in the repo's `.claude/`. After editing it, run `npm run build`
+The kit lives in the repo's `.issflow/`. After editing it, run `npm run build`
 (pure Node — cmd / PowerShell / sh) to refresh `template/`, then `npm version patch`
 and `npm publish`. `prepublishOnly` rebuilds `template/` on publish automatically.
 
 Everything is cross-platform: the installer and `build.js` are pure Node, and the
-lifecycle hooks are Node scripts (`node .claude/hooks/*.js`) — no bash/jq/python,
+lifecycle hooks are Node scripts (`node .issflow/hooks/*.js`) — no bash/jq/python,
 so the kit runs the same on macOS, Windows, and Linux.

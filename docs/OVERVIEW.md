@@ -3,7 +3,7 @@
 > Project language: **th** (discovery / grill / internal docs); public web + HOW-TO stay **EN default + TH pair**  
 > Autonomy: **AUTO** (dev loop after plan / design / commercial gates)  
 > Planning source: grill + design research in `docs/research/`  
-> Status: foundations for kit v1.8.0 ship
+> Status: kit v1.9.0 — portable dir `.issflow/` (+ Claude-only `.claude/` mirror)
 
 ## Purpose / success criteria
 
@@ -19,7 +19,8 @@ ship to GitHub Pages + npm (human publish).
    architecture are approved (internal work may set `n/a`)
 3. `/support` + CR template cover warranty vs billable triage
 4. Landing / HOW-TO / README lead with `/overview` · `/feature` · `/quick`
-5. Root `.claude/` syncs to `create-issflow/template/` via build; version **1.8.0**
+5. Root `.issflow/` syncs to `create-issflow/template/` via build; version **1.9.0**
+   (`--tool=cursor` must not create `.claude/`; `--tool=claude` mirrors into it)
 6. Draft PR → human merge → Pages; human runs npm publish locally
 
 ## Stack (declared)
@@ -39,7 +40,7 @@ Phase 0 (self-managed infra) = **N/A**.
 ## Architecture
 
 - **Pattern:** Feature-Based (kit surfaces: docs · landing · installer)
-- **Layout:** `.claude/` SoT → `create-issflow/template/` via `build.js`
+- **Layout:** `.issflow/` SoT → `create-issflow/template/` via `build.js`
 
 ## UX direction
 

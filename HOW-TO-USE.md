@@ -38,9 +38,9 @@ npx create-issflow                  # omit --tool = all adapters
 npx create-issflow --tool=cursor    # or: claude | codex | gemini | aider | all
 ```
 
-Done. Shared entry is **`AGENTS.md`** (plus the portable kit in `.claude/`).
-Claude Code also gets a thin `CLAUDE.md` shim (`@AGENTS.md`) because that host
-only auto-loads that filename.
+Done. Shared entry is **`AGENTS.md`** (plus the portable kit in `.issflow/`).
+`--tool=claude` (or `all`) also mirrors the kit into `.claude/` and writes a thin
+`CLAUDE.md` shim (`@AGENTS.md`) — other tools do **not** create `.claude/`.
 
 - **It never overwrites your files** — conflicts are written next to yours for review.
 - Re-run any time to update.
@@ -193,12 +193,13 @@ Yes — install with `npx create-issflow --ci` (GitHub: label an issue
 Anthropic API key.
 
 **How do I uninstall?**
-Delete the `.claude/` folder and `AGENTS.md`. Your code is untouched.
+Delete `.issflow/`, `AGENTS.md`, and any host adapters (`.cursor/`, `CLAUDE.md`,
+`.claude/` mirror, `GEMINI.md`, `.aider.conf.yml`). Your code is untouched.
 
 ---
 
 ## Read next
 
 - Overview + detailed install: [README.md](./README.md)
-- The full rulebook: `.claude/istartsoft-flow/METHODOLOGY.md` (after install)
+- The full rulebook: `.issflow/istartsoft-flow/METHODOLOGY.md` (after install)
 - Website: https://iamstarter.github.io/istartsoftflow/

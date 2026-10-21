@@ -38,8 +38,9 @@ npx create-issflow                  # ไม่ใส่ --tool = ติดต�
 npx create-issflow --tool=cursor    # หรือ: claude | codex | gemini | aider | all
 ```
 
-จบแค่นั้น จุดเข้าหลักคือ **`AGENTS.md`** (กับชุดใน `.claude/`)
-Claude Code จะได้ `CLAUDE.md` บาง ๆ (`@AGENTS.md`) ด้วย เพราะโฮสต์นั้นโหลดชื่อไฟล์นี้เท่านั้น
+จบแค่นั้น จุดเข้าหลักคือ **`AGENTS.md`** (กับชุดใน `.issflow/`)
+`--tool=claude` (หรือ `all`) จะ mirror ชุดไปที่ `.claude/` และเขียน `CLAUDE.md`
+บาง ๆ (`@AGENTS.md`) ด้วย — เครื่องมืออื่น**ไม่**สร้าง `.claude/`
 
 - **ไม่ทับไฟล์เดิมของคุณเด็ดขาด** — ถ้าชนกัน มันเขียนไฟล์ใหม่แยกไว้ให้ดูเอง
 - ติดตั้งซ้ำเพื่ออัปเดตได้ตลอด
@@ -183,12 +184,13 @@ Claude Code จะได้ `CLAUDE.md` บาง ๆ (`@AGENTS.md`) ด้ว�
 `node scripts/feature-docker.js docs/features/ชื่อ/FEATURE.md`) ต้องมี API key ของ Anthropic
 
 **ถาม: เลิกใช้ยังไง?**
-ลบโฟลเดอร์ `.claude/` กับไฟล์ `AGENTS.md` ทิ้ง — โค้ดของคุณไม่ถูกแตะ
+ลบ `.issflow/`, `AGENTS.md`, และ adapter ของโฮสต์ (`.cursor/`, `CLAUDE.md`,
+mirror `.claude/`, `GEMINI.md`, `.aider.conf.yml`) — โค้ดของคุณไม่ถูกแตะ
 
 ---
 
 ## อ่านต่อ
 
 - ภาพรวม + ติดตั้งละเอียด: [README.md](./README.md)
-- กฎทั้งหมดของระบบ (ฉบับเต็ม): `.claude/istartsoft-flow/METHODOLOGY.md` (หลังติดตั้ง)
+- กฎทั้งหมดของระบบ (ฉบับเต็ม): `.issflow/istartsoft-flow/METHODOLOGY.md` (หลังติดตั้ง)
 - เว็บ: https://iamstarter.github.io/istartsoftflow/

@@ -3,7 +3,7 @@
 // current project. Pure Node, zero deps, cross-platform, NON-DESTRUCTIVE:
 // never overwrites an existing file — on conflict it writes `<file>.issflow-new`.
 //
-// Tool-agnostic: the portable kit lives in `.claude/` and the methodology is the
+// Tool-agnostic: the portable kit lives in `.issflow/` and the methodology is the
 // single source of truth. `--tool=<name>` writes the right adapter so the same
 // kit drives Claude Code, Codex, Cursor, Gemini CLI, Aider, or any AGENTS.md tool.
 'use strict';
@@ -23,7 +23,7 @@ const toolArg = (argv.find(a => a.startsWith('--tool=')) || '').split('=')[1];
 const TOOLS = {
   claude: 'Claude Code (Anthropic) — full: subagents, lifecycle hooks, skills',
   codex:  'OpenAI Codex CLI — AGENTS.md native; subagents/skills as readable files',
-  cursor: 'Cursor — .cursor/rules + commands + hooks; reads .claude/agents natively',
+  cursor: 'Cursor — .cursor/rules + commands + hooks; kit stays in .issflow/ (no .claude/)',
   gemini: 'Google Gemini CLI — GEMINI.md pointer; commands/skills as readable files',
   aider:  'Aider — .aider.conf.yml loads the methodology as conventions',
   all:    'Write every adapter above (mixed-team repo)',
@@ -50,10 +50,10 @@ Flags:
   --force     overwrite existing kit files (default keeps yours -> <file>.issflow-new)
   -h, --help  this message
 
-Every tool installs the portable kit in .claude/ + a root AGENTS.md (the open
-standard — primary entry for most hosts). The full methodology lives in
-.claude/istartsoft-flow/METHODOLOGY.md. Claude Code also gets a thin CLAUDE.md
-shim (@AGENTS.md) because that host only auto-loads CLAUDE.md.`);
+Every tool installs the portable kit in .issflow/ + a root AGENTS.md (open
+standard). Methodology: .issflow/istartsoft-flow/METHODOLOGY.md.
+Claude Code ONLY (--tool=claude|all) also gets a .claude/ mirror + CLAUDE.md
+shim — other tools do not create .claude/.`);
 }
 
 // Typo / alias map → canonical TOOLS key
@@ -98,33 +98,38 @@ function walk(dir) {
 }
 
 function copyTemplateCommands(destDir) {
-  const cmdDir = path.join(TPL, '.claude', 'commands');
+  const cmdDir = path.join(TPL, '.issflow', 'commands');
   if (!fs.existsSync(cmdDir)) return;
   for (const f of fs.readdirSync(cmdDir)) writeFile(path.join(destDir, f), fs.readFileSync(path.join(cmdDir, f), 'utf8'));
+}
+
+/** Claude Code loads commands/agents/skills from `.claude/`. Mirror the
+ *  portable `.issflow/` kit there (Claude adapter only — Cursor never gets this). */
+function materializeClaudeMirror() {
+  const kitTpl = path.join(TPL, '.issflow');
+  for (const src of walk(kitTpl)) {
+    const rel = path.relative(kitTpl, src);
+    writeFile(path.join('.claude', rel), fs.readFileSync(src, 'utf8'));
+  }
 }
 
 // ---- adapters (keep the methodology single-source — these POINT at it) ------
 
 function adapterClaude() {
-  // Claude Code auto-loads CLAUDE.md only — NOT AGENTS.md. Without a CLAUDE.md
-  // the methodology never enters context on its own (the SessionStart hook still
-  // injects the per-session summary, but the full single-source doc would not
-  // load). A one-line `@AGENTS.md` import gives Claude Code the full baseline
-  // while keeping ONE source of truth — no rule is restated here (anti-drift).
+  // Claude Code: needs CLAUDE.md auto-load + native `.claude/` tree for
+  // commands/agents/skills discovery. Portable SoT remains `.issflow/`;
+  // hooks execute from `.issflow/` (single source).
   const c0 = conflicts;
   writeFile('CLAUDE.md', claudeMd());
   if (conflicts > c0) warnings.push('claude: you already keep a CLAUDE.md — ours was written as CLAUDE.md.issflow-new. Add a line `@AGENTS.md` to your CLAUDE.md so the methodology auto-loads.');
-  // Context-budget watchdog config (consumed by .claude/hooks/context-guard.js).
-  // Shipped default window:0 = auto-detect; flow-config.json lives at .claude root,
-  // outside build.js's copied DIRS, so the installer writes it here.
-  writeFile('.claude/flow-config.json', flowConfig());
+  materializeClaudeMirror();
   const HOOKS = {
-    SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .claude/hooks/session-start.js' }] }],
-    PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .claude/hooks/context-guard.js' }] },
-                   { matcher: 'Edit|Write|MultiEdit|NotebookEdit', hooks: [{ type: 'command', command: 'node .claude/hooks/plan-gate.js' }] }],
-    PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .claude/hooks/pre-compact.js' }] }],
-    SubagentStop: [{ hooks: [{ type: 'command', command: 'node .claude/hooks/subagent-stop.js' }] }],
-    Stop:         [{ hooks: [{ type: 'command', command: 'node .claude/hooks/feature-gate.js' }] }],
+    SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .issflow/hooks/session-start.js' }] }],
+    PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .issflow/hooks/context-guard.js' }] },
+                   { matcher: 'Edit|Write|MultiEdit|NotebookEdit', hooks: [{ type: 'command', command: 'node .issflow/hooks/plan-gate.js' }] }],
+    PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .issflow/hooks/pre-compact.js' }] }],
+    SubagentStop: [{ hooks: [{ type: 'command', command: 'node .issflow/hooks/subagent-stop.js' }] }],
+    Stop:         [{ hooks: [{ type: 'command', command: 'node .issflow/hooks/feature-gate.js' }] }],
   };
   const sp = path.join(CWD, '.claude', 'settings.json');
   let settings = {};
@@ -135,27 +140,28 @@ function adapterClaude() {
   for (const k of Object.keys(HOOKS)) if (!settings.hooks[k]) { settings.hooks[k] = HOOKS[k]; added.push(k); }
   if (added.length) { log(`  + .claude/settings.json hooks: ${added.join(', ')}`); if (!DRY) { fs.mkdirSync(path.dirname(sp), { recursive: true }); fs.writeFileSync(sp, JSON.stringify(settings, null, 2) + '\n'); } }
   else log('  = .claude/settings.json hooks already present');
+  warnings.push('claude: portable SoT is .issflow/ — .claude/ is a host mirror; refresh with create-issflow --tool=claude after kit edits.');
 }
 
 function adapterCodex() {
-  warnings.push('codex: AGENTS.md is read natively. Lifecycle hooks unsupported (rituals model-run); subagents in .claude/agents/ are read as reference, not isolated contexts.');
+  warnings.push('codex: AGENTS.md is read natively. Lifecycle hooks unsupported (rituals model-run); subagents in .issflow/agents/ are read as reference, not isolated contexts.');
 }
 
 function adapterCursor() {
   writeFile('.cursor/rules/istartsoftflow.mdc', [
     '---', 'description: iStartSoftFlow workflow — always apply', 'alwaysApply: true', '---', '',
     'Run the **iStartSoftFlow** workflow. The full, single-source methodology is',
-    '`.claude/istartsoft-flow/METHODOLOGY.md` — read it before acting. Roles live in',
-    '`.claude/agents/` (Cursor reads them natively); procedures in `.cursor/commands/`',
-    '(mirror of `.claude/commands/`). Caveman ULTRA mode; apply the `karpathy-guidelines`',
+    '`.issflow/istartsoft-flow/METHODOLOGY.md` — read it before acting. Roles live in',
+    '`.issflow/agents/` (Cursor reads them natively); procedures in `.cursor/commands/`',
+    '(mirror of `.issflow/commands/`). Caveman ULTRA mode; apply the `karpathy-guidelines`',
     'and `ux-design` skills. See `AGENTS.md` for the role/command/skill map.', '',
   ].join('\n'));
   copyTemplateCommands('.cursor/commands');
   writeFile('.cursor/hooks.json', JSON.stringify({
     version: 1,
     hooks: {
-      sessionStart: [{ command: 'node .claude/hooks/session-start.js' }],
-      subagentStop: [{ command: 'node .claude/hooks/subagent-stop.js' }],
+      sessionStart: [{ command: 'node .issflow/hooks/session-start.js' }],
+      subagentStop: [{ command: 'node .issflow/hooks/subagent-stop.js' }],
     },
   }, null, 2) + '\n');
   warnings.push('cursor: PreCompact has no Cursor equivalent (snapshot ritual degrades to model-run); verify hooks.json against cursor.com/docs/hooks — the schema evolves.');
@@ -166,9 +172,9 @@ function adapterGemini() {
     '# GEMINI.md — iStartSoftFlow', '',
     'This repo runs the **iStartSoftFlow** agentic dev workflow. The complete,',
     'tool-agnostic methodology (the single source of truth) lives in',
-    '`.claude/istartsoft-flow/METHODOLOGY.md` — read it before acting. Roles are in',
-    '`.claude/agents/`, procedures in `.claude/commands/` (run their bodies as prompts),',
-    'skills in `.claude/skills/` (read on demand). See `AGENTS.md` for the full map.', '',
+    '`.issflow/istartsoft-flow/METHODOLOGY.md` — read it before acting. Roles are in',
+    '`.issflow/agents/`, procedures in `.issflow/commands/` (run their bodies as prompts),',
+    'skills in `.issflow/skills/` (read on demand). See `AGENTS.md` for the full map.', '',
     'Lifecycle hooks do not auto-fire in Gemini CLI — run the SESSION-OPEN ritual',
     '(git state, docs/STATE.md, docs/ISSUES.md) yourself at the start of each session.', '',
   ].join('\n'));
@@ -181,7 +187,7 @@ function adapterAider() {
     '# Aider has no lifecycle hooks/subagents; the workflow degrades to model-run rituals.',
     'read:',
     '  - AGENTS.md',
-    '  - .claude/istartsoft-flow/METHODOLOGY.md',
+    '  - .issflow/istartsoft-flow/METHODOLOGY.md',
     '',
   ].join('\n'));
   warnings.push('aider: hooks + named subagents unsupported — the loop runs as a single-agent, model-driven workflow.');
@@ -191,7 +197,7 @@ const ADAPTERS = { claude: adapterClaude, codex: adapterCodex, cursor: adapterCu
 
 const NEXT_STEPS = {
   claude: 'Open Claude Code — CLAUDE.md (@AGENTS.md) loads the methodology and the SessionStart hook fires automatically. Run /overview to bootstrap.',
-  codex:  'Open Codex CLI — it reads AGENTS.md. Start by running the /overview procedure (.claude/commands/overview.md).',
+  codex:  'Open Codex CLI — it reads AGENTS.md. Start by running the /overview procedure (.issflow/commands/overview.md).',
   cursor: 'Open Cursor — the rule applies automatically. Run the /overview command to bootstrap.',
   gemini: 'Open Gemini CLI — it reads GEMINI.md. Run the SESSION-OPEN ritual, then the overview procedure.',
   aider:  'Run aider — it loads AGENTS.md + METHODOLOGY.md. Drive the loop manually (overview -> phase).',
@@ -204,23 +210,23 @@ function agentsMd() {
     'This repo runs the **iStartSoftFlow** agentic dev workflow.', '',
     '**Primary entry (this file).** The complete, tool-agnostic methodology — loop,',
     'roles, procedures, rituals, hard rules — lives in ONE place. Read before acting:', '',
-    '> **`.claude/istartsoft-flow/METHODOLOGY.md`** ← single source of truth.', '',
-    'The portable kit lives in **`.claude/`** (folder name = host convention for',
-    'commands/agents/hooks — content is tool-agnostic; see `.claude/README.md`).',
-    'Do not restate METHODOLOGY rules elsewhere (anti-drift).', '',
+    '> **`.issflow/istartsoft-flow/METHODOLOGY.md`** ← single source of truth.', '',
+    'The portable kit lives in **`.issflow/`** (commands, agents, hooks, skills,',
+    'methodology — see `.issflow/README.md`). Host adapters (`.cursor/`, `CLAUDE.md`,',
+    '…) point at it. Do not restate METHODOLOGY rules elsewhere (anti-drift).', '',
     '## The loop', '',
     'design-research → grill ×2 → plan → (propose/design if quoted) → implement →',
     'test → deploy — one VERTICAL SLICE per phase. Phase 0 (infra) only when',
     'infra is self-managed.', '',
-    '## Roles — `.claude/agents/`', '',
+    '## Roles — `.issflow/agents/`', '',
     'planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer', '',
-    '## Procedures — `.claude/commands/` (run as `/name`)', '',
+    '## Procedures — `.issflow/commands/` (run as `/name`)', '',
     '**Default:** `/overview` · `/feature` · `/quick`', '',
     '**Advanced:** `/propose` · `/design` · `/support` · `/phase` · `/sprint` · `/goal` ·',
     '`/ui-audit` · `/qa-audit` · `/security-audit` · `/release` · `/uat` ·',
     '`/change-request` · `/replan` · `/synthesize` · `/runbook` · `/store-wisdom` ·',
     '`/log-issue` · `/log-decision` · `/unstuck`', '',
-    '## Skills — `.claude/skills/` (loaded on demand)', '',
+    '## Skills — `.issflow/skills/` (loaded on demand)', '',
     'caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards ·',
     'support-triage', '',
     '## Autonomy', '',
@@ -246,10 +252,12 @@ function claudeMd() {
     '@AGENTS.md', '',
     'Claude Code auto-loads **this filename only**. The import above is the real',
     'entry (`AGENTS.md` → METHODOLOGY). Do NOT restate rules here.', '',
-    '## Host wiring (automatic — see `.claude/settings.json`)', '',
+    '## Host wiring', '',
+    '- **`.claude/`** is a mirror of `.issflow/` for command/agent/skill discovery.',
+    '- **Hooks** run from `.issflow/hooks/` (see `.claude/settings.json`).',
     '- **SessionStart** injects git state + `docs/STATE.md` + open `docs/ISSUES.md`.',
     '- **PreCompact** + **SubagentStop** rituals run automatically.',
-    '- Commands in `.claude/commands/` → `/name`; agents in `.claude/agents/` → native subagents.', '',
+    '- Edit the kit in `.issflow/`, then re-run `create-issflow --tool=claude` to refresh the mirror.', '',
   ].join('\n');
 }
 
@@ -259,7 +267,7 @@ function flowConfig() {
       window: 0,
       warnPct: 60,
       gatePct: 78,
-      _note: 'Context-budget watchdog (.claude/hooks/context-guard.js, PreToolUse hook). '
+      _note: 'Context-budget watchdog (.issflow/hooks/context-guard.js, PreToolUse hook). '
         + 'window 0 = auto-detect from the model id (200000 for standard models). '
         + 'Some 1M-context models report their id WITHOUT a [1m] tag, so auto-detect '
         + 'assumes 200000 and may false-gate around 156k — if you run a 1M model, set '
@@ -281,7 +289,7 @@ function flowConfig() {
 
 function main() {
   if (HELP) { printHelp(); return; }
-  if (!fs.existsSync(path.join(TPL, '.claude'))) {
+  if (!fs.existsSync(path.join(TPL, '.issflow'))) {
     console.error('create-issflow: embedded template/ missing. From source run: npm run build');
     process.exit(1);
   }
@@ -289,14 +297,14 @@ function main() {
   const TOOL = pickTool();
   const targets = TOOL === 'all' ? Object.keys(TOOLS).filter(t => t !== 'all') : [TOOL];
 
-  // 1. portable kit tree (.claude/) — every tool gets it.
-  for (const src of walk(path.join(TPL, '.claude'))) {
+  // 1. portable kit tree (.issflow/) — every tool gets it.
+  for (const src of walk(path.join(TPL, '.issflow'))) {
     const rel = path.relative(TPL, src);
     writeFile(rel, fs.readFileSync(src, 'utf8'));
   }
 
   // 1b. integrity: confirm the methodology resolved on disk (load-bearing sentinel).
-  const methPath = path.join(CWD, '.claude', 'istartsoft-flow', 'METHODOLOGY.md');
+  const methPath = path.join(CWD, '.issflow', 'istartsoft-flow', 'METHODOLOGY.md');
   const SENTINEL = 'ISTARTSOFTFLOW-AGENTS-SENTINEL-v2.0';
   if (!DRY && (!fs.existsSync(methPath) || !fs.readFileSync(methPath, 'utf8').includes(SENTINEL))) {
     warnings.push(`integrity: ${SENTINEL} not found in installed METHODOLOGY.md — the kit may be incomplete; re-run create-issflow (or npm run build from source).`);
@@ -309,7 +317,7 @@ function main() {
   for (const t of targets) ADAPTERS[t]();
 
   // 3b. headless feature lane (opt-in): materialize the automation templates.
-  const autoDir = path.join(TPL, '.claude', 'templates', 'automation');
+  const autoDir = path.join(TPL, '.issflow', 'templates', 'automation');
   if (CI) {
     writeFile(path.join('.github', 'workflows', 'issflow-feature.yml'), fs.readFileSync(path.join(autoDir, 'issflow-feature.yml'), 'utf8'));
     writeFile(path.join('.github', 'workflows', 'issflow-goal.yml'), fs.readFileSync(path.join(autoDir, 'issflow-goal.yml'), 'utf8'));
@@ -319,13 +327,13 @@ function main() {
     writeFile(path.join('scripts', 'feature-docker.js'), fs.readFileSync(path.join(autoDir, 'feature-docker.js'), 'utf8'), { exec: true });
   }
 
-  // 4. .gitignore: track the workflow dirs if .claude/* is ignored
+  // 4. .gitignore: track the workflow dirs if .issflow/* is ignored
   const gi = path.join(CWD, '.gitignore');
   if (fs.existsSync(gi)) {
     const txt = fs.readFileSync(gi, 'utf8');
-    if (/^\.claude\/\*\s*$/m.test(txt) && !txt.includes('!.claude/agents/')) {
-      const block = '\n# iStartSoftFlow workflow — track as project config\n!.claude/agents/\n!.claude/commands/\n!.claude/skills/\n!.claude/hooks/\n!.claude/istartsoft-flow/\n';
-      log('  + .gitignore: un-ignore .claude workflow dirs');
+    if (/^\.issflow\/\*\s*$/m.test(txt) && !txt.includes('!.issflow/agents/')) {
+      const block = '\n# iStartSoftFlow workflow — track as project config\n!.issflow/agents/\n!.issflow/commands/\n!.issflow/skills/\n!.issflow/hooks/\n!.issflow/istartsoft-flow/\n';
+      log('  + .gitignore: un-ignore .issflow workflow dirs');
       if (!DRY) fs.appendFileSync(gi, block);
     }
   }

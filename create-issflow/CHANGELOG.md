@@ -1,12 +1,24 @@
 # Changelog — create-issflow
 
+## 1.9.0 — 2026-10-21
+
+### Changed
+- **Portable kit directory renamed `.claude/` → `.issflow/`.** Every `--tool=`
+  install gets `.issflow/` + root `AGENTS.md`. **Claude Code only**
+  (`--tool=claude` or `all`) also mirrors the kit into `.claude/` + `CLAUDE.md`
+  shim; Cursor / Codex / Gemini / Aider no longer create `.claude/`.
+- Hooks always execute from `.issflow/hooks/` (single source). Claude
+  `.claude/settings.json` points there.
+- METHODOLOGY, commands, hooks, templates, landing/HOW-TO paths updated.
+- `.issflow/README.md` documents the Claude-only mirror.
+
 ## 1.8.1 — 2026-10-21
 
 ### Changed
-- **Clarify `.claude/`:** folder name is a host convention, not Claude-only
-  branding. Add `.claude/README.md` layout map (shipped in template). METHODOLOGY
-  + generated `AGENTS.md` lead with AGENTS.md; `CLAUDE.md` shim wording softened.
-- Capability matrix lists AGENTS.md hosts first.
+- **Clarify kit layout:** Add `.issflow/README.md` map (shipped in template).
+  METHODOLOGY + generated `AGENTS.md` lead with AGENTS.md; `CLAUDE.md` shim
+  wording softened. Capability matrix lists AGENTS.md hosts first.
+  *(Superseded by 1.9.0 kit-dir rename — 1.8.1 still lived under `.claude/`.)*
 
 ## 1.8.0 — 2026-10-21
 
@@ -83,7 +95,7 @@ existing product. Humans remain at doc approval, UAT, and merge.
   queue → delivery (branch / PR per the doc's `> Automation:` header).
   Entry modes: `/feature new <name>` (scaffold the doc) and
   `/feature from-story <key>` (BMAD/iSSM story → PENDING doc).
-- **`.claude/templates/FEATURE-template.md`** — the Feature-doc form with
+- **`.issflow/templates/FEATURE-template.md`** — the Feature-doc form with
   `> Approval:` / `> Automation:` headers and spec sections.
 - **`feature-gate.js` (Stop hook)** — blocks session end while the active
   feature has unchecked gates in `docs/features/<slug>/GATES.md`, and verifies
