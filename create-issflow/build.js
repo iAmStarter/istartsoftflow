@@ -10,6 +10,7 @@ const HERE = __dirname;
 const SRC = path.join(HERE, '..', '.claude');   // repo-root .claude (source of truth)
 const TPL = path.join(HERE, 'template', '.claude');
 const DIRS = ['agents', 'commands', 'skills', 'hooks', 'istartsoft-flow', 'templates'];
+const ROOT_FILES = ['README.md']; // human map of the kit (why .claude/, layout)
 
 fs.rmSync(path.join(HERE, 'template'), { recursive: true, force: true });
 fs.mkdirSync(TPL, { recursive: true });
@@ -17,6 +18,11 @@ for (const d of DIRS) {
   const from = path.join(SRC, d);
   if (!fs.existsSync(from)) { console.error(`build: missing ${from}`); process.exit(1); }
   fs.cpSync(from, path.join(TPL, d), { recursive: true });
+}
+for (const f of ROOT_FILES) {
+  const from = path.join(SRC, f);
+  if (!fs.existsSync(from)) { console.error(`build: missing ${from}`); process.exit(1); }
+  fs.cpSync(from, path.join(TPL, f));
 }
 
 function countFiles(dir) {

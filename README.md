@@ -76,6 +76,11 @@ Unsupported features degrade to model-run rituals — they never silently vanish
 
 ## What you get (in `<project>/.claude/`)
 
+The folder name `.claude/` is a **host convention** (commands/agents/hooks load
+from that path on several tools) — the kit inside is **tool-agnostic**. See the
+installed [`.claude/README.md`](./.claude/README.md) map. Primary entry remains
+root **`AGENTS.md`**.
+
 | Group | Items |
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |

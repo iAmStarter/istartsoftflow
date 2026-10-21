@@ -1,5 +1,13 @@
 # Changelog — create-issflow
 
+## 1.8.1 — 2026-10-21
+
+### Changed
+- **Clarify `.claude/`:** folder name is a host convention, not Claude-only
+  branding. Add `.claude/README.md` layout map (shipped in template). METHODOLOGY
+  + generated `AGENTS.md` lead with AGENTS.md; `CLAUDE.md` shim wording softened.
+- Capability matrix lists AGENTS.md hosts first.
+
 ## 1.8.0 — 2026-10-21
 
 ### Added
