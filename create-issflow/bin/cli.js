@@ -40,7 +40,7 @@ function printHelp() {
 
 Usage: npx create-issflow [--tool=<name>] [--dry-run] [--force]
 
-Tools (--tool=, interactive prompt if omitted):`);
+Tools (--tool=). Omit --tool to install EVERY adapter (same as --tool=all):`);
   for (const [k, v] of Object.entries(TOOLS)) log(`  ${k.padEnd(7)} ${v}`);
   log(`
 Flags:
@@ -51,27 +51,22 @@ Flags:
   -h, --help  this message
 
 Every tool installs the portable kit in .claude/ + a root AGENTS.md (the open
-standard). The full methodology lives in .claude/istartsoft-flow/METHODOLOGY.md.`);
+standard — primary entry for most hosts). The full methodology lives in
+.claude/istartsoft-flow/METHODOLOGY.md. Claude Code also gets a thin CLAUDE.md
+shim (@AGENTS.md) because that host only auto-loads CLAUDE.md.`);
 }
 
-// Resolve the target tool: flag -> interactive (TTY) -> default 'claude'.
+// Typo / alias map → canonical TOOLS key
+const TOOL_ALIASES = { cusor: 'cursor' };
+
+// Resolve the target tool: --tool= flag → default 'all' when omitted.
 function pickTool() {
   if (toolArg) {
-    if (!TOOLS[toolArg]) { console.error(`create-issflow: unknown --tool=${toolArg}. One of: ${Object.keys(TOOLS).join(', ')}`); process.exit(1); }
-    return toolArg;
+    const key = TOOL_ALIASES[toolArg] || toolArg;
+    if (!TOOLS[key]) { console.error(`create-issflow: unknown --tool=${toolArg}. One of: ${Object.keys(TOOLS).join(', ')}`); process.exit(1); }
+    return key;
   }
-  if (process.stdin.isTTY && process.stdout.isTTY && !DRY) {
-    const keys = Object.keys(TOOLS);
-    process.stdout.write('\nWhich AI coding tool? (the kit is portable — pick your primary)\n');
-    keys.forEach((k, i) => process.stdout.write(`  ${i + 1}) ${k} — ${TOOLS[k]}\n`));
-    process.stdout.write('> ');
-    let line = '';
-    try { line = (fs.readFileSync(0, 'utf8').split('\n')[0] || '').trim().toLowerCase(); } catch (_) {}
-    const chosen = TOOLS[line] ? line : keys[parseInt(line, 10) - 1];
-    if (!chosen) { console.error('create-issflow: no valid choice; defaulting to claude.'); return 'claude'; }
-    return chosen;
-  }
-  return 'claude'; // non-interactive default = back-compatible
+  return 'all'; // omit --tool = every adapter
 }
 
 // write a single file, non-destructive (honors DRY/FORCE).

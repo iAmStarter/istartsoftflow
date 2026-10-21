@@ -74,12 +74,12 @@
   @media(max-width:760px){nav .links a:not(.keep){display:none}}
 
   .hero{padding:80px 0 60px;text-align:center}
-  .hero h1{font-size:clamp(44px,6.4vw,76px);line-height:.96;margin-bottom:.18em;color:var(--ink)}
+  .hero h1{font-size:clamp(40px,6vw,72px);line-height:.96;margin-bottom:.18em;color:var(--ink);letter-spacing:-.02em}
   .grad{color:var(--violet)}
-  .lead{font-size:clamp(18px,2.1vw,21px);color:var(--muted);max-width:680px;margin:0 auto 1.5em}
-  .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:30px}
-  .badge{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:750;color:#4a5669;border:1px solid var(--line);background:rgba(255,255,255,.85);padding:8px 12px;border-radius:999px}
-  .badge b{color:var(--ink)}
+  .lead{font-size:clamp(18px,2.1vw,21px);color:var(--muted);max-width:640px;margin:0 auto 1.4em}
+  .paths{display:flex;gap:10px 18px;justify-content:center;flex-wrap:wrap;margin:18px 0 8px;font-size:.92rem;font-weight:700}
+  .paths a{color:var(--muted);border-bottom:1px solid transparent} .paths a:hover{color:var(--violet);border-color:var(--violet)}
+  .paths code{font-size:.9em;color:var(--teal-deep);background:none;border:none;padding:0}
   .cmd{display:inline-flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:13px 16px;font-family:var(--mono);font-size:.95rem;max-width:100%;box-shadow:var(--card-sh)}
   .cmd code{background:none;border:none;padding:0;color:var(--ink);white-space:nowrap;overflow:auto} .cmd .pp{color:var(--teal-deep)}
   .copy{cursor:pointer;border:1px solid var(--line);background:var(--surface-2);color:var(--muted);border-radius:8px;padding:6px 12px;font:700 .72rem/1 var(--sans)}
@@ -144,14 +144,14 @@
   }
 
   /* motion — flow pipeline (above) · hero entrance · scroll reveal (reduced-motion safe) */
-  .hero .ey,.hero h1,.hero .lead,.hero .badges,.hero .cmd,.hero .cta{animation:rise .6s both}
-  .hero h1{animation-delay:.05s} .hero .lead{animation-delay:.12s} .hero .badges{animation-delay:.18s}
-  .hero .cmd{animation-delay:.24s} .hero .cta{animation-delay:.3s}
+  .hero .ey,.hero h1,.hero .lead,.hero .paths,.hero .cmd,.hero .cta{animation:rise .6s both}
+  .hero h1{animation-delay:.05s} .hero .lead{animation-delay:.12s} .hero .paths{animation-delay:.16s}
+  .hero .cmd{animation-delay:.22s} .hero .cta{animation-delay:.28s}
   @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
   .reveal{opacity:0;transform:translateY(16px)}
   .reveal.in{opacity:1;transform:none;transition:opacity .55s ease,transform .55s ease}
   @media(prefers-reduced-motion:reduce){
-    .flowsvg .flowline,.flowsvg .dot,.hero .ey,.hero h1,.hero .lead,.hero .badges,.hero .cmd,.hero .cta{animation:none!important}
+    .flowsvg .flowline,.flowsvg .dot,.hero .ey,.hero h1,.hero .lead,.hero .paths,.hero .cmd,.hero .cta{animation:none!important}
     .reveal{opacity:1;transform:none}
   }
   ul.clean{list-style:none;padding:0;margin:0}
@@ -190,16 +190,11 @@
 <nav><div class="wrap">
   <span class="brand"><span class="dot">iSS</span>iStartSoftFlow</span>
   <span class="links">
-    <a href="#loop"><span class="en">The loop</span><span class="th">ลูป</span></a>
-    <a href="#sprint"><span class="en">Sprints</span><span class="th">สปรินต์</span></a>
+    <a href="#howto" class="keep"><span class="en">How to use</span><span class="th">วิธีใช้</span></a>
+    <a href="#start"><span class="en">Start</span><span class="th">เริ่มต้น</span></a>
     <a href="#feature"><span class="en">Feature lane</span><span class="th">ฟีเจอร์เลน</span></a>
     <a href="#tools"><span class="en">Tools</span><span class="th">เครื่องมือ</span></a>
-    <a href="#start"><span class="en">Start</span><span class="th">เริ่มต้น</span></a>
-    <a href="#kit"><span class="en">What you get</span><span class="th">ในชุด</span></a>
-    <a href="#skills"><span class="en">Skills</span><span class="th">สกิล</span></a>
-    <a href="#security"><span class="en">Security</span><span class="th">ความปลอดภัย</span></a>
-    <a href="#practices"><span class="en">Best practices</span><span class="th">แนวปฏิบัติ</span></a>
-    <a class="keep" href="#howto"><span class="en">How to use</span><span class="th">วิธีใช้</span></a>
+    <a href="#kit"><span class="en">Kit</span><span class="th">ในชุด</span></a>
     <span class="lang keep" role="group" aria-label="language">
       <label for="lang-en">EN</label><label for="lang-th">ไทย</label>
     </span>
@@ -208,30 +203,24 @@
 
 <header class="hero"><div class="wrap">
   <div class="ey"><span class="en">workflow kit for AI coding agents</span><span class="th">ชุดเวิร์กโฟลว์สำหรับ AI coding agent</span></div>
-  <h1>
-    <span class="en">Make your AI coding agent<br><span class="grad">follow a real process.</span></span>
-    <span class="th">ทำให้ AI coding agent ของคุณ<br><span class="grad">ทำงานอย่างมีกระบวนการ</span></span>
-  </h1>
+  <h1>iStartSoft<span class="grad">Flow</span></h1>
   <p class="lead">
-    <span class="en">One command drops it into any repo. It enforces a <b>spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship</b>
-    loop with hooks the agent can't skip — so it stops winging it. Works with Claude Code, Codex, Cursor, Gemini &amp; Aider.</span>
-    <span class="th">ติดตั้งด้วยคำสั่งเดียวในทุก repo — บังคับลูป <b>spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship</b>
-    ด้วย hook ที่ agent ข้ามไม่ได้ เพื่อไม่ให้มันทำงานมั่ว ใช้ได้กับ Claude Code, Codex, Cursor, Gemini และ Aider</span>
+    <span class="en">One install. Three default paths. A <b>spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship</b>
+    loop enforced by hooks the agent can't skip — Claude Code, Codex, Cursor, Gemini &amp; Aider.</span>
+    <span class="th">ติดตั้งครั้งเดียว · สามเส้นทางหลัก · ลูป <b>spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship</b>
+    ที่บังคับด้วย hook ซึ่ง agent ข้ามไม่ได้ — ใช้ได้กับ Claude Code, Codex, Cursor, Gemini และ Aider</span>
   </p>
-  <div class="badges">
-    <span class="badge"><b>6</b> <span class="en">tools</span><span class="th">เครื่องมือ</span></span>
-    <span class="badge">macOS · Windows · Linux</span>
-    <span class="badge"><span class="en">pure</span><span class="th">ใช้</span> <b>Node</b> <span class="en">zero deps</span><span class="th">ล้วน</span></span>
-    <span class="badge"><span class="en">token&#8209;lean</span><span class="th">ประหยัด token</span></span>
-    <span class="badge"><span class="en">headless</span><span class="th">headless</span> <b>CI · Docker</b></span>
-    <span class="badge">MIT</span>
+  <div class="paths" aria-label="default paths">
+    <a href="#howto"><code>/overview</code> <span class="en">new project</span><span class="th">งานใหม่</span></a>
+    <a href="#howto"><code>/feature</code> <span class="en">add feature</span><span class="th">เพิ่มฟีเจอร์</span></a>
+    <a href="#howto"><code>/quick</code> <span class="en">tiny fix</span><span class="th">แก้จุกจิก</span></a>
   </div>
   <div class="cmd">
-    <code><span class="pp">$</span> npx create-issflow <span class="muted">--tool=claude</span></code>
+    <code><span class="pp">$</span> npx create-issflow</code>
     <button class="copy" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText('npx create-issflow').then(()=>{this.textContent='copied';setTimeout(()=>this.textContent='copy',1200)})">copy</button>
   </div>
   <div class="cta">
-    <a class="btn primary" href="#tools"><span class="en">Get started</span><span class="th">เริ่มใช้งาน</span></a>
+    <a class="btn primary" href="#howto"><span class="en">How to use</span><span class="th">วิธีใช้</span></a>
     <a class="btn ghost" href="https://github.com/iAmStarter/istartsoftflow"><span class="en">View on GitHub</span><span class="th">ดูบน GitHub</span></a>
   </div>
 </div></header>
@@ -415,17 +404,17 @@
     <tr><td><span class="en">Any AGENTS.md tool</span><span class="th">ทุก tool ที่อ่าน AGENTS.md</span></td><td><code>AGENTS.md</code></td><td><span class="en">reference</span><span class="th">อ้างอิง</span></td><td class="warn">model-run</td><td class="warn">model-run</td></tr>
   </table></div>
   <p class="muted" style="margin-top:14px;font-size:.86rem">
-    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> · <code>--ci</code> (headless via GitHub Actions) · <code>--docker</code> (headless in a container) · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Non-destructive: conflicts are written as <code>&lt;file&gt;.issflow-new</code>.</span>
-    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> · <code>--ci</code> (headless ผ่าน GitHub Actions) · <code>--docker</code> (headless ใน container) · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> — ไม่ทับไฟล์เดิม: ที่ชนกันจะเขียนเป็น <code>&lt;file&gt;.issflow-new</code></span>
+    <span class="en">Flags: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>omit = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code>. Primary entry <code>AGENTS.md</code>; Claude Code also gets a thin <code>CLAUDE.md</code> shim. Non-destructive: conflicts → <code>&lt;file&gt;.issflow-new</code>.</span>
+    <span class="th">แฟล็ก: <code>--tool=&lt;name&gt;</code> (<code>claude</code> · <code>codex</code> · <code>cursor</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>; <b>ไม่ใส่ = all</b>) · <code>--ci</code> · <code>--docker</code> · <code>--dry-run</code> · <code>--force</code> · <code>--help</code> จุดเข้าหลัก <code>AGENTS.md</code> · Claude Code ได้ <code>CLAUDE.md</code> บาง ๆ ด้วย — ไม่ทับไฟล์เดิม: ชนกัน → <code>&lt;file&gt;.issflow-new</code></span>
   </p>
 </div></section>
 
 <section id="howto"><div class="wrap">
-  <div class="ey"><span class="en">how to use · plain language</span><span class="th">วิธีใช้งาน · ฉบับภาษาคน</span></div>
+  <div class="ey"><span class="en">default paths · plain language</span><span class="th">เส้นทางหลัก · ฉบับภาษาคน</span></div>
   <h2><span class="en">Three commands cover most days</span><span class="th">จำแค่ 3 คำสั่ง ก็ใช้งานได้แล้ว</span></h2>
   <p class="muted" style="max-width:760px">
-    <span class="en">You don't need to learn all 20 commands — day to day it's these three; the rest get called in when needed. The system stops to ask you only at the moments that must stay human: confirming it understood a new task, approvals (plan / feature doc / price), dangerous actions, and the final test + merge.</span>
-    <span class="th">ไม่ต้องจำทั้ง 20 คำสั่ง — ใช้จริงรายวันมีแค่ 3 ตัวนี้ ที่เหลือระบบเรียกใช้เองตามจังหวะ และมันจะหยุดถามคุณเฉพาะจุดที่ต้องเป็นคนตัดสินใจ: ทวนความเข้าใจก่อนเริ่มงานใหม่ · การอนุมัติ (แผน / ใบสั่งฟีเจอร์ / ราคา) · ของอันตราย · และการทดสอบรอบสุดท้าย + merge</span>
+    <span class="en"><b>Default:</b> <code>/overview</code> · <code>/feature</code> · <code>/quick</code>. Advanced commands (<code>/propose</code>, <code>/design</code>, <code>/support</code>, audits, sprints…) stay in the kit — use them when the job needs them. The system stops only for human moments: confirm understanding, approvals (plan / design / price), dangerous actions, final UAT + merge.</span>
+    <span class="th"><b>เส้นทางหลัก:</b> <code>/overview</code> · <code>/feature</code> · <code>/quick</code> คำสั่งขั้นสูง (<code>/propose</code>, <code>/design</code>, <code>/support</code>, audits, sprints…) ยังอยู่ในชุด — ใช้เมื่องานต้องการ และมันหยุดถามเฉพาะจุดที่ต้องเป็นคน: ทวนความเข้าใจ · อนุมัติ (แผน / ดีไซน์ / ราคา) · ของอันตราย · UAT สุดท้าย + merge</span>
   </p>
   <div class="grid g3" style="margin-top:24px">
     <div class="card"><h3><code class="flat">/overview</code> <span class="tag"><span class="en">new project</span><span class="th">งานใหม่</span></span></h3>
@@ -453,7 +442,7 @@
   <ol class="steps">
     <li><div class="stepno">1</div>
       <details class="stepd" open><summary>
-        <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow --tool=claude</code></span>
+        <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow</code></span>
         <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </summary><div class="stepbody">
         <p><span class="en">Scaffolds <code>.claude/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.claude/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>

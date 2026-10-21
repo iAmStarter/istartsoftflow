@@ -7,14 +7,14 @@ and tool-agnostic. Non-destructive: it never overwrites your files.
 
 ```bash
 cd my-project
-npx create-issflow                  # prompts for your AI tool
-npx create-issflow --tool=claude    # or pass it: claude | codex | cursor | gemini | aider | all
-# then open your tool — Claude Code fires the SessionStart hook automatically
+npx create-issflow                  # omit --tool = install EVERY adapter
+npx create-issflow --tool=cursor    # claude | codex | cursor | gemini | aider | all
+# then open your tool and run:
 /overview                           # bootstrap the project
 ```
 
 Flags:
-- `--tool=<name>` — pick the target tool (skips the prompt). `all` writes every adapter.
+- `--tool=<name>` — pick the target tool. **Omit = `all`** (every adapter).
 - `--ci` — also write `.github/workflows/issflow-feature.yml` (headless `/feature`
   via GitHub Actions: label an issue `feature:approved` → the lane runs).
 - `--docker` — also write `Dockerfile.issflow` + `scripts/feature-docker.js`
@@ -36,15 +36,15 @@ The portable kit (every tool) in `<project>/.claude/`:
 - `hooks/` — session-start · context-guard · plan-gate (rule-13 enforcement) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`, artifact-verified)
 - `istartsoft-flow/METHODOLOGY.md` — the full methodology (single source of truth)
 
-Plus a root `AGENTS.md` (the open standard) and the per-tool adapter:
+Plus a root **`AGENTS.md`** (open standard — primary entry) and the per-tool adapter:
 
 | Tool | Adds |
 |------|------|
-| `claude` | merges hooks into `.claude/settings.json` |
 | `codex` | nothing extra — `AGENTS.md` is read natively |
 | `cursor` | `.cursor/rules/` + `.cursor/commands/` + `.cursor/hooks.json` |
 | `gemini` | `GEMINI.md` pointer |
 | `aider` | `.aider.conf.yml` that loads the methodology |
+| `claude` | thin `CLAUDE.md` (`@AGENTS.md`) + merges hooks into `.claude/settings.json` |
 | `all` | every adapter above |
 
 It also un-ignores the workflow dirs in `.gitignore` if `.claude/*` was ignored.

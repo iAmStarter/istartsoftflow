@@ -49,7 +49,16 @@ sign-off** — a release gate, always interactive in both modes.
 On a SIGNED sign-off only: deploy to production, smoke-test prod (health 200), update
 `docs/ENDPOINTS.md` base URL, tag the release. HISTORY line: `released v<n> (<date>)`.
 
-## STAGE 8 — GO-LIVE & SUPPORT
-Enter after-go-live support (hypercare): watch for incidents, keep the issue log live.
-New scope → `/change-request` (impact + re-price + sign-off). The project is live; the
-loop continues through change requests.
+## STAGE 8 — GO-LIVE & SUPPORT (hypercare)
+Enter after-go-live support:
+
+1. **Watch** — incidents, error budgets, critical paths; keep `docs/ISSUES.md` live.
+2. **Front door** — route client/prod reports through `/support` (severity P1–P3,
+   warranty vs billable). Warranty defects → `/quick` (or larger lane); do not
+   silently expand scope for free.
+3. **New scope** → `/change-request` (impact + re-price + sign-off).
+4. **Ops memory** — update `/runbook` when a fix changes operational steps.
+5. Default warranty window if unset: **30 days** from this promote (STATE/HISTORY);
+   override from PROPOSAL assumptions when present.
+
+The project is live; the loop continues through `/support` and change requests.

@@ -104,10 +104,14 @@ proceeds to the planner. (This is the planning confirmation gate.)
 
 phase: 0 (pending)
 plan: PENDING
+design: PENDING
+architecture: PENDING
 completed: project bootstrapped — design research done, double grill done
 blocker: none
 
 ```
+(For internal non-quoted work you may set `design: n/a` and `architecture: n/a`
+instead of PENDING so rule 15 does not block `/phase`.)
 8. Create docs/ISSUES.md with header `# Issues` and `## Archived` section.
 
 9. Create empty docs/HISTORY.md.
@@ -138,6 +142,9 @@ blocker: none
 
     AUTO governs the development loop that runs AFTER this gate, never the gate itself.
 
-Optional next step (client / quoted work only): run `/propose` to turn this
-OVERVIEW + PLAN into a proposal + estimate for sign-off before building. Internal or
-personal projects skip it and go straight to `/phase`.
+Optional next steps (client / quoted work):
+1. `/propose` — proposal + estimate (asks rate in chat; client docs stay totals-only).
+2. `/design` — UX pack + architecture approve gates (hard rule 15) before `/phase`.
+
+Internal or personal projects may skip `/propose` and set `design: n/a` /
+`architecture: n/a` in STATE, then go to `/phase`.

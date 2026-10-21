@@ -120,11 +120,12 @@
 <h2><span class="en">Install (1 minute)</span><span class="th">ติดตั้ง (1 นาที)</span></h2>
 <p><span class="en">In your project folder:</span><span class="th">เปิด Terminal เข้าโฟลเดอร์โปรเจกต์ แล้วพิมพ์:</span></p>
 <div class="cmd"><code><span class="pp">$</span> npx create-issflow</code></div>
-<p><span class="en">Pick your AI tool (usually <code>claude</code>). It <b>never overwrites your files</b> — conflicts are written next to yours. Re-run any time to update. Then open your AI tool there:</span>
-<span class="th">เลือกเครื่องมือ AI ของคุณ (ส่วนใหญ่คือ <code>claude</code>) มัน<b>ไม่ทับไฟล์เดิมเด็ดขาด</b> — ถ้าชนกันจะเขียนไฟล์ใหม่แยกไว้ให้ดู ติดตั้งซ้ำเพื่ออัปเดตได้ตลอด จากนั้นเปิดเครื่องมือ AI ในโฟลเดอร์นั้น:</span></p>
-<div class="cmd"><code><span class="pp">$</span> claude</code></div>
+<p class="muted"><span class="en">Omit <code>--tool</code> = install <b>every</b> adapter. Or pass one: <code>--tool=cursor</code> · <code>claude</code> · <code>codex</code> · <code>gemini</code> · <code>aider</code> · <code>all</code>. Primary entry is <b>AGENTS.md</b>; Claude Code also gets a thin <code>CLAUDE.md</code> shim (<code>@AGENTS.md</code>). It <b>never overwrites your files</b> — conflicts are written next to yours. Re-run any time to update. Then open your AI tool and run <code>/overview</code>.</span>
+<span class="th">ไม่ใส่ <code>--tool</code> = ติดตั้ง adapter <b>ทุกตัว</b> หรือระบุ เช่น <code>--tool=cursor</code> · <code>claude</code> · <code>codex</code> · <code>gemini</code> · <code>aider</code> · <code>all</code> จุดเข้าหลักคือ <b>AGENTS.md</b> · Claude Code ได้ <code>CLAUDE.md</code> บาง ๆ (<code>@AGENTS.md</code>) ด้วย มัน<b>ไม่ทับไฟล์เดิม</b> — ชนกันจะเขียนไฟล์ใหม่แยกไว้ อัปเดตซ้ำได้ จากนั้นเปิดเครื่องมือ AI แล้วรัน <code>/overview</code></span></p>
 
 <h2><span class="en">Pick your situation</span><span class="th">ใช้ยังไง — เลือกตามสถานการณ์</span></h2>
+<p class="muted"><span class="en"><b>Default:</b> <code>/overview</code> · <code>/feature</code> · <code>/quick</code>. Advanced (<code>/propose</code> · <code>/design</code> · <code>/support</code> · …) stays in the kit.</span>
+<span class="th"><b>เส้นทางหลัก:</b> <code>/overview</code> · <code>/feature</code> · <code>/quick</code> คำสั่งขั้นสูง (<code>/propose</code> · <code>/design</code> · <code>/support</code> · …) ยังอยู่ในชุด</span></p>
 
 <div class="card">
   <h3><span class="en">1 · Starting a brand-new project → </span><span class="th">1 · เริ่มโปรเจกต์ใหม่ทั้งอัน → </span><code>/overview</code></h3>
@@ -152,7 +153,7 @@
   <span class="th"><code>/quick อธิบายสิ่งที่อยากแก้</code> — มันจะ<b>ทวนความเข้าใจให้ฟังก่อน รอคุณยืนยัน</b> แล้วค่อยแก้ให้เล็กที่สุดเท่าที่งานสำเร็จ พร้อมรันเทสต์กันของเดิมพัง</span></p>
 </div>
 
-<h2><span class="en">All commands</span><span class="th">คำสั่งทั้งหมด</span></h2>
+<h2><span class="en">Default commands</span><span class="th">คำสั่งหลัก</span></h2>
 <p class="muted"><span class="en">You only need three to be productive: <code>/overview</code> to start · <code>/feature</code> to add · <code>/quick</code> to fix.</span>
 <span class="th">จำแค่ 3 ตัวก็ทำงานได้: <code>/overview</code> เริ่มงานใหม่ · <code>/feature</code> เพิ่มของ · <code>/quick</code> แก้จุกจิก</span></p>
 <div class="scroll"><table class="tbl">
@@ -161,12 +162,19 @@
   <tr><td>/feature new &lt;name&gt;</td><td><span class="en">get the feature work-order form</span><span class="th">ขอฟอร์มใบสั่งงานฟีเจอร์</span></td></tr>
   <tr><td>/feature</td><td><span class="en">build the feature end-to-end, deliver branch + test sheet</span><span class="th">ทำฟีเจอร์จนจบ ส่ง branch + ใบทดสอบกลับมา</span></td></tr>
   <tr><td>/quick …</td><td><span class="en">small fast fix</span><span class="th">แก้เล็ก ๆ เร็ว ๆ</span></td></tr>
+</table></div>
+
+<h2><span class="en">Advanced commands</span><span class="th">คำสั่งขั้นสูง</span></h2>
+<div class="scroll"><table class="tbl">
+  <tr><th><span class="en">Type</span><span class="th">พิมพ์ว่า</span></th><th><span class="en">It means</span><span class="th">มันคือ</span></th></tr>
+  <tr><td>/propose</td><td><span class="en">client proposal (asks rate in chat; client page = totals only)</span><span class="th">ใบเสนอราคา (ถามเรทในแชท — หน้าลูกค้าเห็นแค่ยอดรวม)</span></td></tr>
+  <tr><td>/design</td><td><span class="en">UX pack + architecture approve gates before build</span><span class="th">อนุมัติ UX pack + architecture ก่อนเริ่มสร้าง</span></td></tr>
   <tr><td>/phase</td><td><span class="en">build the next slice of the plan</span><span class="th">สร้างงานช่วงถัดไปตามแผน</span></td></tr>
+  <tr><td>/support</td><td><span class="en">after-go-live triage (severity · warranty vs billable CR)</span><span class="th">ซัพพอร์ตหลังขึ้นระบบ (ความรุนแรง · รับประกัน vs CR)</span></td></tr>
+  <tr><td>/change-request …</td><td><span class="en">mid-project change — impact + fair re-price, transparently</span><span class="th">ขอเปลี่ยนงานกลางทาง — คิดผลกระทบ + ราคาใหม่แบบโปร่งใส</span></td></tr>
   <tr><td>/goal set "…"</td><td><span class="en">set a big goal ("clear the feature backlog") for it to chase</span><span class="th">ตั้งเป้าใหญ่ (เช่น "เคลียร์ฟีเจอร์ค้างให้หมด") ให้มันไล่ทำเอง</span></td></tr>
   <tr><td>/goal run</td><td><span class="en">work toward the goal until done / budget spent</span><span class="th">ไล่ทำตามเป้าจนเสร็จหรือหมดโควตาที่ตั้งไว้</span></td></tr>
   <tr><td>/sprint run</td><td><span class="en">organize phases into Scrum sprints, driven automatically</span><span class="th">จัดงานเป็นรอบแบบ Scrum แล้วขับให้อัตโนมัติ</span></td></tr>
-  <tr><td>/propose</td><td><span class="en">client proposal with scope + price (freelance/agency work)</span><span class="th">ทำใบเสนอราคาให้ลูกค้า (งานรับจ้าง)</span></td></tr>
-  <tr><td>/change-request …</td><td><span class="en">mid-project change — impact + fair re-price, transparently</span><span class="th">ขอเปลี่ยนงานกลางทาง — คิดผลกระทบ + ราคาใหม่แบบโปร่งใส</span></td></tr>
   <tr><td>/release</td><td><span class="en">big pre-production check (full tests + audits + human UAT)</span><span class="th">ตรวจใหญ่ก่อนขึ้นระบบจริง (เทสต์รวม + ตรวจครบ + คนทดสอบ)</span></td></tr>
   <tr><td>/uat</td><td><span class="en">generate a human test sheet + collect results</span><span class="th">สร้างชุดทดสอบให้มนุษย์กด + เก็บผล</span></td></tr>
   <tr><td>/ui-audit · /qa-audit · /security-audit</td><td><span class="en">whole-product health checks: UI / quality / security</span><span class="th">ตรวจสุขภาพทั้งระบบ: หน้าตา / คุณภาพ / ความปลอดภัย</span></td></tr>

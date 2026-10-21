@@ -29,6 +29,16 @@ a. PLAN-APPROVAL CHECK (hard rule 13): Read the docs/PLAN.md `> Approval:` heade
    start. Route me to the `/overview` PLAN-APPROVAL gate (or `/replan` then re-approve).
    Approved -> continue.
 
+a2. DESIGN + ARCHITECTURE GATES (hard rule 15): Read `docs/STATE.md` for `design:`
+    and `architecture:`.
+    - Quoted / client work (approved `docs/PROPOSAL.md` exists): both must read
+      `approved <date>` (or explicit `n/a` only if the human waived the gate in
+      writing). Still PENDING / missing -> STOP. Route me to `/design`.
+    - Internal / no proposal: if STATE has `design: n/a` and `architecture: n/a`,
+      continue; if fields are missing, treat as n/a once (set them) unless OVERVIEW
+      opted into the gates.
+    Approved / n/a -> continue.
+
 b. INFRA CHECK (phases > 0): Read the declared infra in docs/OVERVIEW.md.
    - Managed infra -> confirm it is reachable; no provisioning step is needed.
    - Self-managed infra -> confirm Phase 0 (infra) ran and is healthy.

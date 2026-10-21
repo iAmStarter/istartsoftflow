@@ -33,36 +33,57 @@ Is this an in-scope **clarification** (no cost change) or a real **scope change*
 (add / remove / alter)? Clarification -> log it, proceed, no re-price. Scope change
 -> continue.
 
+Also classify commercial lane:
+- **Warranty / defect** (bug vs approved scope, inside support window) → prefer
+  `/support` or `/quick` — not a billable CR unless the client expands scope.
+- **Billable CR** → continue below.
+
 ## STEP 2 — IMPACT ANALYSIS
 Determine:
 - phases affected — **done phases are frozen** (their cost is already spent and
   counts); new / changed phases; cut phases (credit back the un-started effort).
-- knock-on effects — architecture, **security (re-threat-model?)**, tests, timeline.
+- knock-on effects — architecture, **UX pack**, **security (re-threat-model?)**,
+  tests, timeline. If UX or arch artifacts change, those gates re-open (rule 15).
 - dispatch `researcher` (DESIGN or IMPL) if the change needs grounding in facts.
 
-## STEP 3 — RE-ESTIMATE (the DELTA only; reasonable + transparent)
-- Use the SAME estimation config as PROPOSAL.md (unit, rate card, currency,
-  contingency) — consistency is what makes the re-price defensible.
+## STEP 3 — RE-ESTIMATE (the DELTA only)
+- Reuse the SAME estimation config used for the approved proposal’s **internal**
+  math (unit, rate card, currency, contingency) if still available in a private
+  estimate memo or chat-recorded answers.
+- If rate / contingency is missing → **ASK once** (same rule as `/propose`). Never
+  invent a kit default rate; never commit personal rates into public kit files.
 - added effort × rate = added cost; cut effort = credit.
-- **net cost Δ** + **new total** vs the approved baseline — as a range + assumptions.
+- **net cost Δ** + **new total** vs the approved baseline — as a range.
+- Show rate math **in chat to the human only**.
 - **timeline Δ**. State what stays the SAME so the client sees the price is fair.
 
-## STEP 4 — LOG the change order to docs/CHANGES.md (append-only)
+### CLIENT-DOC RULE
+Anything the client sees (CR summary, updated PROPOSAL.md / proposal.html) shows
+**Δ cost + new total** (and effort/timeline) only — **never** rate, rate card, or
+contingency %.
+
+## STEP 4 — LOG the change order
+1. Append a one-line summary to `docs/CHANGES.md` (append-only):
 ```
 CR-<n> | <date> | <change> | impact: <phases> | effort Δ: <±days> |
 cost Δ: <±amount> | new total: <amount> | status: proposed
 ```
+2. Fill `.claude/templates/CR-template.md` → `docs/changes/CR-<n>.md` (detail:
+   classification, impact, Δ cost, warranty vs billable, status). Keep the detail
+   file client-safe on money fields (totals only).
 
 ## STEP 5 — APPROVAL GATE
-Show me CR-<n> (impact + price delta + new total). **STOP for approval** (commercial
-gate — always interactive).
+Show me CR-<n> (impact + price delta + new total — no rate). **STOP for approval**
+(commercial gate — always interactive).
 - **Approved** -> set CR status `approved`; bump PROPOSAL.md to a new version (vN+1)
-  with the delta folded in; re-render `docs/proposal.html` from it (same template +
-  language); then dispatch `/replan` to apply the phase changes to PLAN.md (done
-  phases stay frozen). Update STATE.md. NOTE: `/replan` reverts PLAN.md to
-  `> Approval: PENDING` and re-runs the PLAN-APPROVAL gate (hard rule 13) — the
-  commercial CR sign-off is SEPARATE from the plan sign-off, so `/phase` and
-  `/sprint` stay blocked until you also re-approve the revised plan.
+  with the delta folded in (**totals only**); re-render `docs/proposal.html` from it
+  (same template + language; no contingency note / rate); then dispatch `/replan` to
+  apply the phase changes to PLAN.md (done phases stay frozen). Update STATE.md.
+  NOTE: `/replan` reverts PLAN.md to `> Approval: PENDING` and re-runs the
+  PLAN-APPROVAL gate (hard rule 13) — the commercial CR sign-off is SEPARATE from
+  the plan sign-off, so `/phase` and `/sprint` stay blocked until you also
+  re-approve the revised plan. If UX/arch scope changed, reset `design:` /
+  `architecture:` in STATE to PENDING (rule 15) before build resumes.
 - **Rejected** -> set CR status `rejected`; PLAN + PROPOSAL unchanged.
 
 ## STEP 6 — RECORD

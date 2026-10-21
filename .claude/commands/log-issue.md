@@ -13,6 +13,8 @@ Canonical format:
 ### <short error title — searchable, literal error keywords>
 
 - [ ] open      (or “- [x] resolved” once fixed)
+- severity: P1 | P2 | P3   (optional; required when filed via /support)
+- commercial: warranty | billable | n/a
 - symptom: <what was observed>
 - root cause: <the REAL underlying cause>
 - solution: <exact fix, or “pending”>
@@ -26,5 +28,6 @@ Rules:
 - open issues use the empty box `- [ ]`; resolved are checked `- [x] resolved`
   (the SessionStart hook surfaces every `- [ ]` as open — keep the box empty until fixed).
 - open issues go at the TOP; resolved below; archived oldest at bottom.
+- For after-go-live tickets prefer `/support` first (triage), then this log.
 
 Confirm the entry back in 2 lines.

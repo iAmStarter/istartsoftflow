@@ -106,34 +106,55 @@ from idea to closeout:
 5. **Proposal & estimate (OPTIONAL — depends on the job)** — for client / quoted
    work, `/propose` reads OVERVIEW + PLAN → `docs/PROPOSAL.md` + a rendered
    `docs/proposal.html`: scope, phase breakdown, effort + cost estimate, timeline,
-   assumptions, with a **client sign-off gate** before build. Internal / personal
-   projects skip straight from plan to build.
-6. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop). Each phase's
+   assumptions, with a **client sign-off gate** before build. **Ask rate +
+   contingency in chat** when missing — the kit stores **no** default rate (rates
+   are confidential). Client docs show **totals only** (never rate or contingency %).
+   Internal / personal projects skip straight from plan to build (and may set
+   design/architecture gates to `n/a`).
+6. **Design + architecture gates (rule 15 — after proposal, before build)** —
+   `/design` produces `docs/UX-PACK.md` + `docs/ARCHITECTURE.md` and stops for
+   human approve. Vertical slices still implement UI+code together; these gates
+   lock the *frame* first (software-house shape without abandoning slices).
+7. **Build** — the loop, one phase at a time (`/phase`, AUTO dev loop). Each phase's
    tests (unit + integration + e2e) are automated and MUST pass before the next phase.
    Optionally wrap the phases in the **sprint layer** (`/sprint`): group them into
    capacity-bounded sprints, each shipping one demoable increment with planning →
    standups → review → retro. `/sprint run` drives this end-to-end (see Sprint layer).
-7. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
-   change order (`docs/CHANGES.md`) + sign-off, then `/replan`. Scope and cost never
-   change silently.
-8. **Release** — `/release`: full regression (functional/integration/e2e) → auto
+8. **Change mid-flight** — `/change-request`: impact analysis + re-estimate + a logged
+   change order (`docs/CHANGES.md` + `docs/changes/CR-<n>.md`) + sign-off, then
+   `/replan`. Scope and cost never change silently. Client-facing CR = Δ cost + new
+   total only.
+9. **Release** — `/release`: full regression (functional/integration/e2e) → auto
    audits (UI / QA / security / code) → smoke → **manual UAT** (`/uat`, scenario sheet
    + captured results) → defect loop → **sign-off** (`docs/SIGNOFF-…`) → promote to
    production (a human-signed hard-stop).
-9. **Go-live & support** — after-go-live hypercare; new scope routes through
-   `/change-request`. The project is live; the loop continues.
-10. **Closeout** — `/synthesize` → a project summary: what was built, key decisions,
+10. **Go-live & support** — hypercare + `/support` triage (severity, warranty vs
+    billable CR, hotfix via `/quick`). New scope → `/change-request`.
+11. **Closeout** — `/synthesize` → a project summary: what was built, key decisions,
     every change order, and the final cost vs the original estimate.
 
 **Logging is continuous and total.** Every stage writes to a durable artifact:
-requirements (PRD / OVERVIEW), commercial (PROPOSAL / CHANGES), execution
-(PLAN / HISTORY), decisions (DESIGN_LOG), errors (ISSUES), research (research/).
-Nothing important lives only in chat — it is on disk, so the project can always be
-reconstructed and summarised.
+requirements (PRD / OVERVIEW), commercial (PROPOSAL / CHANGES), design
+(UX-PACK / ARCHITECTURE), execution (PLAN / HISTORY), decisions (DESIGN_LOG),
+errors (ISSUES), research (research/). Nothing important lives only in chat — it
+is on disk, so the project can always be reconstructed and summarised.
 
 **Approval gates are always interactive** (both modes): the **PLAN-APPROVAL** gate
-(rule 13), the proposal sign-off, and every change-order approval pause for the human.
-AUTO governs the *dev loop between* those gates, never the plan or the money decisions.
+(rule 13), the proposal sign-off, **DESIGN + ARCHITECTURE** (rule 15), and every
+change-order approval pause for the human. AUTO governs the *dev loop between*
+those gates, never the plan, the money, or the design/arch frame.
+
+### Software-house roles → kit map
+
+| House role | Kit surface |
+|------------|-------------|
+| BA / PM | `/overview` grill · `grill-me` · PLAN / PROPOSAL / CR gates |
+| UX / UI | `/design` (UX pack) · `ux-design` skill · `/ui-audit` · rule 9 CLOSE |
+| Architect | `/design` (ARCHITECTURE) · `researcher` DESIGN · `code-standards` · `/log-decision` |
+| Developer | `implementer` · `/phase` · `/feature` · `/quick` |
+| QA | `test-author` · `e2e-runner` · `/qa-audit` · `/uat` |
+| DevOps | final-phase deploy · `/release` promote |
+| Support | `/support` · `/log-issue` · `/runbook` · release hypercare |
 
 -----
 
@@ -280,12 +301,22 @@ Named procedures, each with a canonical body in `.claude/commands/<name>.md`.
 
 **Lane routing — which entry point for which job:**
 
+**Default paths** (most days — elevate these in HOW-TO / landing):
+
 | The job | Lane |
 |---------|------|
-| Brand-new project (no OVERVIEW yet) | `/overview` → `/phase` (optionally `/sprint`) |
+| Brand-new project (no OVERVIEW yet) | `/overview` → (`/propose` if quoted) → `/design` → `/phase` (optionally `/sprint`) |
 | New FEATURE on an existing product | `/feature` (scaffold the doc with `/feature new`) |
 | Small, obvious, non-phase change (a fix, a rename, a copy tweak) | `/quick` |
+
+**Advanced** (same kit — do not cut; use when the job needs them):
+
+| The job | Lane |
+|---------|------|
+| Client quote after plan approval | `/propose` (asks rate; client totals only) |
+| UX pack + architecture sign-off | `/design` (rule 15) |
 | Scope change to already-approved work | `/change-request` |
+| After-go-live bug / triage | `/support` |
 | An OUTCOME spanning several units ("clear the feature queue") | `/goal` (drives the lanes above) |
 | Whole-product quality sweep / pre-release | `/ui-audit` · `/qa-audit` · `/security-audit` · `/release` |
 
@@ -310,8 +341,14 @@ surface or need its own acceptance criteria? -> `/feature`. Otherwise `/quick`.
   holds state; its `Approved:` line arms headless passes.
 - **propose** — turn approved requirements + stack into `PROPOSAL.md` (scope, phase
   breakdown, effort + cost estimate, assumptions) with a client sign-off gate.
+  Asks rate/contingency in chat when missing; client artifacts are totals-only.
+- **design** — post-proposal UX pack + architecture note (`UX-PACK.md` /
+  `ARCHITECTURE.md`) with human approve (rule 15) before `/phase`.
 - **change-request** — a mid-project scope change: impact analysis + re-estimate +
-  a logged change order (`CHANGES.md`) + sign-off, then `replan`.
+  a logged change order (`CHANGES.md` + `docs/changes/CR-<n>.md`) + sign-off, then
+  `replan`. Client sees Δ cost + new total only.
+- **support** — after-go-live triage: severity P1–P3, warranty vs billable CR,
+  hotfix via `/quick` or route to `/change-request`.
 - **phase [n]** — run one phase end-to-end with the circuit breaker. Chooses the
   TDD or non-TDD order at RESEARCH. CLOSE runs the regression guard + ENDPOINTS
   coverage gate. When a sprint is active, CLOSE also fires a `/sprint standup` tick.
@@ -462,7 +499,7 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
 
 -----
 
-## Hard rules (1–14)
+## Hard rules (1–15)
 
 1. Before debugging ANY error: grep `docs/ISSUES.md` AND `docs/research/INDEX.md`.
    The SESSION-OPEN ritual surfaces ISSUES.md — there is no excuse to miss it.
@@ -536,6 +573,14 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
     change · `Approved:` goal → goal runs) — that is exactly what arms headless.
     Rationale: a wrong understanding burns tokens and context at 100× the cost
     of one confirm turn. AUTO governs execution AFTER intake, never instead of it.
+15. **DESIGN + ARCHITECTURE gates.** After a client proposal is signed (quoted
+    work), no `/phase` / `/sprint` build starts until `docs/UX-PACK.md` and
+    `docs/ARCHITECTURE.md` carry human approval, recorded as `design:` /
+    `architecture:` in `docs/STATE.md` plus HISTORY lines. Run `/design` to
+    author and stop for sign-off. Internal / non-quoted projects may set both to
+    `n/a`. A CR that reshapes UX or architecture reverts the affected gate to
+    `PENDING`. Client-facing commercial docs never include rate cards or
+    contingency percentages (ask rates in chat; totals only on the page).
 
 -----
 
@@ -571,14 +616,17 @@ the KB. The kit works normally without a KB.
 ## File contract
 
 - `docs/PRD.md` — crystallised product requirements (or your BMAD/iSSM stories).
-- `docs/PROPOSAL.md` — scope + phase breakdown + effort/cost estimate + assumptions
-  + sign-off. Versioned; the commercial baseline (source of truth).
+- `docs/PROPOSAL.md` — scope + phase breakdown + effort/cost totals + assumptions
+  + sign-off. Versioned; client-safe commercial baseline (no rate / contingency %).
 - `docs/proposal.html` — the client-facing proposal, rendered from PROPOSAL.md via
   `.claude/templates/proposal.html`, in the project language; print-ready (PDF).
-- `.claude/templates/` — client-facing document templates (proposal.html, …) the
-  commands render into `docs/`.
+- `docs/UX-PACK.md` · `docs/ARCHITECTURE.md` — pre-build design/arch frames
+  (rule 15); templates under `.claude/templates/`.
+- `.claude/templates/` — document templates (proposal.html, UX-PACK, ARCHITECTURE,
+  CR, FEATURE, …) the commands render into `docs/`.
 - `docs/CHANGES.md` — change-order log (append-only): each scope change with its
   impact, effort/cost delta, new total, and approval status. The commercial audit trail.
+- `docs/changes/CR-<n>.md` — detailed CR from `CR-template.md` (client-safe totals).
 - `docs/UAT-<date>.md` — UAT scenario sheet (all cases) + captured tester results
   (PASS/FAIL + notes). Drives the release defect loop.
 - `docs/SIGNOFF-<date>.md` — release sign-off: scope delivered, test/audit/UAT
@@ -601,7 +649,8 @@ the KB. The kit works normally without a KB.
   (Done-when · Budget · `Approved:` line · progress ticks). Maintained by `/goal`.
 - `.claude/templates/FEATURE-template.md` — the Feature-doc form `/feature new`
   scaffolds (Approval/Automation headers + spec sections).
-- `docs/STATE.md` — current position. Small. Rewritten, not appended.
+- `docs/STATE.md` — current position. Small. Rewritten, not appended. Includes
+  `plan:`, `design:`, `architecture:` gate pointers (approved · PENDING · n/a).
 - `docs/ISSUES.md` — error log. Deduped by synthesizer.
 - `docs/PLAN.md` — the phase plan (the product backlog). Carries an `> Approval:`
   header — `PENDING` until the rule-13 PLAN-APPROVAL gate stamps `approved <date> v<n>`;
