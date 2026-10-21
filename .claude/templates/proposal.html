@@ -91,7 +91,8 @@
 
   <div class="total">
     <span><span class="lbl" style="margin:0">ราคารวม <em>Total</em></span><br><span class="muted" style="font-size:9px">{{TIMELINE}}</span></span>
-    <span class="amt">{{TOTAL_COST}} <small>{{CONTINGENCY_NOTE}}</small></span>
+    <!-- CLIENT-SAFE: totals only. Never put rate, rate card, or contingency % in {{TOTAL_NOTE}}. Leave empty or a non-rate label (e.g. currency). -->
+    <span class="amt">{{TOTAL_COST}} <small>{{TOTAL_NOTE}}</small></span>
   </div>
 
   <div class="cols">
