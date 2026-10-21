@@ -27,18 +27,23 @@ against the cookbook + wireframe and produces a UX CHECK verdict; nothing UI shi
 without it. New visual direction (a layout or look the wireframe doesn't cover) is
 confirmed with the user before building — design is where human taste matters.
 
+- **Authoring the UX pack** (`/design` → `docs/UX-PACK.md`) after proposal sign-off
+  and before `/phase` (hard rule 15) — produce the frame the build must stay inside.
 - Building a screen / page / component.
 - Reviewing a UI diff (the "ตรวจ" pass).
 - CLOSE gate of any frontend phase — the cookbook check MUST pass.
 
-This skill is the STANDARD + the inline GATE (one screen, at phase close). For a
-WHOLE-PRODUCT sweep against this same cookbook — periodic or before a release — run
-`/ui-audit` (same rubric, broader scope, a scored report).
+This skill is the STANDARD + the inline GATE (one screen, at phase close) **and**
+the authoring guide for the pre-build UX pack. For a WHOLE-PRODUCT sweep against
+this same cookbook — periodic or before a release — run `/ui-audit` (same rubric,
+broader scope, a scored report).
 
 Order: **wireframe first** (does the layout match the baseline frame?) ->
 **cookbook** (do the details obey the system?). Never invent layout the
 wireframe does not have. If the design truly needs a frame the wireframe lacks,
 STOP and update the wireframe baseline first (a design decision -> `log-decision`).
+When an approved `docs/UX-PACK.md` exists, treat it as the project frame — drift
+from the pack is a defect unless the pack is re-approved.
 
 -----
 
