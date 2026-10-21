@@ -52,6 +52,9 @@ claude
 
 ## How to use it — pick your situation
 
+**Default paths** (most days): `/overview` · `/feature` · `/quick`.  
+**Advanced** (same kit — when the job needs them): `/propose` · `/design` · `/support` · `/phase` · `/sprint` · audits · `/release` · …
+
 ### Situation 1: starting a brand-new project
 
 ```
@@ -111,7 +114,7 @@ smallest change that works — with a regression check so nothing else breaks.
 
 ---
 
-## All commands
+## Default commands
 
 | Type | It means |
 |---|---|
@@ -119,12 +122,19 @@ smallest change that works — with a regression check so nothing else breaks.
 | `/feature new <name>` | get the feature work-order form |
 | `/feature` | build the feature end-to-end, deliver branch + test sheet |
 | `/quick ...` | small fast fix |
+
+## Advanced commands
+
+| Type | It means |
+|---|---|
+| `/propose` | client proposal (asks your rate in chat; client page shows totals only) |
+| `/design` | UX pack + architecture approve gates before build |
 | `/phase` | build the next slice of the plan |
+| `/support` | after-go-live triage (severity · warranty vs billable CR) |
+| `/change-request ...` | mid-project change — impact + fair re-price, transparently |
 | `/goal set "..."` | set a big goal ("clear the feature backlog") for it to chase |
 | `/goal run` | work toward the goal until done / budget spent |
 | `/sprint run` | organize phases into Scrum-style sprints, driven automatically |
-| `/propose` | client proposal with scope + price (for freelance/agency work) |
-| `/change-request ...` | mid-project change — impact + fair re-price, transparently |
 | `/release` | the big pre-production check (full tests + audits + human UAT) |
 | `/uat` | generate a human test sheet + collect results |
 | `/ui-audit` `/qa-audit` `/security-audit` | whole-product health checks |
@@ -145,7 +155,8 @@ Almost everything is automatic — except the points that must stay human:
 
 1. **Before starting any new task** — it briefs its understanding back; you
    confirm first (a wrong understanding wastes far more money than one question).
-2. **Approvals** — the plan, the feature doc, the price. No signature, no build.
+2. **Approvals** — the plan, the feature doc, UX/architecture (quoted work), the
+   price. No signature, no build.
 3. **Dangerous things** — production deploys, deleting data, sending things out.
 4. **Final testing (UAT) + the merge** — the last gate is always a person.
 

@@ -36,10 +36,12 @@ as `<file>.issflow-new`).
 You don't need all 20 commands — **three cover most days**. Full beginner
 guides: [English](./HOW-TO-USE.md) · [ภาษาไทย](./HOW-TO-USE.th.md)
 
+**Default paths** (most days):
+
 1. **Brand-new project** → `/overview` — it interviews you like a good PM,
    writes a plan, and stops for **your approval** (a real lock: source files
-   can't be edited while the plan is unapproved). Then `/phase` builds it slice
-   by slice, tests first.
+   can't be edited while the plan is unapproved). Quoted work then uses
+   `/propose` + `/design` before `/phase` builds slice by slice.
 2. **Add a feature to an existing product** → `/feature new <name>` gives you a
    form; fill it in normal human language; flip `Approval: PENDING` →
    `APPROVED <you> <date>`; run `/feature` and walk away. You come back to a
@@ -48,10 +50,13 @@ guides: [English](./HOW-TO-USE.md) · [ภาษาไทย](./HOW-TO-USE.th.md
 3. **Tiny fix** → `/quick <describe it>` — it repeats its understanding back,
    waits for your confirm, then makes the smallest change with a regression check.
 
+**Advanced** (same kit): `/propose` · `/design` · `/support` · `/change-request` ·
+`/sprint` · audits · `/release` · …
+
 It stops to ask you at exactly four kinds of moments: confirming it understood a
-new task · approvals (plan / feature doc / price) · dangerous actions (prod
-deploy, deletions, pushes) · final UAT + the merge. Everything in between runs
-itself.
+new task · approvals (plan / design / feature doc / price) · dangerous actions
+(prod deploy, deletions, pushes) · final UAT + the merge. Everything in between
+runs itself.
 
 ## Supported tools
 
@@ -75,8 +80,8 @@ silently vanish.
 | Group | Items |
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
-| **commands** | `/overview` `/feature` `/goal` `/propose` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/quick` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
-| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** (naming-per-language + architecture) — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
+| **commands** | `/overview` `/feature` `/quick` (default) · `/propose` `/design` `/support` `/goal` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
+| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** · **support-triage** — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
 | **hooks** | session-start · context-guard (token-budget watchdog) · plan-gate (rule-13 PLAN-approval enforcement) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`, artifact-verified) (Node scripts, wired per tool) |
 | **methodology** | `.claude/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 

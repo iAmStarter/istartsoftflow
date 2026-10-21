@@ -1,5 +1,26 @@
 # Changelog — create-issflow
 
+## 1.8.0 — 2026-10-21
+
+### Added
+- **`/design`** — post-proposal UX pack + architecture approve gates (hard rule 15)
+  before `/phase`; templates `UX-PACK-template.md` · `ARCHITECTURE-template.md`.
+- **`/support`** + **`support-triage` skill** — after-go-live severity triage,
+  warranty vs billable CR, hotfix routing.
+- **`CR-template.md`** — detailed change-order artifact under `docs/changes/`.
+- Software-house **roles → kit map** and **Default / Advanced** lane routing in
+  METHODOLOGY.
+
+### Changed
+- **`/propose` / `/change-request`:** ask rate + contingency in chat when missing;
+  never ship kit default rates; client PROPOSAL / HTML show **totals only**
+  (no rate, no contingency %). `proposal.html` `{{CONTINGENCY_NOTE}}` →
+  `{{TOTAL_NOTE}}`.
+- **Landing / HOW-TO / README:** default paths (`/overview` · `/feature` ·
+  `/quick`) first; advanced commands labeled, not cut; hero brand-forward.
+- **`/phase` preflight** enforces design + architecture gates when a proposal
+  exists; `/release` STAGE 8 hypercare points at `/support`.
+
 ## 1.7.0 — 2026-07-03
 
 ### Added
