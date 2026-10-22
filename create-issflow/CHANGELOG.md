@@ -1,5 +1,15 @@
 # Changelog — create-issflow
 
+## 1.9.2 — 2026-10-22
+
+### Added
+- **`ui-ux-pro-max` skill** vendored into the kit (search engine + catalogue
+  from [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill),
+  MIT). `/design` STEP 1 runs `scripts/search.py --design-system` and folds the
+  look into `docs/UX-PACK.md`. No extra `uipro init`. `ux-design` stays the
+  rule-9 CLOSE gate; do not re-roll styles per phase. Python 3 required at
+  runtime (ask the human if missing).
+
 ## 1.9.1 — 2026-10-21
 
 ### Changed

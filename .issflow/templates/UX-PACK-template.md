@@ -22,6 +22,7 @@ must stay inside. Wireframe baseline first; visual direction confirmed here.
 ## Frame & tokens
 - Wireframe baseline: (link or summary)
 - Brand / tokens: (or “follow OVERVIEW UX direction”)
+- UI UX Pro Max: style · palette · type · anti-patterns
 - Breakpoints: XS · SM · MD · LG · XL
 
 ## States & a11y notes

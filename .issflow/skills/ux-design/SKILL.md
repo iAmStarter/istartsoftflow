@@ -29,6 +29,9 @@ confirmed with the user before building — design is where human taste matters.
 
 - **Authoring the UX pack** (`/design` → `docs/UX-PACK.md`) after proposal sign-off
   and before `/phase` (hard rule 15) — produce the frame the build must stay inside.
+  Visual direction (style, palette, type) comes from `ui-ux-pro-max` first; this
+  skill still owns the wireframe + cookbook. Do not skip the cookbook because a
+  catalogue picked a look.
 - Building a screen / page / component.
 - Reviewing a UI diff (the "ตรวจ" pass).
 - CLOSE gate of any frontend phase — the cookbook check MUST pass.

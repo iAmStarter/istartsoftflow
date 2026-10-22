@@ -34,10 +34,13 @@
 
 Caveman ULTRA mode always on. Apply the `karpathy-guidelines` skill (engineering
 discipline) on every coding and debugging task. Apply the `ux-design` skill (the UX
-cookbook + wireframe baseline) on every UI-facing task. Apply the `security` skill
-(the Secure SDLC cookbook) at design (threat model), while coding (secure coding),
-and before any deploy. Apply the `code-standards` skill (naming per the language's
-own idiom + the declared architecture) on every coding task.
+cookbook + wireframe baseline) on every UI-facing task. When **authoring** a new
+visual direction (`/design`, or no approved UX-PACK yet), apply `ui-ux-pro-max`
+first and fold the look into the UX pack — do not re-roll styles at phase CLOSE.
+Apply the `security` skill (the Secure SDLC cookbook) at design (threat model),
+while coding (secure coding), and before any deploy. Apply the `code-standards`
+skill (naming per the language's own idiom + the declared architecture) on every
+coding task.
 
 -----
 
@@ -155,7 +158,7 @@ those gates, never the plan, the money, or the design/arch frame.
 | House role | Kit surface |
 |------------|-------------|
 | BA / PM | `/overview` grill · `grill-me` · PLAN / PROPOSAL / CR gates |
-| UX / UI | `/design` (UX pack) · `ux-design` skill · `/ui-audit` · rule 9 CLOSE |
+| UX / UI | `/design` (UX pack) · `ui-ux-pro-max` (look) · `ux-design` (frame + gate) · `/ui-audit` · rule 9 CLOSE |
 | Architect | `/design` (ARCHITECTURE) · `researcher` DESIGN · `code-standards` · `/log-decision` |
 | Developer | `implementer` · `/phase` · `/feature` · `/quick` |
 | QA | `test-author` · `e2e-runner` · `/qa-audit` · `/uat` |
@@ -691,6 +694,8 @@ the KB. The kit works normally without a KB.
   `scripts/regression.sh` (default mock; `--real` runs the real corpus).
 - `.issflow/skills/ux-design/` — the UX cookbook + wireframe baseline (read on
   demand for any UI work).
+- `.issflow/skills/ui-ux-pro-max/` — visual direction for `/design` (vendored
+  search engine + catalogue; MIT upstream).
 - `.issflow/skills/security/` — the Secure SDLC cookbook + threat-modeling /
   secure-coding / pentest / standards references (read on demand for security work).
 - `.issflow/skills/code-standards/` — naming-per-language + architecture cookbook

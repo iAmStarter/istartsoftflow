@@ -14,7 +14,7 @@ This directory is the **portable workflow kit** (tool-agnostic). Every
 |------|------|
 | `agents/` | Fresh-context workers (planner, researcher, implementer, …) |
 | `commands/` | Procedures — Default: `/overview` `/feature` `/quick`; Advanced: `/propose` `/design` `/support` … |
-| `skills/` | On-demand cookbooks (ux-design, security, support-triage, …) |
+| `skills/` | On-demand cookbooks (ux-design, ui-ux-pro-max, security, support-triage, …) |
 | `hooks/` | Lifecycle enforcement scripts |
 | `istartsoft-flow/` | METHODOLOGY.md — every hard rule lives here once |
 | `templates/` | Proposal / UX pack / architecture / CR / FEATURE / automation |

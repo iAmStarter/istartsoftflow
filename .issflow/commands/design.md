@@ -24,13 +24,19 @@ and STOP. Write nothing.
 Target: `$ARGUMENTS` → `ux` | `arch` | `both` (default **both**).
 
 ## STEP 1 — UX PACK (if ux|both)
-1. Apply `ux-design` skill (authoring mode): wireframe baseline + cookbook direction.
-2. Scaffold or update `docs/UX-PACK.md` from `.issflow/templates/UX-PACK-template.md`.
-3. Fill flows, screen inventory, tokens/frame, a11y notes from OVERVIEW + PLAN.
-4. SHOW me UX-PACK.md. **STOP for approval.**
-5. On approve: stamp `> Approval: approved <date> v<n>`; set `design: approved <date>`
+1. Apply `ui-ux-pro-max` (visual direction): run the kit engine
+   `.issflow/skills/ui-ux-pro-max/scripts/search.py --design-system` from
+   OVERVIEW product + industry. Fold into UX-PACK tokens — do not create a
+   parallel `design-system/` SoT. If Python 3 is missing, ask me to install it
+   (do not install tools yourself).
+2. Apply `ux-design` skill (authoring mode): wireframe baseline + cookbook direction.
+   Catalogue output must still pass the cookbook (tokens, a11y, no emoji icons).
+3. Scaffold or update `docs/UX-PACK.md` from `.issflow/templates/UX-PACK-template.md`.
+4. Fill flows, screen inventory, tokens/frame, a11y notes from OVERVIEW + PLAN.
+5. SHOW me UX-PACK.md. **STOP for approval.**
+6. On approve: stamp `> Approval: approved <date> v<n>`; set `design: approved <date>`
    in STATE.md; HISTORY line `design v<n> approved`.
-6. On change request: revise and re-show; header stays PENDING.
+7. On change request: revise and re-show; header stays PENDING.
 
 ## STEP 2 — ARCHITECTURE (if arch|both)
 1. Dispatch `researcher` (DESIGN) only if open unknowns remain; else use OVERVIEW.

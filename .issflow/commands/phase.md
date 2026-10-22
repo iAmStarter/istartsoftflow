@@ -119,6 +119,8 @@ for the slice using the declared E2E runner (it brings the test stack up/down
 itself). Then run the `ux-design` cookbook + wireframe check on the new UI
 (hard rule 9): the UI must match the wireframe frame and pass the cookbook
 (tokens, a11y/WCAG AA, states, breakpoints). A `ux-design` BLOCK is a GATE FAIL.
+Do not re-run `ui-ux-pro-max` `--design-system` here — the look is locked in the
+approved UX pack.
 Non-frontend phase -> skip §3c.
 
 PHASE GATE (rule 5) -> go to §4/§5/§6 (see GATE below).

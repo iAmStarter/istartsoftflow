@@ -85,7 +85,7 @@ remains root **`AGENTS.md`**.
 |-------|-------|
 | **agents** | planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer |
 | **commands** | `/overview` `/feature` `/quick` (default) · `/propose` `/design` `/support` `/goal` `/phase` `/sprint` `/ui-audit` `/qa-audit` `/security-audit` `/release` `/uat` `/change-request` `/replan` `/synthesize` `/runbook` `/store-wisdom` `/log-issue` `/log-decision` `/unstuck` |
-| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **security** (Secure SDLC) · **code-standards** · **support-triage** — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
+| **skills** | caveman · grill-me · karpathy-guidelines · **ux-design** · **ui-ux-pro-max** (look at `/design`) · **security** (Secure SDLC) · **code-standards** · **support-triage** — authored to Anthropic's *Complete Guide to Building Skills* (kebab-case names, `what + when-to-use` descriptions, `references/` progressive disclosure) |
 | **hooks** | session-start · context-guard (token-budget watchdog) · plan-gate (rule-13 PLAN-approval enforcement) · pre-compact · subagent-stop · feature-gate (Stop gate for `/feature`, artifact-verified) (Node scripts, wired per tool) |
 | **methodology** | `.issflow/istartsoft-flow/METHODOLOGY.md` (single source of truth) |
 
