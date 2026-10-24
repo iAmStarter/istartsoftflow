@@ -13,6 +13,7 @@
     "docs/plans/**",
     "docs/approvals/**",
     "docs/ACTIVE-PLAN",
+    "scripts/**",
     "tests/**",
     ".github/**"
   ],
