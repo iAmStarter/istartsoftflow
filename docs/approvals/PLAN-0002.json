@@ -1,0 +1,18 @@
+{
+  "planId": "PLAN-0002",
+  "revision": 1,
+  "planBlobSha": "bb3bb30805957d2dbfeccf305fbd0a5fd4511aae",
+  "approvedBy": "iAmStarter",
+  "approvedAt": "2026-10-25",
+  "approvalSource": "explicit-owner-chat-approval",
+  "allowedPaths": [
+    "docs/ACTIVE-PLAN",
+    "docs/approvals/PLAN-0002.json",
+    "docs/plans/PLAN-0002.md",
+    "create-issflow/package.json",
+    "create-issflow/package-lock.json",
+    "create-issflow/CHANGELOG.md",
+    ".github/workflows/approval-check.yml"
+  ],
+  "note": "Release preparation and tests only. Merge, tag, npm publication and Pages settings require separate explicit approval. Human provenance requires protected review."
+}
