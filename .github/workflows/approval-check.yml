@@ -1,0 +1,40 @@
+name: Approval and workflow checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  approval-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test approval gates
+        run: node --test tests/approval-policy.test.js
+      - name: Verify approved plan and diff
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ -n "$BASE_REF" ]; then
+            node .issflow/hooks/verify-approval.js --base "origin/$BASE_REF"
+          else
+            node .issflow/hooks/verify-approval.js
+          fi
+      - name: Check commit subjects
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: node scripts/check-commit-messages.js "origin/$BASE_REF"
+      - name: Verify generated installer template
+        run: |
+          node create-issflow/build.js
+          git diff --exit-code -- create-issflow/template
