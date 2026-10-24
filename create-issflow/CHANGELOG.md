@@ -1,5 +1,23 @@
 # Changelog — create-issflow
 
+## 1.10.0 — 2026-10-25
+
+### Added
+- Plan-scoped approvals: one approved plan ID and revision per task, bound to the exact Markdown Git blob hash.
+- Approval verifier CLI for checking changed-file boundaries in local development and CI.
+- Scoped plan template and automated regression coverage for approval gates and non-destructive installer behavior.
+
+### Changed
+- Claude Code file-edit approval gate now rejects missing or invalid approval metadata and no longer trusts an active feature state as approval.
+- Concise Conventional Commit validation and GitHub Actions approval checks.
+- English and Thai setup guidance for the new approval workflow.
+
+### Compatibility and limitations
+- Existing projects using `docs/PLAN.md` remain supported through legacy approval checks; these are not revision-scoped.
+- Codex does not have universal pre-edit enforcement; use the CLI/CI verifier and protected branch reviews.
+- A writable approval JSON is not cryptographic evidence of human authorization.
+- Installer remains non-destructive by default and may write `.issflow-new` files when existing files differ.
+
 ## 1.9.2 — 2026-10-22
 
 ### Added

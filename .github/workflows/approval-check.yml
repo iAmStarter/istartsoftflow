@@ -38,3 +38,28 @@ jobs:
         run: |
           node create-issflow/build.js
           git diff --exit-code -- create-issflow/template
+      - name: Verify release package and clean install
+        run: |
+          set -euo pipefail
+          cd create-issflow
+          npm pack --dry-run --json > "$RUNNER_TEMP/issflow-pack.json"
+          node -e '
+            const p = require(process.env.RUNNER_TEMP + "/issflow-pack.json")[0];
+            const names = new Set(p.files.map(f => f.path));
+            for (const required of ["bin/cli.js", "template/.issflow/hooks/verify-approval.js", "template/.issflow/hooks/approval-policy.js", "template/.issflow/templates/PLAN-SCOPED.md"]) {
+              if (!names.has(required)) throw new Error("Missing packed file: " + required);
+            }
+            console.log("Package:", p.name, p.version, "files:", p.files.length);
+          '
+          package_name="$(npm pack --pack-destination "$RUNNER_TEMP" --silent)"
+          tmp="$(mktemp -d)"
+          npm install --prefix "$tmp" "$RUNNER_TEMP/$package_name" --no-audit --no-fund
+          (
+            cd "$tmp"
+            node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex --dry-run
+            test ! -e .issflow
+            node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
+            test -f .issflow/hooks/verify-approval.js
+            test -f .issflow/templates/PLAN-SCOPED.md
+            node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
+          )
