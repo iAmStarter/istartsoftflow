@@ -194,3 +194,22 @@ mirror `.claude/`, `GEMINI.md`, `.aider.conf.yml`) — โค้ดของค�
 - ภาพรวม + ติดตั้งละเอียด: [README.md](./README.md)
 - กฎทั้งหมดของระบบ (ฉบับเต็ม): `.issflow/istartsoft-flow/METHODOLOGY.md` (หลังติดตั้ง)
 - เว็บ: https://iamstarter.github.io/istartsoftflow/
+
+## อนุมัติหนึ่งแผนต่อหนึ่งงาน
+
+สำหรับงานใหม่ สร้าง `docs/plans/PLAN-XXXX.md` จาก
+`.issflow/templates/PLAN-SCOPED.md` แล้วชี้ `docs/ACTIVE-PLAN`
+ไปที่แผนนั้น เมื่อเจ้าของอนุมัติ Revision ที่แน่นอนแล้ว
+จึงบันทึก `docs/approvals/PLAN-XXXX.json` ที่ผูกกับ Git blob hash ของไฟล์แผน
+
+ตรวจสอบก่อนแก้ไข/เปิด PR ด้วย:
+
+```bash
+node .issflow/hooks/verify-approval.js --base origin/main
+```
+
+ถ้าแก้แผนหลังอนุมัติ ต้องขออนุมัติใหม่ แผนหนึ่งไม่อนุมัติแผนอื่น
+Codex ไม่ได้มี Hook แบบ Claude ในทุกสภาพแวดล้อม จึงต้องใช้ตัวตรวจ CLI/CI
+ร่วมกับ Branch Protection และการ Review PR โดยมนุษย์
+ไฟล์อนุมัติที่แก้ไขได้เอง **ไม่ใช่หลักฐานยืนยันตัวตนของผู้อนุมัติ**
+โปรเจกต์เดิมที่ใช้ `docs/PLAN.md` ยังรองรับแบบ Legacy จนกว่าจะย้าย

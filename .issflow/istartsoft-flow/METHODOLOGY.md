@@ -44,6 +44,49 @@ coding task.
 
 -----
 
+## Plan-scoped approvals (new work)
+
+For each new task, create one `docs/plans/PLAN-<id>.md` with a unique ID, revision,
+scope, changed-file boundaries, acceptance criteria, tests, and risks. Set
+`docs/ACTIVE-PLAN` to its relative path. One human approval authorizes exactly
+one plan revision, not other plans or future edits to that plan.
+
+Approval is recorded separately in `docs/approvals/PLAN-<id>.json` with
+`planId`, `revision`, `planBlobSha` (Git blob SHA-1 of the exact Markdown),
+`approvedBy`, `approvedAt`, `approvalSource`, and `allowedPaths`.
+The approval record is created only after explicit human consent. Revisions,
+including seemingly small edits, invalidate the old digest and require new approval.
+Do not let an agent self-approve a plan.
+
+Use `node .issflow/hooks/verify-approval.js --base origin/main` to check the
+active plan and changed paths. Run `node --test tests/approval-policy.test.js`
+when those tests are installed. For an existing project with only `docs/PLAN.md`,
+the verifier retains legacy `> Approval: approved ...` compatibility and warns
+that it is not revision-scoped. Migrate intentionally, not by silently rewriting
+existing plans.
+
+**Enforcement boundary:** The Claude PreToolUse hook protects supported file-edit
+tools; it does not intercept shell commands, GitHub API writes, or every Codex
+execution mode. The verifier checks the local checkout/PR diff, but a writable
+approval JSON is not cryptographic proof of the human approver. Require protected
+branches, required CI checks, and an actual human GitHub PR review for merge.
+No tool can treat a self-edited approval file as owner authorization.
+
+**Recovery:** If approval metadata is missing or malformed, stop implementation.
+A human should inspect the plan, restore the correct pointer and approval record,
+then rerun verification. Never bypass the gate by editing `STATE.md` or disabling
+checks. A scoped feature lane does not inherit approval from another plan.
+
+**Engineering:** Prefer feature-based modules and vertical slices. Keep route
+adapters thin; put business rules near their feature. Use idiomatic names,
+cohesive files, explicit contracts, and minimal abstractions. Comments explain
+non-obvious intent, not line-by-line mechanics. Use concise Conventional Commit
+subjects (`feat(scope): change`, `fix(scope): change`); avoid tool signatures
+and promotional boilerplate while preserving truthful Git author/committer
+metadata and any required disclosures.
+
+-----
+
 ## The loop
 
 `design-research -> grill (×2) -> plan -> implement -> test -> deploy`, one
