@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '22'
       - name: Test approval gates
-        run: node --test tests/approval-policy.test.js
+        run: node --test tests/*.test.js
       - name: Verify approved plan and diff
         env:
           BASE_REF: ${{ github.base_ref }}
