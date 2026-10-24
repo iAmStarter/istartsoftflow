@@ -10,7 +10,7 @@ if (!base) {
 }
 try {
   const mergeBase = execFileSync('git', ['merge-base', base, 'HEAD'], { encoding: 'utf8' }).trim();
-  const subjects = execFileSync('git', ['log', '--format=%s', `${mergeBase}..HEAD`], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+  const subjects = execFileSync('git', ['log', '--no-merges', '--format=%s', `${mergeBase}..HEAD`], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
   const convention = /^(feat|fix|docs|test|refactor|perf|style|build|ci|chore|revert)(\([a-z0-9-]+\))?!?: [a-z0-9].{0,71}$/;
   const invalid = subjects.filter((subject) => !convention.test(subject));
   if (invalid.length) {
