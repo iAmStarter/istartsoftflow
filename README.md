@@ -220,3 +220,17 @@ istartsoftflow/
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+## Plan-scoped approval (opt-in migration)
+
+New tasks can use one plan file per approval: `docs/plans/PLAN-XXXX.md`, with
+`docs/ACTIVE-PLAN` pointing to the active plan. After explicit owner approval,
+record the exact revision and Git blob hash in `docs/approvals/PLAN-XXXX.json`.
+The template is in `.issflow/templates/PLAN-SCOPED.md`.
+
+Verify locally with `node .issflow/hooks/verify-approval.js --base origin/main`.
+Claude's file-edit hook uses the same policy; Codex requires the CLI/CI check.
+**Neither a writable approval file nor a model instruction proves human consent.**
+Use GitHub branch protection and required human PR reviews. Existing
+`docs/PLAN.md` projects remain compatible until intentionally migrated.
+See the methodology for recovery and security limitations.
