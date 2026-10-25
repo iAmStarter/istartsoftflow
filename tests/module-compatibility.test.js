@@ -83,6 +83,15 @@ for (const moduleType of ['module', 'commonjs']) {
     assert.equal(outside.status, 1, outside.stderr);
     assert.match(outside.stderr, /outside approved plan scope/);
 
+    const dockerInstall = run(root, cli, ['--tool=codex', '--docker', '--ci']);
+    assert.equal(dockerInstall.status, 0, dockerInstall.stderr);
+    assert.ok(fs.existsSync(path.join(root, 'scripts/feature-docker.js')));
+    assert.ok(fs.existsSync(path.join(root, '.github/workflows/issflow-feature.yml')));
+    const dockerRunner = run(root, path.join(root, 'scripts/feature-docker.js'), ['docs/features/missing/FEATURE.md']);
+    assert.equal(dockerRunner.status, 1, dockerRunner.stderr);
+    assert.match(dockerRunner.stderr, /Feature doc not found/);
+    assert.doesNotMatch(dockerRunner.stderr, /require is not defined|ERR_REQUIRE_ESM/);
+
     const second = run(root, cli, ['--tool=codex']);
     assert.equal(second.status, 0, second.stderr);
     assert.equal(fs.readFileSync(path.join(root, 'AGENTS.md'), 'utf8'), '# Existing custom rules\n');
