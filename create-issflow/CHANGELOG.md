@@ -1,5 +1,19 @@
 # Changelog — create-issflow
 
+## 1.10.1 — 2026-10-25
+
+### Fixed
+- Portable Node hooks now include a nested `.issflow/hooks/package.json` declaring CommonJS, so they run in projects using `"type": "module"` without renaming or overwriting existing hook scripts.
+- Template generation excludes Python `__pycache__`, `*.pyc`, `*.pyo`, and installer conflict artifacts.
+- Docker feature runner now uses dynamic Node imports, so `--docker` works in both ESM and CommonJS consumer projects.
+- Approval verification now checks deleted paths in Git diffs, preventing out-of-scope deletions from being ignored.
+- Regression tests cover installer dry-run, non-destructive installation, pending/approved plan gates, and verification in ESM and CommonJS consumers.
+
+### Upgrade
+- Run `npx create-issflow@1.10.1 --tool=codex` from the project root. The new `.issflow/hooks/package.json` is added without overwriting customized hook scripts.
+- Existing `.issflow-new` conflicts still require manual review. The package boundary fixes Node module interpretation; it does not automatically merge customized policy files.
+- No changes to authentication, business logic, or existing plan approval records.
+
 ## 1.10.0 — 2026-10-25
 
 ### Added

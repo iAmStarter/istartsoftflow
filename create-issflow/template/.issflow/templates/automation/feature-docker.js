@@ -18,9 +18,15 @@
 // own doc + slug. Results come back as commits on feature/<slug> (visible from the
 // main repo); remove the dir with `git worktree remove` after merge.
 'use strict';
-const fs = require('fs');
-const path = require('path');
-const { spawnSync } = require('child_process');
+// Dynamic imports work in both CommonJS and ESM project scopes.
+Promise.all([
+  import('node:fs'),
+  import('node:path'),
+  import('node:child_process'),
+]).then(([fsModule, pathModule, childModule]) => {
+const fs = fsModule.default;
+const path = pathModule.default;
+const { spawnSync } = childModule;
 
 const IMAGE = process.env.ISSFLOW_IMAGE || 'issflow-runner';
 const argv = process.argv.slice(2);
@@ -105,3 +111,7 @@ args.push(IMAGE, '-p', `/feature ${doc}`, '--dangerously-skip-permissions');
 const res = run('docker', args);
 if (res.status !== 0) die(`run exited with status ${res.status} — see output above; blockers land in docs/features/<slug>/BLOCKED.md`);
 console.log('feature-docker: done. Review the feature branch, then run /uat with the TEST-PLAN.');
+}).catch((error) => {
+  console.error('feature-docker: ' + error.message);
+  process.exitCode = 1;
+});
