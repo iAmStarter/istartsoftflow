@@ -92,6 +92,16 @@ for (const moduleType of ['module', 'commonjs']) {
     assert.match(dockerRunner.stderr, /Feature doc not found/);
     assert.doesNotMatch(dockerRunner.stderr, /require is not defined|ERR_REQUIRE_ESM/);
 
+    const allAdapters = run(root, cli, ['--tool=all']);
+    assert.equal(allAdapters.status, 0, allAdapters.stderr);
+    assert.ok(fs.existsSync(path.join(root, '.claude/hooks/package.json')));
+    assert.ok(fs.existsSync(path.join(root, '.claude/settings.json')));
+    const mirroredGate = run(root, path.join(root, '.claude/hooks/plan-gate.js'), [], JSON.stringify({
+      tool_name: 'Edit', tool_input: { file_path: path.join(root, 'src/features/hr/index.ts') },
+    }));
+    assert.equal(mirroredGate.status, 0, mirroredGate.stderr);
+    assert.match(mirroredGate.stdout, /permissionDecision.*deny/);
+
     const second = run(root, cli, ['--tool=codex']);
     assert.equal(second.status, 0, second.stderr);
     assert.equal(fs.readFileSync(path.join(root, 'AGENTS.md'), 'utf8'), '# Existing custom rules\n');
