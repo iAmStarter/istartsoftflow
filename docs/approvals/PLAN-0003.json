@@ -1,0 +1,27 @@
+{
+  "planId": "PLAN-0003",
+  "revision": 1,
+  "planBlobSha": "c1d4b2e51a456563ef9df4f74021aaee90541494",
+  "approvedBy": "iAmStarter",
+  "approvedAt": "2026-10-25",
+  "approvalSource": "explicit-owner-chat-approval",
+  "allowedPaths": [
+    ".issflow/hooks/**",
+    ".issflow/istartsoft-flow/**",
+    ".issflow/templates/**",
+    "create-issflow/build.js",
+    "create-issflow/bin/**",
+    "create-issflow/template/**",
+    "create-issflow/package.json",
+    "create-issflow/CHANGELOG.md",
+    ".github/workflows/**",
+    "tests/**",
+    "scripts/**",
+    "README.md",
+    "HOW-TO-USE.th.md",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0003.md",
+    "docs/approvals/PLAN-0003.json"
+  ],
+  "note": "Implementation and tests only; no merge, tag, npm publish, or TwinFlow changes. Approval JSON alone does not prove identity."
+}
