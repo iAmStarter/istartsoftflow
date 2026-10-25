@@ -66,6 +66,10 @@ jobs:
               test -f .issflow/hooks/package.json
               test -f .issflow/templates/PLAN-SCOPED.md
               node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
-              node .issflow/hooks/verify-approval.js --files src/example.ts && exit 1 || test "$?" -eq 1
+              if output="$(node .issflow/hooks/verify-approval.js --files src/example.ts 2>&1)"; then
+                echo "Unapproved source change unexpectedly allowed"
+                exit 1
+              fi
+              echo "$output" | grep -q 'BLOCKED:'
             )
           done
