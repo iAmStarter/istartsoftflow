@@ -65,7 +65,14 @@ jobs:
               test -f .issflow/hooks/verify-approval.js
               test -f .issflow/hooks/package.json
               test -f .issflow/templates/PLAN-SCOPED.md
-              node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
+              node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex --docker --ci
+              test -f scripts/feature-docker.js
+              test -f .github/workflows/issflow-feature.yml
+              if runner_output="$(node scripts/feature-docker.js docs/features/missing/FEATURE.md 2>&1)"; then
+                echo "Docker runner unexpectedly accepted missing feature doc"
+                exit 1
+              fi
+              echo "$runner_output" | grep -q 'Feature doc not found'
               if output="$(node .issflow/hooks/verify-approval.js --files src/example.ts 2>&1)"; then
                 echo "Unapproved source change unexpectedly allowed"
                 exit 1
