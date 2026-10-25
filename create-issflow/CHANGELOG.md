@@ -5,6 +5,8 @@
 ### Fixed
 - Portable Node hooks now include a nested `.issflow/hooks/package.json` declaring CommonJS, so they run in projects using `"type": "module"` without renaming or overwriting existing hook scripts.
 - Template generation excludes Python `__pycache__`, `*.pyc`, `*.pyo`, and installer conflict artifacts.
+- Docker feature runner now uses dynamic Node imports, so `--docker` works in both ESM and CommonJS consumer projects.
+- Approval verification now checks deleted paths in Git diffs, preventing out-of-scope deletions from being ignored.
 - Regression tests cover installer dry-run, non-destructive installation, pending/approved plan gates, and verification in ESM and CommonJS consumers.
 
 ### Upgrade
