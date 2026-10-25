@@ -120,3 +120,30 @@ test('Claude hook blocks approval-record edits', (t) => {
   });
   assert.match(run.stdout, /permissionDecision.*deny/);
 });
+
+test('deleted files cannot bypass approved path boundaries', (t) => {
+  const { root } = fixture(t, { approved: true });
+  const git = (...args) => {
+    const result = spawnSync('git', args, { cwd: root, encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    return result.stdout.trim();
+  };
+  git('init', '-q');
+  git('config', 'user.name', 'Test User');
+  git('config', 'user.email', 'test@example.invalid');
+  const file = path.join(root, 'src/features/hr/private.ts');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, 'export const privateValue = true;\n');
+  git('add', '.');
+  git('commit', '-qm', 'test: seed fixture');
+  const base = git('rev-parse', 'HEAD');
+  fs.unlinkSync(file);
+  git('add', '-A');
+  git('commit', '-qm', 'test: delete unrelated file');
+  const verifier = path.resolve(__dirname, '../.issflow/hooks/verify-approval.js');
+  const result = spawnSync(process.execPath, [verifier, '--base', base], {
+    cwd: root, encoding: 'utf8',
+  });
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /outside approved plan scope/);
+});
