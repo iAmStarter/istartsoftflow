@@ -17,7 +17,7 @@ function main(args) {
     const base = args[baseIndex + 1];
     if (!base || base.startsWith('--')) throw new Error('Missing --base value');
     const mergeBase = execFileSync('git', ['merge-base', base, 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-    const diff = execFileSync('git', ['diff', '--name-only', '--diff-filter=ACMRT', mergeBase, 'HEAD'], { cwd: root, encoding: 'utf8' });
+    const diff = execFileSync('git', ['diff', '--name-only', '--diff-filter=ACMRTD', mergeBase, 'HEAD'], { cwd: root, encoding: 'utf8' });
     changedFiles = diff.split(/\r?\n/).filter(Boolean);
   } else if (filesIndex >= 0) {
     const files = args[filesIndex + 1];
