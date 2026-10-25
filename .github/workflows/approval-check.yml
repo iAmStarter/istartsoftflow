@@ -55,7 +55,7 @@ jobs:
           package_name="$(npm pack --pack-destination "$RUNNER_TEMP" --silent)"
           for module_type in module commonjs; do
             tmp="$(mktemp -d)"
-            printf '{"private":true,"type":"%s"}\\n' "$module_type" > "$tmp/package.json"
+            printf '{"private":true,"type":"%s"}' "$module_type" > "$tmp/package.json"
             npm install --prefix "$tmp" "$RUNNER_TEMP/$package_name" --no-audit --no-fund
             (
               cd "$tmp"
