@@ -53,15 +53,19 @@ jobs:
             console.log("Package:", p.name, p.version, "files:", p.files.length);
           '
           package_name="$(npm pack --pack-destination "$RUNNER_TEMP" --silent)"
-          tmp="$(mktemp -d)"
-          npm install --prefix "$tmp" "$RUNNER_TEMP/$package_name" --no-audit --no-fund
-          (
-            cd "$tmp"
-            node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex --dry-run
-            test ! -e .issflow
-            node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
-            test -f .issflow/hooks/verify-approval.js
-            test -f .issflow/hooks/package.json
-            test -f .issflow/templates/PLAN-SCOPED.md
-            node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
-          )
+          for module_type in module commonjs; do
+            tmp="$(mktemp -d)"
+            printf '{"private":true,"type":"%s"}\\n' "$module_type" > "$tmp/package.json"
+            npm install --prefix "$tmp" "$RUNNER_TEMP/$package_name" --no-audit --no-fund
+            (
+              cd "$tmp"
+              node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex --dry-run
+              test ! -e .issflow
+              node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
+              test -f .issflow/hooks/verify-approval.js
+              test -f .issflow/hooks/package.json
+              test -f .issflow/templates/PLAN-SCOPED.md
+              node "$tmp/node_modules/create-issflow/bin/cli.js" --tool=codex
+              node .issflow/hooks/verify-approval.js --files src/example.ts && exit 1 || test "$?" -eq 1
+            )
+          done
