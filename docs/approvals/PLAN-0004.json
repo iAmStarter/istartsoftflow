@@ -1,0 +1,25 @@
+{
+  "planId": "PLAN-0004",
+  "revision": 1,
+  "planBlobSha": "c07480d1d503118d5069e31db557093eaa991ad6",
+  "approvedBy": "iAmStarter",
+  "approvedAt": "2026-10-28",
+  "approvalSource": "explicit-owner-chat-approval-2026-10-28-do-it",
+  "allowedPaths": [
+    ".issflow/routing/**",
+    ".issflow/agents/**",
+    ".issflow/commands/**",
+    ".issflow/istartsoft-flow/**",
+    "create-issflow/template/**",
+    "docs/adaptive-model-routing-v1.md",
+    "docs/model-routing-usage.md",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0004.md",
+    "docs/approvals/PLAN-0004.json",
+    "tests/model-router.test.js",
+    "README.md",
+    "HOW-TO-USE.md",
+    "HOW-TO-USE.th.md"
+  ],
+  "note": "Feature branch and PR #37 only. No merge, production deploy, tag or npm publish."
+}
