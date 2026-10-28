@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "defaultMode": "advisory",
+  "tiers": {
+    "economy": {
+      "description": "Low-risk documentation and routine checks"
+    },
+    "balanced": {
+      "description": "Implementation and test work"
+    },
+    "advanced": {
+      "description": "Architecture, security and complex debugging"
+    }
+  },
+  "agents": {
+    "orchestrator": "balanced",
+    "researcher": "economy",
+    "planner": "advanced",
+    "implementer": "balanced",
+    "test-author": "balanced",
+    "debugger": "balanced",
+    "e2e-runner": "economy",
+    "synthesizer": "economy"
+  },
+  "providers": {
+    "codex": {
+      "economy": {
+        "modelId": null,
+        "reasoningEffort": "medium"
+      },
+      "balanced": {
+        "modelId": null,
+        "reasoningEffort": "high"
+      },
+      "advanced": {
+        "modelId": null,
+        "reasoningEffort": "xhigh"
+      }
+    },
+    "claude": {
+      "economy": {
+        "modelId": null,
+        "reasoningEffort": null
+      },
+      "balanced": {
+        "modelId": null,
+        "reasoningEffort": null
+      },
+      "advanced": {
+        "modelId": null,
+        "reasoningEffort": null
+      }
+    },
+    "cursor": {
+      "economy": {
+        "modelId": null,
+        "reasoningEffort": null
+      },
+      "balanced": {
+        "modelId": null,
+        "reasoningEffort": null
+      },
+      "advanced": {
+        "modelId": null,
+        "reasoningEffort": null
+      }
+    }
+  }
+}
