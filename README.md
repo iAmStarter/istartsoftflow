@@ -235,13 +235,13 @@ Use GitHub branch protection and required human PR reviews. Existing
 `docs/PLAN.md` projects remain compatible until intentionally migrated.
 See the methodology for recovery and security limitations.
 
-### Node.js ESM projects (v1.10.1)
+### Node.js ESM projects (v1.11.1)
 
 The portable `.issflow/hooks/` directory now contains its own `package.json` with
 `"type": "commonjs"`. This lets the existing `.js` hooks use `require` even
 when the consuming project declares `"type": "module"`.
 
-Upgrade non-destructively with `npx create-issflow@1.10.1 --tool=codex`.
+Upgrade non-destructively with `npx create-issflow@1.11.1 --tool=codex`.
 Existing files are kept; inspect `*.issflow-new` conflicts before replacing
 customized hooks or instructions. The new module boundary fixes runtime parsing
 but does not merge project-specific approval policy. Validate using

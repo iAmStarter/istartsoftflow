@@ -24,6 +24,11 @@ and its `> Approval:` header still reads `PENDING` (or is missing), STOP and rou
 to the `/overview` PLAN-APPROVAL gate before quoting — pricing an unapproved plan
 re-prices on every revision.
 
+DIRECTION CHECK (UI in scope): STATE `design-direction:` must be `locked …` (or
+explicit `n/a` if no UI). Still PENDING → STOP and run overview STEP 5c Direction
+Picker first. Screen appendix must use `docs/design/tokens.css` colors — never invent
+a parallel palette.
+
 ## STEP 1 — SCOPE
 List the deliverables (features / epics) from OVERVIEW / PRD. Mark each
 **in-scope** or **out-of-scope** explicitly — naming out-of-scope items now is what
@@ -32,8 +37,14 @@ prevents silent scope creep (and grounds change-order re-pricing later).
 ## STEP 2 — PHASE BREAKDOWN (internal)
 Derive the vertical-slice phases (or read `docs/PLAN.md` if it exists). Size each:
 - complexity: **S | M | L | XL**
-- effort: an ideal-days RANGE (e.g. 2–3d), + story points if your team uses them
+- **scope_effort** (axis A): ideal-days RANGE for commercial value (human-equivalent)
+- **agent_delivery** (axis B): agent-active hours/days from `flow-config.json` →
+  `delivery.phaseHours` (S/M/L/XL) — wall-clock when AI may work, **excluding**
+  waiting-on-human gates
 - risk / unknowns: what could move the estimate
+
+Show **both axes in chat to the human** every time. Client price uses **A only**.
+Client timeline may show B as “AI-assisted delivery (if approvals are timely)”.
 
 Keep this sizing for the **chat math**. Do **not** dump every PLAN phase onto the
 client table — collapse into packages in STEP 5.
@@ -109,9 +120,12 @@ production is up within the scope on this quote. **Never** construction wording
 ## Scope        — in-scope: … | out-of-scope: …
 ## Packages     — table: package | cost
                 — or package | estimated | billed | cost  (only if hours columns requested)
-## Total        — <low>–<high>   ← totals only; no “incl. X% contingency”
-## Timeline     — <estimate>, dependency order
-## Assumptions  — …
+## Delivery clocks (internal + chat; client page may show demo dates only)
+                — per package: scope_effort (A · pricing) | agent_delivery (B · agent-active)
+                  | demo_by (calendar, assuming human gates ≤ staleAfterHours)
+## Total        — <low>–<high>   ← totals only from A; no “incl. X% contingency”
+## Timeline     — demo_by per package + dependency order (B pauses while waiting on humans)
+## Assumptions  — … (if human gates slower than SLA, demo_by slips — not an agent hang)
 ## Exclusions   — … (hosting/database: client pays provider, if that was the answer)
 ## Payment      — software delivery events + the asked split (if any)
 ## Screens      — docs/proposal.html pages 2–N (or “none — no UI in scope”)
@@ -149,14 +163,18 @@ production is up within the scope on this quote. **Never** construction wording
    **Screen appendix (required when UI is in scope)** — same `docs/proposal.html`,
    not a second signable file. After page 1's page-break, emit `.sheet.screens`
    into `{{SCREEN_SHEETS}}`:
-   - Build frames from **PLAN + OVERVIEW** modules/capabilities (empty chrome is
-     fine). Do **not** wait for UX-PACK (that gate is after sign-off).
+   - Build frames from **PLAN + OVERVIEW** with stable **screen IDs** (`S-01`…).
+   - Apply locked **token colors** from `docs/design/tokens.css` into the template
+     CSS variables / inline token slots — same direction the build will use.
    - Cover **every** in-scope module and capability — not a 4–8 frame sampler.
    - Group sheets by package; module bar on each sheet; numbered short captions
      under frames.
-   - Label: not pixel-binding. Sign on page 1 only. **No emoji as icons.**
+   - Label: structure-binding via screen IDs; visuals follow locked direction (still
+     not pixel-perfect). Sign on page 1 only. **No emoji as icons.**
    - Use the template's desk/phone/sidebar/card/table CSS. Do not invent a
      parallel stylesheet.
+   - Per package row (internal + chat): `scope_effort` · `agent_delivery` ·
+     `demo_by` (calendar date assuming human gates answer within staleAfterHours).
 
    Print-ready (Ctrl/Cmd-P → A4 → Save as PDF). Keep PROPOSAL.md and proposal.html
    in sync.

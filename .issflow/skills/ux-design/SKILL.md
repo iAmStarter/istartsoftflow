@@ -47,6 +47,9 @@ wireframe does not have. If the design truly needs a frame the wireframe lacks,
 STOP and update the wireframe baseline first (a design decision -> `log-decision`).
 When an approved `docs/UX-PACK.md` exists, treat it as the project frame — drift
 from the pack is a defect unless the pack is re-approved.
+When `docs/design/tokens.css` exists, components must use those semantic tokens —
+raw hex / off-grid spacing in UI files is a **BLOCK** (run `node scripts/token-lint.js`
+when present). Frontend CLOSE also needs a **task check** for the primary user job.
 
 -----
 

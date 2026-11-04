@@ -17,14 +17,16 @@ Do NOT touch docs/ENDPOINTS.md — owned by implementer.
 ## Standard tasks (every phase — do all, in order)
 
 1. STATE.md — rewrite, do not append. Keep ONLY:
-   - current phase + status
+   - current phase + status + stage
    - what was just completed (1-3 bullets)
    - the immediate next action
    - any open blocker
    PRESERVE verbatim (never blank on rewrite): the `plan:` line (the PLAN-APPROVAL
-   sign-off record, hard rule 13) and the `sprint:` line (active-sprint marker) if
-   present — load-bearing gate/standup state, not transient progress.
-   Target: under 25 lines.
+   sign-off record, hard rule 13), the `sprint:` line if present, **and the entire
+   `delivery:` block** (agent_eta / status / waiting_* / slip) — load-bearing for
+   finish-date honesty. Also preserve `design-direction:`, `design:`, `architecture:`,
+   `surfaces:`, `timezone:` when present.
+   Target: under ~30 lines including delivery.
 
 2. ISSUES.md — dedup + compress:
    - merge duplicate / near-duplicate issues.
