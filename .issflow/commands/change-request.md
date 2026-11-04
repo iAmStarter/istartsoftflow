@@ -38,12 +38,18 @@ Also classify commercial lane:
   `/support` or `/quick` — not a billable CR unless the client expands scope.
 - **Billable CR** → continue below.
 
+**No full grill-me.** If the change hits surfaces / auth / UX / architecture:
+ask **1–3 mini questions** (brief-back with recommended answers), then continue.
+Deep design re-lock happens later via `/design` if rule 15 reopens.
+
 ## STEP 2 — IMPACT ANALYSIS
 Determine:
 - phases affected — **done phases are frozen** (their cost is already spent and
   counts); new / changed phases; cut phases (credit back the un-started effort).
 - knock-on effects — architecture, **UX pack**, **security (re-threat-model?)**,
-  tests, timeline. If UX or arch artifacts change, those gates re-open (rule 15).
+  tests, timeline, **design-direction / tokens**. If UX or arch artifacts change,
+  those gates re-open (rule 15). If direction must change, reset
+  `design-direction:` to PENDING (re-picker).
 - dispatch `researcher` (DESIGN or IMPL) if the change needs grounding in facts.
 
 ## STEP 3 — RE-ESTIMATE (the DELTA only)
@@ -52,10 +58,12 @@ Determine:
   estimate memo or chat-recorded answers.
 - If rate / contingency is missing → **ASK once** (same rule as `/propose`). Never
   invent a kit default rate; never commit personal rates into public kit files.
+- Report **two deltas** in chat: scope_effort Δ (axis A, drives money) and
+  agent_delivery Δ (axis B, calendar when AI may work). Price uses A only.
 - added effort × rate = added cost; cut effort = credit.
 - **net cost Δ** + **new total** vs the approved baseline — as a range.
 - Show rate math **in chat to the human only**.
-- **timeline Δ**. State what stays the SAME so the client sees the price is fair.
+- **timeline Δ** (B agent_delivery + human-gate buffer + new `demo_by`). Refresh STATE `delivery:` if mid-build. State what stays the SAME so the client sees the price is fair.
 
 ### CLIENT-DOC RULE
 Anything the client sees (CR summary, updated PROPOSAL.md / proposal.html) shows

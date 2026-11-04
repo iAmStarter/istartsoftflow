@@ -81,13 +81,29 @@ Store the round-1 answers as working context — do NOT write OVERVIEW.md yet.
 — the whole plan is built on these, so lock them first. Show a concise summary and
 STOP for sign-off (planning always asks, both modes):
 - **Tech stack** — language · framework · infra · auth · datastore · test + E2E runner
+- **Auth checklist** (if any login/user): provider · session vs token · social/LINE link · roles — must be answered or explicit `n/a`
+- **Surfaces** — default `web-responsive` if unset; also pwa / line-oa / mobile-app as needed
 - **Architecture** — the pattern (Feature-Based by default) + the folder layout
-- **UX direction** — design system / tokens + the wireframe baseline (the frame)
+- **UX direction** — see STEP 5c Direction Picker when UI is in scope
 - **Data & integrations** — core data model + external services + their limits
-- **Conventions** — naming idiom (`code-standards`) + autonomy mode (AUTO / GUIDED)
+- **Conventions** — naming idiom (`code-standards`) + autonomy mode (AUTO / GUIDED) — recommend AUTO for PM-mode builds
 - **Estimation config** — unit · rate card · currency · contingency (if quoting)
+- **Timezone** — for delivery ETA dates (default `Asia/Bangkok` when project language is th)
 On any "change X" → revise OVERVIEW.md and re-confirm. Only a signed-off foundation
 proceeds to the planner. (This is the planning confirmation gate.)
+
+### Direction Picker (when UI is in scope)
+
+5c. If the product has UI (default yes unless OVERVIEW says none):
+1. Copy `.issflow/templates/design/picker.html` → `docs/design/picker.html`.
+2. Fill placeholders only (names, swatches, fonts, blurbs, anti-patterns). Prefer
+   `ui-ux-pro-max` `--design-system` output; if Python 3 is missing, use the three
+   fallback presets in the template footer (Calm SaaS / Bold Commerce / Trust Fintech).
+   **Do not freehand redesign the HTML/CSS chrome.**
+3. SHOW me the picker path and STOP for choice (A/B/C).
+4. On choice: write `docs/design/DIRECTION.md` + `docs/design/tokens.css` from templates;
+   set STATE `design-direction: locked <id> <date>`; HISTORY line.
+5. Internal skip: only if UI truly out of scope — set `design-direction: n/a`.
 
 ### Plan
 
@@ -96,19 +112,33 @@ proceeds to the planner. (This is the planning confirmation gate.)
    - Start with Phase 0 (infra setup) only if infra is self-managed; with
      managed infra, Phase 0 is N/A and the plan starts at Phase 1.
    - End with a final code phase that contains the deploy task block.
+   - Tag each phase `size: S|M|L|XL` and `lane: lite|full` (lite only when no new
+     primary UI and not final/security-sensitive).
 
-7. Create docs/STATE.md:
+7. Create docs/STATE.md (keep ≤ ~25 lines at top; include delivery board):
 ```
-
 # STATE
 
 phase: 0 (pending)
 plan: PENDING
+design-direction: locked <id> <date> | PENDING | n/a
 design: PENDING
 architecture: PENDING
+surfaces: web-responsive
+timezone: Asia/Bangkok
+delivery:
+  package: bootstrap
+  agent_eta: none
+  phase_etas: []
+  status: WAITING_ON_HUMAN
+  waiting_for: plan approve
+  waiting_since: <ISO-date>
+  stale_after: <ISO-date+24h>
+  eta_paused: true
+  next_human_action: approve PLAN.md
+  slip_reason: none
 completed: project bootstrapped — design research done, double grill done
 blocker: none
-
 ```
 (For internal non-quoted work you may set `design: n/a` and `architecture: n/a`
 instead of PENDING so rule 15 does not block `/phase`.)
@@ -130,10 +160,17 @@ instead of PENDING so rule 15 does not block `/phase`.)
 11. The plan is the contract the whole AUTO dev loop builds against, so it ends with a
     human sign-off — the planning twin of the `/propose` commercial gate.
 
-    - SHOW me PLAN.md (and note any open risks the planner flagged). **STOP for approval.**
+    **Plan-Ready checklist** (must pass before you ask me to approve):
+    - Every phase has testable acceptance (no vague “make it good”)
+    - No TBD on auth / money / PII / primary surfaces
+    - If UI in scope: `design-direction` locked (or n/a) and screen IDs listed or stubbed
+    - Phase dependencies clear; size + lane tags present
+    - Open risks listed — material open questions block approve
+
+    - SHOW me PLAN.md + Plan-Ready result. **STOP for approval.**
     - On **approval**: record the sign-off in three places —
       1. stamp the PLAN.md header `> Approval: approved <YYYY-MM-DD> v1`;
-      2. set `plan: approved <YYYY-MM-DD>` in docs/STATE.md;
+      2. set `plan: approved <YYYY-MM-DD>` in docs/STATE.md; clear waiting_for / set delivery status AGENT_ACTIVE when build starts;
       3. append `<YYYY-MM-DD> plan v1 approved` to docs/HISTORY.md (date-first, to
          match the other HISTORY lines).
       Only now may `/phase` / `/sprint` run.
@@ -144,7 +181,9 @@ instead of PENDING so rule 15 does not block `/phase`.)
 
 Optional next steps (client / quoted work):
 1. `/propose` — proposal + estimate (asks rate in chat; client docs stay totals-only).
+   Screen appendix MUST use locked `docs/design/tokens.css` + screen IDs.
 2. `/design` — UX pack + architecture approve gates (hard rule 15) before `/phase`.
+   Upgrade existing frames — do not re-roll direction if locked.
 
 Internal or personal projects may skip `/propose` and set `design: n/a` /
 `architecture: n/a` in STATE, then go to `/phase`.
