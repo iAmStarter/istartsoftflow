@@ -7,6 +7,9 @@
 <meta name="description" content="Install one command into any repo so your AI coding agent — Claude Code, Codex, Cursor, Gemini or Aider — follows a spec → plan → test → ship loop, enforced by hooks it can't skip. Or hand it one approved feature doc and get a tested feature branch back — headless, in CI or Docker. Cross-platform, zero-dependency." />
 <meta name="theme-color" content="#ffffff" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;650;700;800&family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="iStartSoftFlow" />
 <meta property="og:title" content="iStartSoftFlow — a disciplined workflow for AI coding agents" />
@@ -20,18 +23,19 @@
 <meta name="twitter:description" content="One command makes your AI coding agent follow a spec → plan → test → ship loop, enforced by hooks. Works with Claude Code, Codex, Cursor, Gemini & Aider." />
 <meta name="twitter:image" content="https://iamstarter.github.io/istartsoftflow/og.svg" />
 <style>
-  /* ── Clean / premium — flat, no gradients (Inter · soft shadows · ink + violet) ── */
+  /* ── Brand: ink + teal (avoid violet-on-white / Inter defaults) ── */
   :root{
-    --bg:#f6f8fb; --surface:#ffffff; --surface-2:#eef3f8; --line:#dbe3ee;
-    --ink:#162033; --muted:#5d6a7d; --dim:#8a95a6;
-    --violet:#635bff; --violet-deep:#4b45cc; --teal:#0f9f8f; --teal-deep:#0a6b60;
+    --bg:#f3f6f4; --surface:#ffffff; --surface-2:#e8efea; --line:#d0dbd4;
+    --ink:#12231c; --muted:#4d5f56; --dim:#7a8a82;
+    --accent:#0d7377; --accent-deep:#0a5558; --teal:#0d7377; --teal-deep:#0a5558;
+    --violet:var(--accent); --violet-deep:var(--accent-deep);
     --amber:#8f6313; --green:#15803d; --red:#b42318;
     --card:var(--surface); --bg2:var(--surface-2); --txt:var(--ink);
-    --a1:var(--violet); --a2:var(--teal); --a3:var(--green);
-    --shadow:0 18px 50px rgba(22,32,51,.12); --card-sh:0 8px 22px rgba(22,32,51,.05);
+    --a1:var(--accent); --a2:var(--teal); --a3:var(--green);
+    --shadow:0 18px 50px rgba(18,35,28,.12); --card-sh:0 8px 22px rgba(18,35,28,.05);
     --radius:8px; --maxw:1180px;
     --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-    --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans Thai",sans-serif;
+    --sans:"IBM Plex Sans","Noto Sans Thai",ui-sans-serif,system-ui,-apple-system,sans-serif;
   }
   *{box-sizing:border-box;min-width:0}
   html{scroll-behavior:smooth}
@@ -123,7 +127,7 @@
 
   ol.steps{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:12px}
   ol.steps>li{display:flex;gap:14px;align-items:flex-start}
-  .stepno{flex:0 0 auto;width:38px;height:38px;border-radius:8px;background:#efedff;color:var(--violet-deep);font:900 1.05rem/38px var(--sans);text-align:center}
+  .stepno{flex:0 0 auto;width:38px;height:38px;border-radius:8px;background:#e0f2f1;color:var(--accent-deep);font:900 1.05rem/38px var(--sans);text-align:center}
   .stepd{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:var(--card-sh);transition:border-color .15s,box-shadow .15s}
   .stepd[open],.stepd:hover{border-color:#c4d0e0}
   .stepd summary{display:flex;align-items:center;gap:12px;padding:15px 18px;cursor:pointer;list-style:none}
@@ -205,10 +209,12 @@
   <div class="ey"><span class="en">workflow kit for AI coding agents</span><span class="th">ชุดเวิร์กโฟลว์สำหรับ AI coding agent</span></div>
   <h1>iStartSoft<span class="grad">Flow</span></h1>
   <p class="lead">
-    <span class="en">One install. Three default paths. A <b>spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship</b>
-    loop enforced by hooks the agent can't skip — Claude Code, Codex, Cursor, Gemini &amp; Aider.</span>
-    <span class="th">ติดตั้งครั้งเดียว · สามเส้นทางหลัก · ลูป <b>spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship</b>
-    ที่บังคับด้วย hook ซึ่ง agent ข้ามไม่ได้ — ใช้ได้กับ Claude Code, Codex, Cursor, Gemini และ Aider</span>
+    <span class="en">Talk as <b>PM / SA</b> — the agent builds to the plan. Pick a look, lock tokens,
+    see a clear <b>AI finish date</b> (separate from waiting on you). Spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship
+    with hooks the agent can't skip.</span>
+    <span class="th">คุยแบบ <b>PM / SA</b> — AI พัฒนาตามแผน เลือกโทน ล็อก tokens
+    เห็น <b>วัน AI ทำเสร็จ</b> แยกจากเวลารอคุณ ลูป spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship
+    ที่บังคับด้วย hook</span>
   </p>
   <div class="paths" aria-label="default paths">
     <a href="#howto"><code>/overview</code> <span class="en">new project</span><span class="th">งานใหม่</span></a>
@@ -226,6 +232,22 @@
 </div></header>
 
 <main id="main">
+<section id="pm"><div class="wrap">
+  <div class="ey"><span class="en">how you work with it</span><span class="th">วิธีทำงานด้วย</span></div>
+  <h2><span class="en">PM decisions. Agent delivery.</span><span class="th">คุณตัดสินใจแบบ PM — AI ส่งมอบ</span></h2>
+  <div class="grid g3" style="margin-top:22px">
+    <div class="card"><h3><span class="en">Direction Picker</span><span class="th">Direction Picker</span></h3>
+      <p><span class="en">Choose 2–3 looks before propose/build. Tokens lock — no mid-project restyle roulette.</span>
+      <span class="th">เลือกโทน 2–3 แบบก่อน propose/build ล็อก tokens — ไม่สุ่มหน้าตากลางทาง</span></p></div>
+    <div class="card"><h3><span class="en">ETA board</span><span class="th">บอร์ด ETA</span></h3>
+      <p><span class="en">Agent-active finish date vs waiting-on-you. SLIP and WAITING_STALE stay honest.</span>
+      <span class="th">วันจบฝั่ง AI แยกจากประตูที่รอคุณ — SLIP / WAITING_STALE พูดตรง</span></p></div>
+    <div class="card"><h3><span class="en">Dual estimate</span><span class="th">ประมาณการสองแกน</span></h3>
+      <p><span class="en">A = commercial effort (price). B = agent calendar + demo_by. Never mix the clocks.</span>
+      <span class="th">A = มูลค่างานคิดเงิน · B = ปฏิทิน agent + demo_by — ห้ามปนนาฬิกา</span></p></div>
+  </div>
+</div></section>
+
 <section id="loop"><div class="wrap">
   <div class="ey"><span class="en">the loop</span><span class="th">ลูป</span></div>
   <h2><span class="en">One vertical slice per phase</span><span class="th">หนึ่ง vertical slice ต่อหนึ่ง phase</span></h2>
@@ -385,7 +407,7 @@
   <div class="ey"><span class="en">install</span><span class="th">ติดตั้ง</span></div>
   <h2><span class="en">One kit, six tools</span><span class="th">หนึ่งชุด ใช้ได้ 6 เครื่องมือ</span></h2>
   <p class="muted">
-    <span class="en">Single source of truth (<code>.issflow/</code> + <code>AGENTS.md</code>); the installer writes the right adapter. Unsupported features degrade to model-run rituals — never silently dropped.</span>
+    <span class="en">Claude Code = full hooks · Cursor = sessionStart + rules · Codex/Gemini/Aider = model-run rituals. Same kit (<code>.issflow/</code> + <code>AGENTS.md</code>); unsupported features degrade — never silently dropped.</span>
     <span class="th">แหล่งความจริงเดียว (<code>.issflow/</code> + <code>AGENTS.md</code>); installer เขียน adapter ให้ตรงเครื่องมือ ฟีเจอร์ที่ไม่รองรับจะ degrade เป็น ritual แบบ model-run — ไม่หายเงียบ</span>
   </p>
   <div class="scroll" style="margin-top:22px"><table class="tbl">

@@ -4,7 +4,12 @@ argument-hint: [path to Feature doc, e.g. docs/features/<slug>/FEATURE.md · "dr
 ---
 
 Caveman ULTRA mode. You are the ORCHESTRATOR. Route work to subagents —
-you do NOT implement or debug yourself. Subagents cannot talk to the user; only YOU can.
+you do NOT implement or debug yourself. Speak PM-style (ETA / stage / WAITING /
+DONE). Subagents cannot talk to the user; only YOU can.
+
+Before build slices: set STATE `delivery:` agent_eta from phase sizes; heartbeat
+stage lines; on human gates set WAITING_ON_HUMAN + waiting_since + stale_after.
+UI work must respect `docs/design/tokens.css` + inventory when present.
 
 Target doc: $ARGUMENTS  (default: the single `docs/features/*/FEATURE.md` whose
 `> Status:` reads `approved, pending` — zero or multiple candidates -> STOP and list them.)

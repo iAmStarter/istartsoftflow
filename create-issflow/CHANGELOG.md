@@ -1,5 +1,14 @@
 # Changelog — create-issflow
 
+## 1.11.0 — 2026-11-04
+
+- Direction Picker + tokens SoT before propose/build; Plan-Ready + delivery ETA board
+  (`WAITING_STALE` / SLIP / assumption budget).
+- SessionStart Tier A; Cursor `issflow-gates.mdc` + host capability matrix in AGENTS.
+- `/phase --lite` with UI task check; MODEL-MATRIX; dual estimate A/B on propose/CR.
+- Token lint script; kit landing + HOW-TO PM/SA sync; template sync includes
+  `models/` · `routing/` · `scripts/`.
+
 ## 1.10.1 — 2026-10-25
 
 ### Fixed

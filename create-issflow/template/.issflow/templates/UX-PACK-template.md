@@ -5,7 +5,18 @@
 
 ## Purpose
 Hi-fi-enough UI direction for build: screens, flows, and frame the implementer
-must stay inside. Wireframe baseline first; visual direction confirmed here.
+must stay inside. Wireframe baseline first; visual direction from locked picker.
+
+## Design scale
+Spike | Bounded | Architectural:
+
+## Surfaces
+- web-responsive (default) · pwa · line-oa · mobile-app:
+
+## Direction lock
+- `docs/design/DIRECTION.md` id:
+- Tokens: `docs/design/tokens.css`
+- Inventory: `docs/design/inventory.md`
 
 ## Users & jobs
 -
@@ -15,19 +26,19 @@ must stay inside. Wireframe baseline first; visual direction confirmed here.
 2.
 
 ## Screen inventory
-| Screen | Job | Priority |
-|--------|-----|----------|
-| | | |
+| Id | Screen | Job | Priority | Empty/Loading/Error |
+|----|--------|-----|----------|---------------------|
+| S-01 | | | | |
 
 ## Frame & tokens
-- Wireframe baseline: (link or summary)
-- Brand / tokens: (or “follow OVERVIEW UX direction”)
-- UI UX Pro Max: style · palette · type · anti-patterns
-- Breakpoints: XS · SM · MD · LG · XL
+- Wireframe baseline: `.issflow/skills/ux-design/references/wireframe-template.md`
+- Brand / tokens: locked file above (do not re-roll catalogue)
+- Breakpoints: XS · SM · MD · LG · XL — declare <SM and ≥MD behavior per primary screen
 
 ## States & a11y notes
 - Empty / loading / error covered for each primary view
 - WCAG 2.1 AA targets
+- No emoji as UI icons
 
 ## Out of scope (design)
 -

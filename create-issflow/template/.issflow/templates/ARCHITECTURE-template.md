@@ -29,10 +29,14 @@ into concrete boundaries the implementer follows per phase.
 - Stores / schemas (high level):
 - Migrations approach:
 
-## Auth & trust boundaries
-- Authn / authz:
-- Secrets:
+## Auth & trust boundaries (decision record)
+- Provider (e.g. Clerk / Auth.js / Supabase / custom / LINE Login):
+- Session model (cookie session / JWT / opaque):
+- Identity linking (e.g. LINE userId ↔ app user):
+- Roles / authz:
+- Secrets handling:
 - Threat notes (STRIDE if security-touching):
+- Open auth questions: none | (list — blocks Architectural approve if material)
 
 ## Integrations
 | Service | Use | Failure mode |

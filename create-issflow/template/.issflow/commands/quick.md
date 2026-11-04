@@ -26,6 +26,8 @@ Steps:
    One cheap turn beats redoing a misunderstood edit. (Already confirmed in this
    conversation? say so and proceed — don't re-ask the same understanding.)
 1. grep docs/ISSUES.md for anything related.
+1b. If the change touches UI: read `docs/design/tokens.css` + inventory when present.
+    Use semantic tokens only — no raw hex/spacing literals in components.
 2. Make the change. Smallest diff that works.
 3. Run it — lint/typecheck/smoke. Show me result.
 4. REGRESSION GUARD: run `scripts/regression.sh` (mock corpus). No corpus in this

@@ -79,7 +79,7 @@ token unambiguously. Do not put prose containing the word `approved` after a
 
 ## Sprint 1: <name>  [goal: <one-line user-visible increment>]   ← sprint headers optional; group a few phases
 
-## Phase 1: <name>  [5 pts]  [status: pending]
+## Phase 1: <name>  [5 pts]  [size: S|M|L|XL]  [lane: lite|full]  [status: pending]
 
 - slice: <what works end-to-end after this phase>
 - rationale: <why this slice, why now — the user / business value (from the PRD)>
@@ -88,10 +88,15 @@ token unambiguously. Do not put prose containing the word `approved` after a
 - acceptance (sharp, testable):
   - GIVEN <state> WHEN <action with concrete input> THEN <exact observable output>
   - edge/negative: <input> -> <expected handling>
+  - (UI) task check: primary user completes the job without guessing
 - impl notes: <constraints, gotchas, patterns to follow — so the implementer needs no extra digging>
 - qa focus: <what the tests must especially probe — abuse / edge cases>
 - external: <service name, or “none”>
   …
+
+Plan-Ready (orchestrator checks before human approve): every phase has testable
+acceptance · no TBD on auth/money/PII/primary surfaces · size+lane set · UI phases
+reference screen IDs or locked direction · dependencies clear.
 
 ## Phase N: <name — final code phase>  [status: pending]
 

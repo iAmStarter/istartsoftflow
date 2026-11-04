@@ -17,7 +17,10 @@ This directory is the **portable workflow kit** (tool-agnostic). Every
 | `skills/` | On-demand cookbooks (ux-design, ui-ux-pro-max, security, support-triage, …) |
 | `hooks/` | Lifecycle enforcement scripts |
 | `istartsoft-flow/` | METHODOLOGY.md — every hard rule lives here once |
-| `templates/` | Proposal / UX pack / architecture / CR / FEATURE / automation |
+| `templates/` | Proposal / UX pack / architecture / CR / FEATURE / design picker · platforms |
+| `models/` | MODEL-MATRIX.md — cross-host model guidance (aliases stay haiku/sonnet/opus) |
+| `routing/` | Advisory model router (fail-closed) |
+| `scripts/` | Portable helpers (e.g. token-lint.js) |
 
 ## Claude Code only
 
