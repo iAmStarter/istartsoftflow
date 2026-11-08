@@ -13,6 +13,12 @@ lock the *frame* first (model B).
 DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, outline what you'd write
 and STOP. Write nothing.
 
+## Existing-product entry
+For reviewing an existing product use `/ui-audit`; for changing its UX/UI use
+`/redesign`. Do not force an existing project through commercial proposal or fresh
+bootstrap. Preserve its stack and behavior contracts unless change is approved.
+Read `ux-design/references/visual-direction.md` for contextual preview requirements.
+
 ## PRE-FLIGHT
 - Read `docs/OVERVIEW.md`, `docs/PLAN.md`, `docs/PROPOSAL.md` (if any), `docs/STATE.md`,
   `docs/design/DIRECTION.md`, `docs/design/tokens.css`.

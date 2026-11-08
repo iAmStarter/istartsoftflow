@@ -1,3 +1,11 @@
+# 1.13.0
+
+- Add existing-product UI audit and behavior-preserving redesign procedures.
+- Add contextual visual direction and product experience references.
+- Add a portable UX evidence consistency validator with explicit runtime gaps.
+- Preserve existing adapters, autonomy helpers and released assets.
+- Clarify landing-page claims: host execution and real browser evidence are required.
+
 # Changelog — create-issflow
 
 ## 1.12.0

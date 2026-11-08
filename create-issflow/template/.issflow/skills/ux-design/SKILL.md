@@ -1,7 +1,7 @@
 ---
 name: ux-design
 description: >
-  The iStartSoft UX cookbook + wireframe baseline. A checklist an agent uses to
+  The iStartSoft UX workflow: user jobs, journeys, review, redesign and visual craft. A rubric an agent uses to
   VALIDATE generated UI so it does not drift outside the design frame. Use on
   every UI-facing task: building a screen/component, reviewing a UI diff, or
   before a frontend phase closes. Triggers: "ui", "screen", "component",
@@ -9,7 +9,7 @@ description: >
   "ตรวจดีไซน์", "หน้าจอ".
 ---
 
-# ux-design — cookbook + wireframe frame
+# ux-design — product experience + visual craft + evidence
 
 Caveman ULTRA mode. UI conforms to the FRAME. Build or change UI -> run this
 cookbook before you call it done. Drift outside the wireframe = defect, not
@@ -54,7 +54,19 @@ token usage and spacing separately because the script does not verify those. Fro
 
 -----
 
-## The cookbook (check every item)
+## Product experience comes first
+
+Read `references/product-experience.md` for every audit, redesign and primary user
+flow; read `references/visual-direction.md` when choosing/changing direction.
+The cookbook below is the visual-system layer, not the whole UX discipline.
+Evaluate task success, navigation/information architecture, feedback/recovery,
+content, hierarchy, accessibility, responsive behavior and preserved contracts.
+Use `/ui-audit` for existing-product review; use `/redesign` for an authorized
+behavior-preserving visual/interaction redesign. Review alone never authorizes fixes.
+Keep the actual project frame, not a generic template aesthetic. Wireframe examples
+are scaffolds: a project-specific approved composition may replace their layout.
+
+## The cookbook (check every applicable item)
 
 ### 1. Design tokens — no raw values
 - Color / spacing / radius / type / shadow come from named tokens, never
@@ -63,16 +75,16 @@ token usage and spacing separately because the script does not verify those. Fro
   don't inline it.
 
 ### 2. Spacing scale — 8pt grid
-- All spacing is a multiple of 4px, prefer 8 (4 · 8 · 12 · 16 · 24 · 32 · 48 · 64).
-- No magic margins (`margin: 7px`). Off-grid spacing is a defect.
+- Default project scale: multiples of 4px, prefer 8 (4 · 8 · 12 · 16 · 24 · 32 · 48 · 64).
+- No unexplained magic margins. Approved optical exceptions belong in tokens/design notes; the grid is a convention, not a universal usability law.
 
 ### 3. Type scale
 - A fixed, named ramp (e.g. xs/sm/base/lg/xl/2xl). No arbitrary font-sizes.
 - Line-height ≥ 1.4 for body. One primary font family + a fallback stack.
 
-### 4. Accessibility — WCAG 2.1 AA (non-negotiable)
+### 4. Accessibility — WCAG 2.2 AA target
 - Text contrast ≥ **4.5:1** (≥ 3:1 for large text ≥ 24px / 19px-bold + UI/icon).
-- Every interactive element: keyboard-reachable, visible focus ring, ≥ 44×44px hit area.
+- Interactive elements: keyboard-reachable with visible, unobscured focus. SC 2.5.8 requires 24×24 CSS px targets or its exceptions; prefer 44×44 for touch (enhanced AAA target, not AA).
 - Semantic HTML (`button`/`nav`/`main`/`label`), not `div` soup. Inputs have labels.
 - Images have `alt`; icon-only buttons have `aria-label`.
 - Color is never the ONLY signal (add text/icon for state).
@@ -122,8 +134,12 @@ UX CHECK: <screen/component>
 - states covered: <list missing, or "all">
 - responsive: PASS | FAIL (<breakpoint that breaks>)
 - i18n: PASS | FAIL
-- VERDICT: PASS | BLOCK (frontend phase cannot close)
+- task success / navigation / recovery: PASS | FAIL | NOT-RUN
+- evidence: build, browser, viewport, role, artifacts and exact checks
+- behavior contracts: preserved | changed with approval | unverified
+- coverage: tested / declared, plus blocked and unsampled targets
+- VERDICT: PASS | BLOCK | INCOMPLETE (unverified frontend phase cannot close)
 ```
 
-Sources behind these defaults: WCAG 2.1 AA, Material Design 3 (semantic tokens),
+Sources behind these defaults: WCAG 2.2 AA, Material Design 3 (semantic tokens),
 Apple HIG, Shopify Polaris. See `docs/research/design-ux-cookbook-wireframe-pattern.md`.

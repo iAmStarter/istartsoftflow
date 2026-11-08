@@ -11,7 +11,12 @@ design tokens / cookbook, not here.
 
 -----
 
-## Global frame (applies to all screens)
+## Adapt the scaffold to the project
+This example is not a mandatory top-bar/footer aesthetic. For an existing product,
+start from its current approved structure. A new composition belongs in the
+project UX-PACK and direction approval, not a global rewrite of this portable kit.
+
+## Example global frame (replace with the approved project frame)
 
 ```
 +--------------------------------------------------+
