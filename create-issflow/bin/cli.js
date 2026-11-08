@@ -319,7 +319,7 @@ function main() {
   const TOOL = pickTool();
   const targets = TOOL === 'all' ? Object.keys(TOOLS).filter(t => t !== 'all') : [TOOL];
 
-  // 1. portable kit tree (.issflow/) ��� every tool gets it.
+  // 1. portable kit tree (.issflow/) — every tool gets it.
   for (const src of walk(path.join(TPL, '.issflow'))) {
     const rel = path.relative(TPL, src);
     writeFile(rel, fs.readFileSync(src, 'utf8'));
