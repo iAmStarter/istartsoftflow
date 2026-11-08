@@ -66,5 +66,10 @@ python3 .issflow/skills/ui-ux-pro-max/scripts/search.py "<query>" --stack <detec
 4. Then apply `ux-design` authoring (wireframe + cookbook). Catalogue must still
    pass: no emoji icons, tokens not raw hex in components, WCAG AA.
 
-If UX-PACK is already **approved**, read it and stop — unless the human asked to
-change the look.
+If UX-PACK is already **approved**, or STATE `design-direction:` is **locked**,
+read the locked DIRECTION/tokens and stop — unless the human asked to change the
+look (then re-picker + re-approve). Never re-roll styles at `/propose` appendix or
+`/phase` CLOSE.
+
+Direction Picker: fill `.issflow/templates/design/picker.html` placeholders only;
+do not rewrite the template chrome.

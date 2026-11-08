@@ -9,7 +9,7 @@ const path = require('path');
 const HERE = __dirname;
 const SRC = path.join(HERE, '..', '.issflow');   // repo-root portable kit (SoT)
 const TPL = path.join(HERE, 'template', '.issflow');
-const DIRS = ['agents', 'commands', 'skills', 'hooks', 'runtime', 'routing', 'istartsoft-flow', 'templates'];
+const DIRS = ['agents', 'commands', 'skills', 'hooks', 'runtime', 'routing', 'models', 'scripts', 'istartsoft-flow', 'templates'];
 const ROOT_FILES = ['README.md', 'flow-config.json']; // map + knobs
 
 function portableFile(source) {

@@ -2,6 +2,9 @@
 
 > Revision: 1
 > Status: PENDING
+> Size: S | M | L
+> Lane: Fast | Standard | Heavy
+> Platform: web | pwa | line | mobile | n/a
 
 ## Goal
 Describe the desired outcome.
@@ -20,6 +23,12 @@ List the paths that the owner will approve in the approval record.
 
 ## Acceptance criteria
 - [ ] Observable behavior with test evidence.
+- [ ] (UI) Primary user can complete the task without guessing — task check
+
+## Delivery (ETA)
+- agent_eta:
+- waiting_on: none | owner | client | vendor | other
+- waiting_since:
 
 ## Tests
 - Unit:
@@ -34,3 +43,6 @@ List the paths that the owner will approve in the approval record.
 Do not change source until the owner approves this exact plan revision.
 The approval record must bind the ID, revision, and Git blob hash.
 Merge and deployment require separate authorization.
+
+Plan-Ready required before approve (testable AC · no TBD on auth/money/PII ·
+direction locked if UI · size+lane set).

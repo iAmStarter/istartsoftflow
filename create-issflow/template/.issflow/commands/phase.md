@@ -1,16 +1,21 @@
 ---
-description: Run one phase end-to-end. TDD phases run SCAFFOLD -> RED -> GREEN; non-TDD phases run IMPLEMENT -> TEST. Both with the debug circuit breaker and the regression guard at CLOSE.
-argument-hint: [phase number · "dry-run" to preview what the phase would do]
+description: Run one phase end-to-end. TDD phases run SCAFFOLD -> RED -> GREEN; non-TDD phases run IMPLEMENT -> TEST. Supports --lite. ETA + stuck/SLIP reporting required.
+argument-hint: [phase number · "lite" · "dry-run"]
 ---
 
 
 Caveman ULTRA mode. You are the ORCHESTRATOR. Route work to subagents —
 use native isolated workers when available; otherwise use sequential role passes
 per METHODOLOGY → Host capabilities and continuity.
+Speak to the human as **PM** (status / ETA / blockers).
 
 Note: subagents cannot talk to the user. Only YOU can.
 
-Target phase: $ARGUMENTS  (default: the phase marked pending in docs/PLAN.md)
+Target phase: $ARGUMENTS (default: next ready phase in the approved plan,
+reconciled with execution state; do not rely on stale status in a hashed plan).
+LANE: if args contain `lite` OR PLAN phase has `lane: lite` → LITE mode.
+  LITE forbidden when: final phase · new primary UI flow · auth/money/PII surface.
+  LITE still requires ETA + DoD + (if any UI touch) task check happy path.
 
 ---
 
@@ -59,18 +64,43 @@ c. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
      phase in PLAN order. GUIDED: STOP, warn, proceed only if I confirm.
    - Phase not in PLAN.md -> STOP. Suggest /overview or /replan.
 
-d. FINAL PHASE CHECK: Read docs/PLAN.md. Is this the last phase (no further
-   pending phases after this one)? Record this as IS_FINAL_PHASE=true/false.
+d. FINAL PHASE CHECK: Reconcile the approved plan with execution state. Is this
+   the last planned phase? Record IS_FINAL_PHASE=true/false; earlier parked units
+   still block package completion even when this is the final phase.
+
+e. DELIVERY / ETA BOARD (required before RESEARCH):
+   Update `docs/STATE.md` `delivery:` block:
+   - First inspect any existing wait: while its gate remains unresolved, retain
+     WAITING_ON_HUMAN (or WAITING_STALE after `stale_after`), surface the next
+     human action, and park this unit. Resume AGENT_ACTIVE only when the gate is
+     resolved and execution actually starts; then clear resolved waiting fields.
+   - Set `agent_eta` and `phase_etas` using `flow-config.json` → `delivery.phaseHours`
+     by phase size (S/M/L/XL) and project timezone. Preserve the previous ETA
+     before recalculating so an overdue estimate is reported as SLIP, not hidden.
+   - Stage line: `stage: RESEARCH | next: … | blocker: none`
+   - Assumption budget: max `assumptionBudgetPerPhase` (default 3). Exceed → park
+     this unit for `/replan` or human; independent approved driver work may continue.
+   - If status was WAITING_ON_HUMAN and `stale_after` passed → set `WAITING_STALE`,
+     tell the human `next_human_action`, do not pretend AI is still building.
+   - If wall-clock past `agent_eta` while AGENT_ACTIVE → **SLIP**: report reason +
+     new ETA or BLOCKED. Never silently continue past ETA.
+
+f. LITE shortcuts (when LITE): skip dedicated researcher if unknowns are none;
+   skip browser E2E if no UI. Keep every applicable CLOSE gate, including regression,
+   endpoint coverage, lint, secrets, and UI task checks. LITE never waives approval,
+   evidence, retry, or security requirements. Full path otherwise.
 
 
 ---
 
 ## 1. RESEARCH + TDD APPLICABILITY
 
-Dispatch `researcher` in IMPL mode scoped to this phase.
+If LITE and no open unknowns: skip researcher; note "lite: research skipped" in STATE.
+Else dispatch `researcher` in IMPL mode scoped to this phase.
 Returns terse summary + path. Read the file only if needed.
 Unknowns block the phase -> re-dispatch narrowed within the methodology retry
 budget, then park if unresolved. No guessing or unbounded research.
+After each major stage change, rewrite STATE `stage:` + one-line progress.
 
 SECURE SDLC (design): if this phase touches a TRUST BOUNDARY (auth, untrusted input,
 data store, money, PII), threat-model it now (`security` skill) and fold the abuse
@@ -122,13 +152,13 @@ NOT edit them). Fill to green. Budget 3, WARN@2, STUCK@3.
 
 ## 3c. TEST (e2e) — FRONTEND phases only
 
-If this phase ships UI: dispatch `e2e-runner` (BLIND) to write + run browser E2E
-for the slice using the declared E2E runner (it brings the test stack up/down
-itself). Then run the `ux-design` cookbook + wireframe check on the new UI
-(hard rule 9): the UI must match the wireframe frame and pass the cookbook
-(tokens, a11y/WCAG AA, states, breakpoints). A `ux-design` BLOCK is a GATE FAIL.
-Do not re-run `ui-ux-pro-max` `--design-system` here — the look is locked in the
-approved UX pack.
+If this phase ships UI:
+- FULL: dispatch `e2e-runner` (BLIND) for browser E2E of the slice.
+- LITE with UI touch: skip full E2E only if a **task check** still proves the
+  primary user job (scripted or manual-recorded happy path) — never skip both.
+- Always run the `ux-design` cookbook + wireframe check (hard rule 9). Tokens must
+  come from `docs/design/tokens.css` — raw hex/spacing in components = BLOCK.
+  Do not re-run `ui-ux-pro-max` `--design-system` here — look is locked.
 Non-frontend phase -> skip §3c.
 
 PHASE GATE (rule 5) -> go to §4/§5/§6 (see GATE below).
@@ -154,7 +184,8 @@ spec — never reads the logic. (e2e-runner only if frontend.)
 
 ## GATE (both paths)
 
-PHASE GATE = current-phase REAL API suite passes AND (if frontend) E2E passes AND
+PHASE GATE = current-phase REAL API suite passes AND (if frontend: E2E passes
+OR the permitted LITE task check has recorded passing evidence) AND
 (if frontend) the `ux-design` cookbook + wireframe check passes AND the
 accumulated mock regression corpus stays green AND every docs/ENDPOINTS.md
 entry has a regression test (checked at CLOSE).
@@ -203,6 +234,13 @@ REGRESSION GATE (before closing — Feature 3):
 - IF IS_FINAL_PHASE: additionally run `scripts/regression.sh --real` (full real
   corpus). A failure blocks close.
 
+UI TASK CHECK (if this phase touched UI — required even in LITE):
+- Happy path: primary user can complete the phase's user-visible job without guessing.
+- Viewport: primary breakpoint (≥MD) + <SM if mobile is primary.
+- Tokens: run `node .issflow/scripts/token-lint.js` to check unlisted hex/RGB colors.
+  Review semantic token usage and spacing separately; the script does not verify those.
+- Fail → FIX; do not close.
+
 CODE-STANDARDS GATE (rule 12): the formatter + linter are clean (the language's
 standard tool); names follow the language's own idiom; the code conforms to the
 declared architecture (Feature-Based by default). Lint/format errors or idiom
@@ -219,6 +257,10 @@ SECURITY GATE (rule 11 — Secure SDLC build stage):
 Record phase `done` in execution state only if all required gates passed. Do not
 edit approval-hashed plan content for progress; pending deployment remains pending
 and prevents declaring a deployment-inclusive phase complete.
+DELIVERY UPDATE: only after all required gates pass, set this phase's
+`phase_etas` entry done; refresh the next ready phase's `agent_eta`. Set
+`delivery.status: DONE` only if the package is complete. Otherwise preserve
+WAITING/BLOCKED and its next action; clear only resolved waiting fields.
 
 SPRINT STANDUP (if a sprint is active — STATE.md shows `sprint: <n> (active)`):
 fire the `/sprint standup` tick — append the one-line standup to
@@ -275,10 +317,16 @@ docs/STATE.md without losing other lanes:
 phase: <n> (in progress)
 plan: approved <date>          ← carry forward; never drop the rule-13 sign-off record
 tdd: <true|false>
+stage: <RESEARCH|SCAFFOLD|RED|GREEN|TEST|FIX|CLOSE>
 completed: <steps done so far>
 next: <exact next step>
 blocker: <none or open issue>
+delivery:                      ← preserve + update; never drop
+  agent_eta: <date>
+  status: AGENT_ACTIVE | WAITING_ON_HUMAN | WAITING_STALE | BLOCKED | SLIP | DONE
+  …
 
 ```
-Keep STATE.md small — overwrite, do not append. Preserve the `plan:` line on every
-overwrite (the PLAN-APPROVAL record, hard rule 13); do not blank it.
+Keep STATE.md small — overwrite, do not append. Preserve `plan:` and `delivery:`
+on every overwrite. When entering WAITING_ON_HUMAN: set waiting_for, waiting_since,
+stale_after (configured `delivery.staleAfterHours`, default 24h), eta_paused: true, next_human_action (one sentence).

@@ -7,11 +7,11 @@ require a separately authorized host scheduler. A checkpoint is not approval.
 
 | Capability | Claude adapter | Codex adapter | Cursor adapter |
 | --- | --- | --- | --- |
-| Entry instructions | CLAUDE.md imports AGENTS.md | AGENTS.md | always-apply rule + AGENTS.md |
+| Entry instructions | CLAUDE.md imports AGENTS.md | AGENTS.md | always-apply workflow/gate rules + AGENTS.md |
 | Roles | .claude agent mirror, host-dependent discovery | reference files; use native delegation if exposed | reference files; use native delegation if exposed |
 | Installed hooks | session, pre-tool, pre-compact, subagent-stop, stop | none | sessionStart, subagentStop only |
 | Task state helper | explicit Node CLI | explicit Node CLI | explicit Node CLI |
-| Checkpoint recovery | session hook summarizes state; agent reconciles | agent reads state explicitly | session hook if supported; otherwise explicit |
+| Checkpoint recovery | lean Tier-A session hook summarizes state; agent reconciles | agent reads state explicitly | session hook if supported; otherwise explicit |
 | Approval enforcement | edit hook covers listed edit tools, not all shell writes | explicit verifier / CI | explicit verifier / CI |
 | Completion proof | agent checks current code; file gate alone is insufficient | same | same |
 

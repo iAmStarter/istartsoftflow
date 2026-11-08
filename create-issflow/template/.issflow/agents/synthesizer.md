@@ -17,14 +17,19 @@ Do NOT touch docs/ENDPOINTS.md — owned by implementer.
 ## Standard tasks (every phase — do all, in order)
 
 1. STATE.md — rewrite, do not append. Keep ONLY:
-   - current phase + status
+   - current phase + status + stage
    - what was just completed (1-3 bullets)
    - the immediate next action
    - any open blocker
    PRESERVE verbatim (never blank on rewrite): the `plan:` line (the PLAN-APPROVAL
-   sign-off record, hard rule 13) and the `sprint:` line (active-sprint marker) if
-   present — load-bearing gate/standup state, not transient progress.
-   Target: under 25 lines.
+   sign-off record, hard rule 13), the `sprint:` line if present, **and the entire
+   `delivery:` block** (agent_eta / status / waiting_* / slip) — load-bearing for
+   finish-date honesty. Also preserve `design-direction:`, `design:`, `architecture:`,
+   `surfaces:`, `timezone:` when present.
+   Preserve all active and parked lane checkpoints, approval digests, branch/base,
+   evidence paths/results, attempt counts and remaining budgets, or verified links
+   to their durable execution records. Never reset counters or erase blocked lanes.
+   Target: under ~30 lines including delivery; correctness beats this size target.
 
 2. ISSUES.md — dedup + compress:
    - merge duplicate / near-duplicate issues.
@@ -35,14 +40,17 @@ Do NOT touch docs/ENDPOINTS.md — owned by implementer.
 3. docs/.snapshots/ — delete precompact snapshots older than the newest 3.
 
 4. Append a single dated line to docs/HISTORY.md:
-   `YYYY-MM-DD phase <n> done - <one line>`
+   `YYYY-MM-DD phase <n> <verified status> - <one line>`
+   Use done only when all required gates and deployment obligations are verified.
 
 ---
 
 ## Final-phase extended pass
 
 The orchestrator will tell you when this is the final phase (no further pending
-phases remain in PLAN.md). When told, ALSO do:
+phases remain in the reconciled execution state). When told, ALSO do:
+Never infer completion from being the last phase. If required gates or deployment
+remain pending/blocked, describe that actual status instead of the done template.
 
 5. Update docs/OVERVIEW.md — append a "## Final state" section:
 ```
@@ -62,7 +70,8 @@ vs the original estimate (PROPOSAL.md v1 total → final total after approved CR
 This is the client closeout — the one-page record of the whole engagement.
 6. Update README.md (the project-level README, not the iStartSoftFlow README) — if a
 project README exists at the repo root, update or append:
-- Current status: "Production — deployed at <URL>"
+- Current status: verified implementation/release status. Use "Production — deployed
+  at <URL>" only with observed successful deployment evidence; never invent a URL.
 - Brief description of what was built (from OVERVIEW.md summary)
 - Link to docs/ENDPOINTS.md for the API surface
 If no project README exists, note this in the return and skip.
@@ -76,6 +85,6 @@ SYNTHESIZED
 - ISSUES.md: <old> -> <new>, merged <k>, archived <m>
 - snapshots pruned: <count>
 - final pass: <yes — OVERVIEW.md + README.md updated | no>
-- safe to /clear: yes
+- safe to reset context: <yes only if all checkpoints are durable | no — reason>
 
 ```

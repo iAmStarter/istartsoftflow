@@ -1,5 +1,26 @@
 # Changelog — create-issflow
 
+## 1.12.0
+
+- Add bounded autonomous task checkpoints, independent-lane continuation, retry budgets and current-attempt evidence.
+- Preserve the published 1.11.1 SDLC refresh: delivery ETA, lean Tier-A context, Cursor gate rules, model matrix, design picker/tokens and token lint.
+- Package runtime/routing/models/scripts consistently; support ESM consumers and non-destructive upgrades.
+- Keep host capability and evidence limits explicit; no implicit daemon, publication or deployment.
+
+## 1.11.1 — 2026-11-04
+
+- Republish path after 1.11.0 lived only on a closed PR (never on npm / main).
+- Same SDLC refresh content as the 1.11.0 kit bump: Direction Picker, ETA board, Cursor gates, token lint, HOW-TO / landing sync.
+
+## 1.11.0 — 2026-11-04
+
+- Direction Picker + tokens SoT before propose/build; Plan-Ready + delivery ETA board
+  (`WAITING_STALE` / SLIP / assumption budget).
+- SessionStart Tier A; Cursor `issflow-gates.mdc` + host capability matrix in AGENTS.
+- `/phase --lite` with UI task check; MODEL-MATRIX; dual estimate A/B on propose/CR.
+- Token lint script; kit landing + HOW-TO PM/SA sync; template sync includes
+  `models/` · `routing/` · `scripts/`.
+
 ## 1.10.1 — 2026-10-25
 
 ### Fixed

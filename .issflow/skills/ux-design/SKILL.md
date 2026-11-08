@@ -47,6 +47,10 @@ wireframe does not have. If the design truly needs a frame the wireframe lacks,
 STOP and update the wireframe baseline first (a design decision -> `log-decision`).
 When an approved `docs/UX-PACK.md` exists, treat it as the project frame — drift
 from the pack is a defect unless the pack is re-approved.
+When `docs/design/tokens.css` exists, components must use those semantic tokens —
+unapproved colors / off-grid spacing in UI files are a **BLOCK**. Run
+`node .issflow/scripts/token-lint.js` for unlisted hex/RGB colors; review semantic
+token usage and spacing separately because the script does not verify those. Frontend CLOSE also needs a **task check** for the primary user job.
 
 -----
 

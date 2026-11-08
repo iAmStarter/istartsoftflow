@@ -23,6 +23,7 @@ for (const tool of ['claude', 'codex', 'cursor']) {
         assert.equal(execFileSync(process.execPath,['-e',`console.log(typeof require(${JSON.stringify(router)}).route)`],{cwd:dir,encoding:'utf8'}).trim(),'function');
         assert.equal(execFileSync(process.execPath, ['-e', `console.log(typeof require(${JSON.stringify(runtime)}).status)`], {cwd:dir, encoding:'utf8'}).trim(), 'function');
         if (tool !== 'claude') assert.equal(fs.existsSync(path.join(dir, '.claude')), false);
+        else assert.match(JSON.parse(fs.readFileSync(path.join(dir,'.claude/settings.json'),'utf8')).hooks.SessionStart[0].matcher,/resume/);
         const agents = fs.readFileSync(path.join(dir, 'AGENTS.md'), 'utf8');
         assert.match(agents, /does not execute agents or schedule/);
         if (tool === 'cursor') assert.match(fs.readFileSync(path.join(dir, '.cursor/rules/istartsoftflow.mdc'), 'utf8'), /not registered native agents/);
