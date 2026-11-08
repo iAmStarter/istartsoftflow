@@ -22,7 +22,7 @@ const toolArg = (argv.find(a => a.startsWith('--tool=')) || '').split('=')[1];
 
 const TOOLS = {
   claude: 'Claude Code (Anthropic) — full: subagents, lifecycle hooks, skills',
-  codex:  'OpenAI Codex CLI — AGENTS.md native; subagents/skills as readable files',
+  codex:  'OpenAI Codex — AGENTS.md; use native tools only when available',
   cursor: 'Cursor — .cursor/rules + commands + hooks; kit stays in .issflow/ (no .claude/)',
   gemini: 'Google Gemini CLI — GEMINI.md pointer; commands/skills as readable files',
   aider:  'Aider — .aider.conf.yml loads the methodology as conventions',
@@ -144,7 +144,7 @@ function adapterClaude() {
 }
 
 function adapterCodex() {
-  warnings.push('codex: AGENTS.md is read natively. Lifecycle hooks unsupported (rituals model-run); subagents in .issflow/agents/ are read as reference, not isolated contexts.');
+  warnings.push('codex: this installer configures AGENTS.md, not lifecycle hooks or subagent registration. Detect native delegation in the current host; otherwise run roles serially. Run checkpoint and verification commands explicitly.');
 }
 
 function adapterCursor() {
@@ -152,7 +152,7 @@ function adapterCursor() {
     '---', 'description: iStartSoftFlow workflow — always apply', 'alwaysApply: true', '---', '',
     'Run the **iStartSoftFlow** workflow. The full, single-source methodology is',
     '`.issflow/istartsoft-flow/METHODOLOGY.md` — read it before acting. Roles live in',
-    '`.issflow/agents/` (Cursor reads them natively); procedures in `.cursor/commands/`',
+    '`.issflow/agents/` (role references, not registered native agents); procedures in `.cursor/commands/`',
     '(mirror of `.issflow/commands/`). Caveman ULTRA mode; apply the `karpathy-guidelines`',
     'and `ux-design` skills. See `AGENTS.md` for the role/command/skill map.', '',
   ].join('\n'));
@@ -164,7 +164,7 @@ function adapterCursor() {
       subagentStop: [{ command: 'node .issflow/hooks/subagent-stop.js' }],
     },
   }, null, 2) + '\n');
-  warnings.push('cursor: PreCompact has no Cursor equivalent (snapshot ritual degrades to model-run); verify hooks.json against cursor.com/docs/hooks — the schema evolves.');
+  warnings.push('cursor: only sessionStart and subagentStop hooks are configured here; no edit/stop approval enforcement. Verify host hook support. Run checkpoint and verification commands explicitly; role files do not register subagents.');
 }
 
 function adapterGemini() {
@@ -230,12 +230,14 @@ function agentsMd() {
     'caveman · grill-me · karpathy-guidelines · ux-design · ui-ux-pro-max · security ·',
     'code-standards · support-triage', '',
     '## Autonomy', '',
-    'Planning (`/overview` grill + plan approval) always asks — that input is cheap.',
+    'Use existing approval for the same scope; ask only for missing approval or material changes.',
     '**AUTO (default)** governs the DEV loop: follow the plan, decide + log + continue,',
     'do NOT stop to ask. Hard-stops only: security · irreversible/outbound actions · a',
     'contradictory spec. Blockers are parked + reported at the phase boundary, not',
     'mid-flow. **GUIDED** asks at each fork in dev too. Declare the mode in',
-    '`docs/OVERVIEW.md`. See METHODOLOGY → Autonomy.', '',
+    '`docs/OVERVIEW.md`. See METHODOLOGY → Autonomy.',
+    'Optional durable task state: `.issflow/runtime/workflow.js` (see `.issflow/runtime/README.md`).',
+    'This local state helper does not execute agents or schedule future sessions.', '',
     '## Hard-rule index (full text in METHODOLOGY.md)', '',
     '1–12 as in METHODOLOGY · 13 PLAN-APPROVAL · 14 UNDERSTAND-FIRST ·',
     '15 DESIGN + ARCHITECTURE gates (after proposal, before `/phase`; internal may n/a).', '',
@@ -331,10 +333,15 @@ function main() {
   const gi = path.join(CWD, '.gitignore');
   if (fs.existsSync(gi)) {
     const txt = fs.readFileSync(gi, 'utf8');
-    if (/^\.issflow\/\*\s*$/m.test(txt) && !txt.includes('!.issflow/agents/')) {
-      const block = '\n# iStartSoftFlow workflow — track as project config\n!.issflow/agents/\n!.issflow/commands/\n!.issflow/skills/\n!.issflow/hooks/\n!.issflow/istartsoft-flow/\n';
-      log('  + .gitignore: un-ignore .issflow workflow dirs');
-      if (!DRY) fs.appendFileSync(gi, block);
+    if (/^\.issflow\/\*\s*$/m.test(txt)) {
+      const tracked = ['agents', 'commands', 'skills', 'hooks', 'runtime', 'routing', 'istartsoft-flow'];
+      const lines = new Set(txt.split(/\r?\n/).map(line => line.trim()));
+      const missing = tracked.map(dir => `!.issflow/${dir}/`).filter(line => !lines.has(line));
+      if (missing.length) {
+        const block = '\n# iStartSoftFlow workflow — track as project config\n' + missing.join('\n') + '\n';
+        log('  + .gitignore: un-ignore missing .issflow workflow dirs');
+        if (!DRY) fs.appendFileSync(gi, block);
+      }
     }
   }
 

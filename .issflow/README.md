@@ -12,10 +12,11 @@ This directory is the **portable workflow kit** (tool-agnostic). Every
 
 | Path | What |
 |------|------|
-| `agents/` | Fresh-context workers (planner, researcher, implementer, …) |
+| `agents/` | Role definitions (isolated workers only where the host supports them) |
 | `commands/` | Procedures — Default: `/overview` `/feature` `/quick`; Advanced: `/propose` `/design` `/support` … |
 | `skills/` | On-demand cookbooks (ux-design, ui-ux-pro-max, security, support-triage, …) |
-| `hooks/` | Lifecycle enforcement scripts |
+| `hooks/` | Host-specific lifecycle scripts; coverage depends on adapter |
+| `runtime/` | Explicit local task state/checkpoint helper, not an agent daemon |
 | `istartsoft-flow/` | METHODOLOGY.md — every hard rule lives here once |
 | `templates/` | Proposal / UX pack / architecture / CR / FEATURE / automation |
 
@@ -34,3 +35,5 @@ Do **not** duplicate METHODOLOGY rules into other files (anti-drift).
 Do **not** put personal rate cards in this kit.
 
 Installer: `npx create-issflow` (omit `--tool` = all adapters).
+
+Host capability limits and smoke checks: [runtime/HOSTS.md](runtime/HOSTS.md).

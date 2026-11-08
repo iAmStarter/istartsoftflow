@@ -1,0 +1,19 @@
+{
+  "planId": "PLAN-0005",
+  "revision": 2,
+  "planBlobSha": "3b5102d4f88d2339564c32148bc2529121410c34",
+  "approvedBy": "User in this conversation",
+  "approvedAt": "2026-11-08",
+  "approvalSource": "Conversation approval: ผมโอเค จัดเลย (in response to ถ้าสตาร์ทโอเค ผมจะเริ่มแก้และทดสอบต่อครับ); subsequent instruction: จริงจริง Codex มีกับ Cursor แต่ Claude ยังไม่มี คุณไม่ต้องลองหรอก คุณ proof ว่ามันโอเคก็ได้แล้ว งั้นก็ push ขึ้น main เลย",
+  "allowedPaths": [
+    ".issflow/**",
+    "create-issflow/bin/cli.js",
+    "create-issflow/build.js",
+    "create-issflow/template/**",
+    "tests/**",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0005.md",
+    "docs/approvals/PLAN-0005.json",
+    "docs/autonomous-workflow-verification.md"
+  ]
+}

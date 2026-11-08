@@ -72,7 +72,8 @@ approval JSON is not cryptographic proof of the human approver. Require protecte
 branches, required CI checks, and an actual human GitHub PR review for merge.
 No tool can treat a self-edited approval file as owner authorization.
 
-**Recovery:** If approval metadata is missing or malformed, stop implementation.
+**Recovery:** If approval metadata is missing or malformed, stop implementation
+for that plan and its dependents; independent, separately approved work may continue.
 A human should inspect the plan, restore the correct pointer and approval record,
 then rerun verification. Never bypass the gate by editing `STATE.md` or disabling
 checks. A scoped feature lane does not inherit approval from another plan.
@@ -91,7 +92,8 @@ metadata and any required disclosures.
 
 `design-research -> grill (×2) -> plan -> implement -> test -> deploy`, one
 VERTICAL SLICE per phase. Implement AND test a phase before the next. The last
-phase always includes deployment.
+phase always includes deployment preparation; deployment itself requires the
+release authorization and checks below.
 
 A phase runs in one of two orders, chosen at RESEARCH time by the TDD
 APPLICABILITY check (see Procedures → `phase`):
@@ -242,7 +244,8 @@ Three layers make "hands-off" real — each uses the mechanism suited to its job
    model-run rituals.
 3. **No-human-at-the-keyboard → a headless runner.** `ISSFLOW_HEADLESS=1` tells the
    lane no human is present: every hard-stop degrades to a `BLOCKED.md` report +
-   clean exit — never a guess. Two shipped runners (`create-issflow --ci|--docker`,
+   lane return/exit — never a guess; an enclosing goal can still run independent
+   approved units. Two shipped runners (`create-issflow --ci|--docker`,
    sources in `.issflow/templates/automation/`):
    - **GitHub Actions** — label an issue `feature:approved` (or dispatch with a doc
      path); the workflow runs the lane on an ephemeral runner.
@@ -258,12 +261,20 @@ Three layers make "hands-off" real — each uses the mechanism suited to its job
      features build in parallel without touching your checkout or each other
      (path-identical mounts: Linux/macOS).
 
-**Approval semantics (rule-13 scoped).** The doc header
-`> Approval: APPROVED <name> <date>` is the human sign-off, scoped to that doc
-only; the mini-plan inherits it while it stays inside the doc's stated scope —
-scope creep hard-stops to `/change-request`. The `> Automation: none|push|push+pr`
-header pre-authorizes outbound git actions for THAT run (hard-stop 1 satisfied by
-recorded consent). Merge and prod deploy can never be pre-authorized.
+**Approval semantics (rule-13 scoped).** The Feature approval confirms intake
+for that document only. Apply Plan-scoped approvals before implementation;
+feature or goal headers never override an invalid revision/digest or path scope.
+Derived execution notes may break down approved work, not silently expand it.
+Scope creep returns to `/change-request` and the relevant approval gate.
+
+**Publication mode:** `> Automation: none|push|push+pr` defaults to `none`.
+`none` delivers local results only. `push` permits the specified feature branch
+push; `push+pr` permits that push and opening its PR to the agreed target. Either
+outbound mode requires explicit human authorization covering this run, repository,
+branch, and destination; a header an agent writes is not consent. Respect later
+restrictions, including no-commit/no-push. Never infer publication from AUTO,
+headless mode, or implementation approval. Merge and production deployment remain
+separate human release gates, never implied by these publication modes.
 
 -----
 
@@ -387,7 +398,8 @@ surface or need its own acceptance criteria? -> `/feature`. Otherwise `/quick`.
   verification. Headless-capable (CI / Docker, `ISSFLOW_HEADLESS=1`). See "Feature lane".
 - **goal [set|run|status|done|drop]** — the goal layer: declare an OUTCOME with a
   measurable Done-when + budget (`set`, behind the rule-14 brief-back), then
-  `run` loops pick-next-unit → route lane → tick until done / budget / hard-stop.
+  `run` loops pick-next-unit → route lane → tick until done / budget / no ready
+  independent unit / run-wide hard-stop; local blockers park only their lane.
   Goal-driven, not time-driven: it stops itself on the finish line. Recurrence is
   host-level (interval loop or the cron-ready `issflow-goal.yml`). `docs/GOALS.md`
   holds state; its `Approved:` line arms headless passes.
@@ -503,29 +515,35 @@ a recorded sign-off) stay interactive in both modes. AUTO governs only the **dev
 close): there, interruptions are expensive, so it follows the plan instead of asking.
 
 - **AUTO (default) — during DEVELOPMENT, follow the plan, don't interrupt.** Once a
-  plan exists, the dev loop prefers DECIDING over asking. Resolve any in-process
+  plan is approved, the dev loop prefers DECIDING over asking. Resolve any in-process
   choice from (1) the PLAN/OVERVIEW/spec, (2) the codebase, (3) a sensible default +
   the worker's recommendation — then RECORD it (`docs/DESIGN_LOG.md` or STATE) and
   CONTINUE. Do not stop mid-build to ask.
 - **GUIDED — ask at each fork in dev too.** The original behaviour: the development
   loop also surfaces choices and waits. Use when exploring an unfamiliar codebase.
 
-**Decision protocol (AUTO, dev loop).** Incomplete acceptance spec → fill the gap
-with the most reasonable interpretation, log it as an Assumption, continue.
+**Decision protocol (AUTO, dev loop).** Resolve routine implementation details
+within the approved acceptance criteria, file boundaries, and risk limits; log
+the interpretation as an Assumption and continue. Do not add requirements or
+rewrite an approved plan to make a decision fit.
 Ambiguous TDD classification → apply the default (`TDD_PHASE=true`), log the reason,
 continue. A worker that would have asked the user instead writes its question + its
 own best answer to STATE and proceeds on that answer. (If the gap is in the PLAN
 itself — not just an implementation detail — that's a planning question: surface it.)
 
-**Batched escalation (AUTO).** Blockers never halt the whole run. On first stuck,
+**Batched escalation (AUTO).** A local blocker does not halt independent work. On first stuck,
 auto-run `/unstuck` (deep re-research) — capped at ONCE per phase, since it is
-token-expensive. Still stuck → park the blocked slice (mark `BLOCKED` in PLAN), move
+token-expensive; allow one fresh three-attempt debug cycle after it, never an
+unbounded reset of the counter. Still stuck → park the blocked slice in execution
+state (do not mutate the approved plan digest), move
 to the next independent slice, and surface ONE consolidated report of all parked
 blockers + logged assumptions at the phase boundary / end of run. The human reviews
 THERE (the `/re` checkpoint), not mid-flow.
 
-**Hard stops (BOTH modes — these always pause for a human).** Autonomy is for
-*development*, not for risk. Stop and get sign-off ONLY for:
+**Hard stops (BOTH modes).** Pause the affected action and dependent work for
+human input; continue only independently approved, safe work. Autonomy is for
+*development*, not permission escalation. The gates above and host permission
+policy still apply. Stop for:
 1. Irreversible or outbound actions — deploy to prod, data deletion/migration,
    `git push`, publish, spending money, sending external messages.
 2. Security-sensitive changes — auth, secrets, permissions, data exposure.
@@ -533,9 +551,75 @@ THERE (the `/re` checkpoint), not mid-flow.
    + log instead).
 4. The debug budget is spent AND no independent slice remains to make progress.
 
+An existing explicit authorization covering the exact action satisfies a gate
+only where that gate permits pre-approval. Never infer publish, push, deploy,
+spend, or security permissions from AUTO or a general build request. Release,
+UAT, and merge remain human gates. A security finding blocks affected completion
+and release, not unrelated safe work.
+
 AUTO removes *questions*, not *discipline*: tests, the phase gate, issue logging,
 and the regression corpus all still run. The point is an efficient, end-to-end
 development run that follows the spec and logs every problem so it never recurs.
+
+
+### Execution contract (short tasks and long runs)
+
+Use the smallest eligible lane. After its intake and approval gates, AUTO runs
+implement → test → fix → verify without requesting approval for each routine
+step. A short `/quick` still verifies; a long `/goal` or `/sprint` tracks units,
+dependencies, and a finite run budget. A single `/phase` or `/feature` request
+does not authorize unrelated work. Select only approved units whose dependencies
+are verified done; never skip a failed prerequisite to keep busy.
+
+Checkpoint after each meaningful step, before a context reset, and on interruption
+or a blocker: task ID, plan revision/digest, branch and base commit, dependencies,
+status, files changed, commands/results and evidence paths, attempt counts,
+remaining run budget, blocker and exact next action. Keep execution progress
+separate from immutable approved plan content. Optional local runtime checkpoints
+are bookkeeping, not approval, test evidence, or a background execution service.
+
+For a multi-unit run, the optional CLI is `node .issflow/runtime/workflow.js`.
+See `.issflow/runtime/README.md` for validated input schemas. Use
+`docs/WORKFLOW.json` when session-hook discovery is desired: `init` once from the
+approved task breakdown, `next` to claim, `update` after actual work, and `status`
+on resume. Each mutation persists state. The helper does not verify approval,
+execute tasks, or attest tests; retain the detailed evidence above separately.
+Never recreate a checkpoint to evade its spent budget. A changed task definition
+requires reviewed scope and carries forward relevant prior attempts explicitly.
+
+On resume, inspect the real worktree and latest approval before trusting a
+checkpoint. Reconcile already-applied edits and uncertain tool outcomes; do not
+repeat commits, outbound actions, or migrations blindly. Preserve retry counters
+and parked blockers across resume. Reopen a parked unit only with new evidence,
+a resolved prerequisite, or explicit direction; do not cycle it through new
+sprints to reset its budget. Bound environment/flake retries too (default two
+retries per failing check, within the run budget); unavailable services are
+`blocked`, not passing tests. Research retries use the same bounded policy.
+
+Completion requires observed acceptance and gate evidence for the current diff.
+Report `done`, `blocked`, `pending`, and `not run` distinctly, including actual
+commands, exit results, and remaining work. A generated test plan is not UAT;
+a skipped or unavailable check is not green. Missing metrics are `unavailable`,
+not invented percentages. Never mark an entire feature/goal done while a required
+unit is parked. Report local implementation separately from release readiness.
+
+### Host capabilities and continuity
+
+See `.issflow/runtime/HOSTS.md` for the installed capability matrix and smoke checks.
+
+Check the actual session's tools rather than assuming a product name grants
+capabilities. Claude Code can use installed native agents/hooks; Codex can use
+available delegation and execution tools; Cursor uses its installed command/rule
+and supported hook surfaces. Where delegation is unavailable, perform role passes
+sequentially and disclose when genuine blind test isolation cannot be provided.
+A model-run ritual is guidance, not tool enforcement. Never claim a Claude hook
+protects Codex or Cursor, or that any prompt guarantees unattended execution.
+
+Continue while the session is active and budget remains. Prompts and checkpoints
+do not create a persistent runtime, scheduler, or automatic wake-up. Use only an
+actually configured host scheduler/CI runner for recurrence, with its own limits
+and authorization; otherwise leave a resumable checkpoint and say a new invocation
+is needed. Do not invent `/clear`, `/loop`, or background execution capabilities.
 
 -----
 
@@ -563,7 +647,9 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
    The cap protects efficiency (no flailing / token burn) in both modes.
 3. Every resolved error -> logged to `docs/ISSUES.md` with root cause + failed
    attempts.
-4. End of phase -> synthesize -> context reset -> next phase.
+4. End of phase -> synthesize -> checkpoint -> next approved, ready phase.
+   Reset context only using an available host mechanism; if that ends execution,
+   leave the exact resume instruction. Do not claim to continue after session exit.
 5. **PHASE GATE** = the current-phase REAL API suite passes AND (frontend phase)
    the E2E suite passes AND the accumulated mock regression corpus stays green AND
    every `docs/ENDPOINTS.md` entry has at least one test in `tests/regression/`.
@@ -605,7 +691,9 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
     (the language's standard tool), names follow the language's OWN idiom, and the
     code conforms to the declared architecture (Feature-Based by default) — checked
     at CLOSE. Lint/format errors or idiom violations BLOCK the close. (`code-standards`.)
-13. **PLAN-APPROVAL gate.** No phase / sprint / build work starts until `docs/PLAN.md`
+13. **PLAN-APPROVAL gate.** Plan-scoped approvals above take precedence; the
+    following header convention applies only to legacy plans. No phase / sprint /
+    build work starts until `docs/PLAN.md`
     carries a human approval. `/overview` ends by presenting the plan and STOPPING for
     sign-off; on approval the gate is RECORDED in three places — the PLAN.md
     `> Approval:` header (`approved <date> v<n>`), `plan:` in `docs/STATE.md`, and a
@@ -623,6 +711,8 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
     A recorded approval artifact IS the confirmation for its lane (approved
     PLAN → phases · APPROVED FEATURE doc → the feature lane · approved CR → the
     change · `Approved:` goal → goal runs) — that is exactly what arms headless.
+    Reuse that confirmation for routine steps and retries within the same scope;
+    goal approval does not replace the required approval of each execution plan.
     Rationale: a wrong understanding burns tokens and context at 100× the cost
     of one confirm turn. AUTO governs execution AFTER intake, never instead of it.
 15. **DESIGN + ARCHITECTURE gates.** After a client proposal is signed (quoted

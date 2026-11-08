@@ -25,15 +25,25 @@ Steps:
    understand it · file(s) you'll touch · blast radius — and WAIT for my confirm.
    One cheap turn beats redoing a misunderstood edit. (Already confirmed in this
    conversation? say so and proceed — don't re-ask the same understanding.)
-1. grep docs/ISSUES.md for anything related.
+1. Verify applicable plan revision/digest and allowed paths per METHODOLOGY →
+   Plan-scoped approvals; intake confirmation alone cannot override that gate.
+   grep docs/ISSUES.md for anything related.
 2. Make the change. Smallest diff that works.
 3. Run it — lint/typecheck/smoke. Show me result.
 4. REGRESSION GUARD: run `scripts/regression.sh` (mock corpus). No corpus in this
    repo? run the project's own test suite instead (or the touched area's tests).
-   A break BLOCKS the `/quick` — surface it to me and stop. No agent chain is added.
-5. Error you cannot fix in 2 tries -> STOP. Recommend `/phase`.
+   A break blocks completion, not the first repair attempt: fix within the approved
+   scope and rerun the failed check plus regression, using the two-try budget below.
+   No agent chain is added.
+5. Error you cannot fix in 2 tries -> park this unit with failed hypotheses,
+   evidence, and the next action. Recommend `/phase`; do not expand scope or
+   reset the budget automatically. Under an approved goal, return the blocker
+   to its driver so independent units can continue.
 6. Change revealed a bug -> `/log-issue`.
 7. ARCHITECTURE SELF-CHECK: touched an agent, hook, command, or workflow rule?
    YES -> `/log-decision`.
 
-No STATE.md rewrite, no synthesize, no /clear needed.
+No full STATE.md rewrite, synthesize, or /clear needed. If interrupted or blocked,
+leave a minimal checkpoint (scope, diff, tests, attempts, next action) per the
+methodology Execution contract; preserve existing state. Report done only after
+required checks pass, otherwise blocked/not run with evidence.

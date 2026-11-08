@@ -4,7 +4,8 @@ argument-hint: [path to Feature doc, e.g. docs/features/<slug>/FEATURE.md · "dr
 ---
 
 Caveman ULTRA mode. You are the ORCHESTRATOR. Route work to subagents —
-you do NOT implement or debug yourself. Subagents cannot talk to the user; only YOU can.
+use native isolated workers when available; otherwise use sequential role passes
+per METHODOLOGY → Host capabilities and continuity. Only YOU report to the user.
 
 Target doc: $ARGUMENTS  (default: the single `docs/features/*/FEATURE.md` whose
 `> Status:` reads `approved, pending` — zero or multiple candidates -> STOP and list them.)
@@ -28,7 +29,8 @@ Target doc: $ARGUMENTS  (default: the single `docs/features/*/FEATURE.md` whose
 HEADLESS DETECT: env `ISSFLOW_HEADLESS=1` (set by the CI workflow / Docker runner)
 means NO human is available this run. Every hard-stop below then degrades to:
 write the blocker to `docs/features/<slug>/BLOCKED.md` + mark the gate `parked`
-+ EXIT cleanly with a report. Never guess through a hard-stop.
++ return this lane as blocked with a report. A goal driver may continue independent
+approved units; a standalone feature run exits. Never guess through a hard-stop.
 
 ---
 
@@ -51,12 +53,16 @@ b. APPROVAL GATE (the ONE human gate at entry): the Feature doc must carry a hea
    ```
    Missing/PENDING -> HARD-STOP: a human approves the DOC, not the run (need a doc?
    `/feature new <name>` scaffolds `.issflow/templates/FEATURE-template.md`). Doc approval
-   is the rule-13 sign-off *scoped to this doc only* — the mini-plan it produces
-   inherits approval as long as it stays inside the doc's stated scope.
+   confirms intake *scoped to this doc only*. Also apply METHODOLOGY → Plan-scoped
+   approvals: verify the active plan revision/digest and file boundaries before
+   implementation. A feature header does not override a missing or invalid plan
+   approval. Routine breakdown within the approved plan needs no new confirmation.
 
 c. WORKSPACE: slug = kebab-case of the doc's title. Ensure
    `docs/features/<slug>/FEATURE.md` (move the doc there if given elsewhere).
-   Write `docs/features/<slug>/GATES.md` — the gate checklist, all unchecked:
+   On a new run, write `docs/features/<slug>/GATES.md`, all unchecked. On resume,
+   reconcile the existing checklist with actual diff/test evidence, approval,
+   and saved attempts; do not erase progress or trust stale checkmarks:
    ```
    # GATES — <slug>
    - [ ] spec-complete
@@ -86,9 +92,10 @@ d. STATE + BRANCH: `docs/STATE.md` gets `feature: <slug> (active)`. Work on
 
 Dispatch `researcher` (IMPL mode) scoped to the doc: which modules/files the
 feature touches, which dependencies + versions are involved, what the doc leaves
-unstated. Fill every gap with the most reasonable interpretation and log each one
-under `## Assumptions` in FEATURE.md (AUTO decision protocol — decide + log +
-continue). Check gate `spec-complete`.
+unstated. Resolve routine details within approved scope and record assumptions
+in execution notes (not an approval-hashed artifact). Material requirement gaps
+require approval. Continue without re-confirming routine choices. Check gate
+`spec-complete` only when the specification is sufficient.
 
 ## 2. ADVERSARIAL DOC-REVIEW (before planning)
 
@@ -99,7 +106,8 @@ Dispatch TWO reviewers in parallel, each told to ATTACK the doc, not summarize i
   data store, money, PII)? If yes, threat-model it now (`security` skill) and fold
   abuse cases into the acceptance criteria as negative cases.
 
-Merge findings into FEATURE.md `## Acceptance criteria` (positive + negative).
+Record findings and derived test cases in execution notes. Do not silently
+rewrite approved acceptance criteria; material changes require renewed approval.
 Internally CONTRADICTORY spec -> HARD-STOP (methodology hard-stop 3). Merely
 incomplete -> fill + log. Check gate `adversarial-doc-review`.
 
@@ -130,13 +138,16 @@ For each slice in `docs/features/<slug>/PLAN.md`, in order:
   implementation) -> GREEN (`implementer`) -> e2e (`e2e-runner`) when the slice has
   a user-facing flow. Non-TDD slice: IMPLEMENT -> TEST.
 - Debug circuit breaker: WARN at 2, cap 3, `/unstuck` once per slice; still stuck
-  -> park the slice (BLOCKED in the feature PLAN) + continue to the next
+  -> park the slice (BLOCKED in execution state) + continue to the next
   independent slice. Blockers batch-report at the end, never mid-flow.
 - Rule 11 (secure coding + SAST/SCA/secrets) and rule 12 (lint/format/naming/
   architecture) apply per slice as in `/phase`.
 - `implementer` updates `docs/ENDPOINTS.md` as surfaces land.
 
 All slices done + full feature suite green -> check gate `build-green`.
+If required slices remain blocked, keep this gate unchecked. Independent review,
+documentation, and test-plan preparation may continue, but delivery and done status
+remain blocked. Checkpoint evidence, attempts, and next actions after each step.
 
 ## 6. REVIEW & HARDEN (adversarial + self-review)
 
@@ -169,7 +180,7 @@ a. Documentation update: `docs/ENDPOINTS.md` final pass; README/docs deltas the
 b. Token stamp — append to FEATURE.md:
    ```
    ## Token stamp
-   context: ~<pct>% of window · subagents: <n> · slices: <n> · debug rounds: <n>
+   context: <observed value or unavailable> · subagents: <actual n> · slices: <n> · debug rounds: <n>
    ```
    Check gate `token-stamp`.
 c. Summary — append to FEATURE.md `## Summary`: what shipped, assumptions made,
@@ -179,11 +190,15 @@ d. Memory update — append wisdom candidates (resolved issues, reusable finding
    to `docs/WISDOM-QUEUE.md`. The QUEUE is local + automatic; pushing to the
    shared KB stays human (`/store-wisdom` reads the queue). Check gate `memory-queued`.
 
-Then: STATE.md -> `feature: <slug> (done)`.
+Only when every required gate is verified: STATE.md -> `feature: <slug> (done)`.
+Otherwise preserve parked/pending status and report exactly what remains unverified.
 
 ## 9. DELIVERY
 
-Commit the feature branch (clear message per slice or one squashed commit).
+Only deliver after required gates pass. Commit the feature branch only when
+allowed by the user's scope (clear message per slice or one squashed commit).
+A no-commit/no-push instruction overrides delivery defaults. An Automation header
+must reflect actual human consent, never an agent-authored permission upgrade.
 Then by the doc's `> Automation:` header:
 - `none` (default) -> STOP here. Show the human: branch name, summary, TEST-PLAN
   path. Push is theirs (methodology hard-stop 1).

@@ -38,25 +38,34 @@ and STOPS. `/goal set` always stops at the confirmation gate anyway.
 
 LOOP — repeat until a stop condition:
 1. PICK the next actionable unit, in this order:
-   a. an in-progress unit in STATE (finish what is started)
+   a. an in-progress, unblocked unit in STATE (finish what is started)
    b. an APPROVED, pending `docs/features/*/FEATURE.md` that advances the goal
    c. the next pending PLAN phase that advances the goal (plan must be approved — rule 13)
    d. an open ISSUES.md item inside the goal's scope (route `/quick` or `/feature`)
-   Nothing actionable -> report + stop.
+   Select only units with verified dependencies and applicable plan approval.
+   Skip parked units and their dependents; do not re-pick them without new evidence.
+   Nothing actionable -> report + checkpoint + stop.
 2. ROUTE it through the lane-routing table (`/feature` · `/phase` · `/quick`).
    The lane runs with ALL its own gates — the goal layer never bypasses one.
-3. TICK: append one line under the goal (`- [x] <unit> — <lane> — <result>`),
-   decrement budget, update STATE (`goal: G<n> (active — <units left>)`).
+3. TICK: record status + evidence under the goal. Use `[x]` only for verified done;
+   record blocked/pending/not-run explicitly. Each attempted unit consumes budget,
+   including a parked unit. Persist remaining budget and retry counts; resuming
+   the same run does not reset them. Update STATE with the exact next action.
 4. CHECK "Done when". Met -> mark `[done]`, STATE `goal: G<n> (done)`, final
    report (units shipped · parked blockers · budget used). Not met -> loop.
 
-STOP conditions (whichever first): Done-when met · budget spent · a lane
-hard-stop (surface it; headless: `BLOCKED.md` + clean exit) · nothing actionable.
+STOP conditions (whichever first): verified Done-when met · budget spent ·
+no independent approved unit actionable · a run-wide safety/approval blocker.
+A lane hard-stop parks that unit and its dependents; record its blocker (headless:
+`BLOCKED.md`), then continue independent authorized units within budget.
+On resume, reconcile checkpoints, approvals, and the worktree per the methodology.
+A blocked required unit prevents claiming the goal complete.
 Every stop produces ONE consolidated report — never a silent end.
 
 ## /goal status · /goal done <id> · /goal drop <id>
 
-Show goals + progress ticks · force-close (human says it's done) · abandon
+Show goals + progress ticks · administratively close (record the human request,
+not fabricated passing evidence) · abandon
 (log why). Both edits keep the history lines — GOALS.md is append-style memory.
 
 ---
@@ -65,7 +74,7 @@ Show goals + progress ticks · force-close (human says it's done) · abandon
 
 `/goal run` is one pass: it works until done/blocked/budget. To keep pressure on
 a long goal, re-fire the pass on a schedule — host-level, not kit-level:
-- **Claude Code web/desktop**: `/loop 30m /goal run` — the host's interval loop
+- **Claude hosts with a verified `/loop` capability**: `/loop 30m /goal run` — the host's interval loop
   re-invokes the pass; the goal layer supplies the state + finish line that a
   bare interval loop lacks (it stops itself when Done-when is met).
 - **CI (headless)**: `create-issflow --ci` also installs
