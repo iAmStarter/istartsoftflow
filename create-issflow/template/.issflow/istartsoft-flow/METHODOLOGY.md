@@ -35,8 +35,10 @@
 Caveman ULTRA mode always on. Apply the `karpathy-guidelines` skill (engineering
 discipline) on every coding and debugging task. Apply the `ux-design` skill (the UX
 cookbook + wireframe baseline) on every UI-facing task. When **authoring** a new
-visual direction (`/design`, or no approved UX-PACK yet), apply `ui-ux-pro-max`
-first and fold the look into the UX pack — do not re-roll styles at phase CLOSE.
+visual direction (the overview Direction Picker, or an explicitly approved
+direction change), apply `ui-ux-pro-max` first and fold the look into locked
+tokens + UX pack. A missing UX-PACK does not unlock an approved direction;
+never re-roll styles at phase CLOSE.
 Apply the `security` skill (the Secure SDLC cookbook) at design (threat model),
 while coding (secure coding), and before any deploy. Apply the `code-standards`
 skill (naming per the language's own idiom + the declared architecture) on every
@@ -202,13 +204,27 @@ those gates, never the plan, the money, or the design/arch frame.
 
 | House role | Kit surface |
 |------------|-------------|
-| BA / PM | `/overview` grill · `grill-me` · PLAN / PROPOSAL / CR gates |
-| UX / UI | `/design` (UX pack) · `ui-ux-pro-max` (look) · `ux-design` (frame + gate) · `/ui-audit` · rule 9 CLOSE |
-| Architect | `/design` (ARCHITECTURE) · `researcher` DESIGN · `code-standards` · `/log-decision` |
-| Developer | `implementer` · `/phase` · `/feature` · `/quick` |
+| BA / PM | `/overview` grill · `grill-me` · PLAN / PROPOSAL / CR gates · delivery ETA board |
+| UX / UI | Direction Picker → tokens · `/design` UX pack · `ui-ux-pro-max` (only if unlocked) · `ux-design` · `/ui-audit` |
+| Architect / SA | `/design` ARCHITECTURE + auth decision · `researcher` DESIGN · `/log-decision` |
+| Developer | `implementer` · `/phase` · `/feature` · `/quick` — **no direct user chat** |
 | QA | `test-author` · `e2e-runner` · `/qa-audit` · `/uat` |
 | DevOps | final-phase deploy · `/release` promote |
 | Support | `/support` · `/log-issue` · `/runbook` · release hypercare |
+
+**Human conversation mode:** the owner talks to the orchestrator as PM/SA. Subagents
+never address the user. During AUTO build, report stage / ETA / WAITING / SLIP /
+DONE — do not pair-program unless GUIDED.
+
+### When `grill-me` runs
+
+| Command | Grill? |
+|---------|--------|
+| `/overview` | Yes — automatic double grill |
+| `/design` | Short grill only if auth/surfaces still open |
+| `/change-request` | No full grill — 1–3 mini-asks if UX/arch/auth hit |
+| `/phase` · `/feature` build | No — use STATE + stuck/ETA |
+| User says “grill me” | On demand anytime |
 
 -----
 
@@ -340,7 +356,8 @@ can. Escalation is at most two hops.
 - **synthesizer** — compresses `docs/STATE.md` / `docs/ISSUES.md`, prunes
   snapshots. On the final phase, also updates `README.md` + `docs/OVERVIEW.md`.
 
-The orchestrator ROUTES. It does not implement or debug.
+The orchestrator ROUTES to isolated workers where supported. Otherwise use the
+sequential role passes in Host capabilities and continuity; do not claim isolation.
 
 **Model routing (per-role tiers).** Each role's `.issflow/agents/<role>.md` pins a
 `model:` tier suited to its work, so the RIGHT model runs each task by default:
@@ -352,9 +369,31 @@ The orchestrator ROUTES. It does not implement or debug.
 | synthesizer | `haiku` | mechanical compression — cheapest tier |
 
 Owner wants a SPECIFIC model? Edit the role's `model:` line — values `haiku` ·
-`sonnet` · `opus` · `inherit` · or a full model id. The installer is
-non-destructive, so your pins survive kit updates. Hosts without per-agent model
-support run everything on the session model (graceful degrade).
+`sonnet` · `opus` · `inherit` · or a full model id. Cross-host suggestions live in
+`.issflow/models/MODEL-MATRIX.md` (update `as_of` when vendors change). Adaptive
+router under `.issflow/routing/` is advisory/fail-closed — never invent unverified
+API IDs. Hosts without per-agent model support run the session model (graceful degrade).
+
+### Delivery clocks (finish-date honesty)
+
+Three clocks — do not mix:
+
+1. **Scope effort (A)** — ideal-days for commercial value / pricing
+2. **Agent-active ETA (B)** — when AI may finish DoD if not waiting on humans
+3. **Waiting-on-human (C)** — pauses B; `WAITING_STALE` after `staleAfterHours`
+
+STATE `delivery:` is mandatory during `/phase` and `/feature`. Past `agent_eta`
+while `AGENT_ACTIVE` → SLIP report. Assumption budget per phase from flow-config.
+These are estimates and observed state updates, not background runtime guarantees.
+Evaluate time changes at the next actual execution opportunity; never claim a timer,
+heartbeat, or scheduler ran when the host did not provide it. A waiting/blocked
+unit does not pause independent approved units: retain per-unit status and ETA.
+Only mark a package DONE when every required unit and gate is verified.
+
+### Plan-Ready (before rule 13 approve)
+
+Testable acceptance per phase · no TBD on auth/money/PII/primary surfaces ·
+direction locked if UI · size+lane tags · dependencies clear.
 
 -----
 
@@ -460,15 +499,18 @@ inject context, the model performs them itself.
 
 ### SESSION-OPEN (start / clear / compact-resume)
 
-At the start of every session, before any other work, surface:
-1. git state (branch, uncommitted count, last 3 commits).
-2. `docs/STATE.md` — the current position. READ THIS FIRST. If a sprint is active,
-   surface its goal + burndown from `docs/sprints/sprint-<n>.md`.
-3. open items in `docs/ISSUES.md`.
-4. `docs/research/INDEX.md` (research map) + infra/auth status.
-5. shared KB: pull latest + load `docs/.kb-snapshot.md` if `.issflow/kb-config.json`
-   exists.
-6. a one-line reminder of the hard rules below.
+**Tier A (default — keep short):** SessionStart hook / model-run checklist:
+1. git one-liner (branch · dirty count · tip).
+2. `docs/STATE.md` top — phase, plan, design-direction, **delivery ETA/status**.
+3. open-issue count (not full dump).
+4. If `WAITING_STALE` / past `agent_eta` while AGENT_ACTIVE → surface that first.
+5. Hard-rule one-liner (plan PENDING → no source edits).
+
+**Tier B (full, on demand / first overview):** research INDEX · infra/auth · KB
+snapshot · sprint burndown. Prefer Hard handoff (`/synthesize` keep `delivery:` →
+`/clear`) over cold `/compact` near the context gate.
+
+Hosts without hooks: the orchestrator runs Tier A by hand before any Edit/Write.
 
 ### SPRINT-STANDUP (auto — at phase close inside an active sprint)
 
@@ -487,10 +529,15 @@ recover: current phase, next action, open blocker.
 
 The cheapest token is the one never loaded. The kit is built to minimise context:
 
-- **Phase boundary is the primary reset.** `/synthesize -> /clear` ends every
-  phase so the next one starts with a small, fresh context instead of carrying
-  the whole history forward. The **sprint boundary** (`/sprint close`) is a second,
-  coarser reset — synthesize + clear there too before the next sprint plans.
+- **SessionStart is Tier A** — git one-liner + STATE top + open-issue count +
+  delivery ETA/WAITING nudge. Target a small inject; resume/compact stays leaner.
+- **Near context gate:** prefer writing handoff into STATE + `/synthesize` +
+  host-supported reset over `/compact` where available. Use configured context
+  thresholds (`flow-config.json`), never invented telemetry or reset guarantees.
+- **Phase boundary is the primary checkpoint.** Synthesize at each boundary;
+  reset context only if needed and supported by the host. Continue the approved
+  driver without routine confirmation. Preserve the `delivery:` block and all
+  active/parked execution records. Sprint close provides a coarser checkpoint.
 - **Lazy, not always-on.** This methodology + the skills load on demand; only the
   SessionStart hook output is paid every session, and it injects just the live
   STATE + *open* issues (resolved ones stay on disk for grep, not re-paid in tokens).
@@ -748,10 +795,13 @@ fail the other.
 
 ## Shared KB (optional)
 
-If `.issflow/kb-config.json` exists, the SESSION-OPEN ritual pulls the KB and loads
-a snapshot to `docs/.kb-snapshot.md`. The researcher checks the snapshot (step 0)
-before any web search. Run `store-wisdom` to promote resolved issues + research to
-the KB. The kit works normally without a KB.
+The lean SessionStart hook does not pull the KB or generate a snapshot. If
+`.issflow/kb-config.json` exists and the task needs prior research, explicitly
+perform the authorized Tier-B/model-run refresh, or use the existing local KB
+with its freshness disclosed. The researcher checks `docs/.kb-snapshot.md` when
+available; never claim it was refreshed automatically. Run `store-wisdom` to
+promote resolved issues + research to the KB with its sharing approval. The kit
+works normally without a KB.
 
 -----
 

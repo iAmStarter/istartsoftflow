@@ -7,5 +7,6 @@ node_modules/
 .issflow-backup-*/
 *.issflow-new
 docs/.snapshots/
+docs/.session/
 docs/.kb-snapshot.md
 .playwright-mcp/

@@ -124,7 +124,7 @@ function adapterClaude() {
   if (conflicts > c0) warnings.push('claude: you already keep a CLAUDE.md — ours was written as CLAUDE.md.issflow-new. Add a line `@AGENTS.md` to your CLAUDE.md so the methodology auto-loads.');
   materializeClaudeMirror();
   const HOOKS = {
-    SessionStart: [{ matcher: 'startup|clear|compact', hooks: [{ type: 'command', command: 'node .issflow/hooks/session-start.js' }] }],
+    SessionStart: [{ matcher: 'startup|resume|clear|compact', hooks: [{ type: 'command', command: 'node .issflow/hooks/session-start.js' }] }],
     PreToolUse:   [{ matcher: '*',                     hooks: [{ type: 'command', command: 'node .issflow/hooks/context-guard.js' }] },
                    { matcher: 'Edit|Write|MultiEdit|NotebookEdit', hooks: [{ type: 'command', command: 'node .issflow/hooks/plan-gate.js' }] }],
     PreCompact:   [{ matcher: 'auto|manual',           hooks: [{ type: 'command', command: 'node .issflow/hooks/pre-compact.js' }] }],
@@ -155,6 +155,19 @@ function adapterCursor() {
     '`.issflow/agents/` (role references, not registered native agents); procedures in `.cursor/commands/`',
     '(mirror of `.issflow/commands/`). Caveman ULTRA mode; apply the `karpathy-guidelines`',
     'and `ux-design` skills. See `AGENTS.md` for the role/command/skill map.', '',
+  ].join('\n'));
+  writeFile('.cursor/rules/issflow-gates.mdc', [
+    '---', 'description: iStartSoftFlow gates — STATE delivery + plan lock', 'alwaysApply: true', '---', '',
+    'Before any source Edit/Write:',
+    '1. Read `docs/STATE.md` — respect `delivery:` (ETA · WAITING · SLIP · DONE).',
+    '2. If PLAN approval is PENDING → do not edit source (rule 13).',
+    '3. Past `agent_eta` while AGENT_ACTIVE → report SLIP; do not silent-continue.',
+    '4. WAITING_ON_HUMAN / WAITING_STALE → do not pretend the agent is still building.',
+    '5. UI work: locked `design-direction` / `docs/design/tokens.css` — no freehand palette.',
+    '6. Near context gate → checkpoint with `/synthesize` (keep delivery:); use only reset capabilities the host exposes.',
+    '',
+    'Talk to the human as PM/SA. Subagents never address the user.',
+    '',
   ].join('\n'));
   copyTemplateCommands('.cursor/commands');
   writeFile('.cursor/hooks.json', JSON.stringify({
@@ -241,6 +254,10 @@ function agentsMd() {
     '## Hard-rule index (full text in METHODOLOGY.md)', '',
     '1–12 as in METHODOLOGY · 13 PLAN-APPROVAL · 14 UNDERSTAND-FIRST ·',
     '15 DESIGN + ARCHITECTURE gates (after proposal, before `/phase`; internal may n/a).', '',
+    '## Host capability', '',
+    'See `.issflow/runtime/HOSTS.md` for actual adapter enforcement and fallbacks.',
+    'Cursor gate rules are model-run guidance, not lifecycle enforcement.',
+    'Model guidance: `.issflow/models/MODEL-MATRIX.md`; delivery ETA: `docs/STATE.md`.', '',
     '## Your stack', '',
     'Declare your stack (language, framework, infra, auth, test + E2E runner,',
     'planning source) once in `docs/OVERVIEW.md`. Every rule references *your declared',
@@ -267,22 +284,25 @@ function flowConfig() {
   return JSON.stringify({
     context: {
       window: 0,
-      warnPct: 60,
-      gatePct: 78,
+      warnPct: 55,
+      gatePct: 70,
+      injectMaxLines: 25,
       _note: 'Context-budget watchdog (.issflow/hooks/context-guard.js, PreToolUse hook). '
         + 'window 0 = auto-detect from the model id (200000 for standard models). '
-        + 'Some 1M-context models report their id WITHOUT a [1m] tag, so auto-detect '
-        + 'assumes 200000 and may false-gate around 156k — if you run a 1M model, set '
-        + 'window:1000000 here by hand. warnPct = soft non-blocking nudge; gatePct = hard '
-        + 'block on NEW build work (Edit/Write to SOURCE files). Checkpoint paths '
-        + '(docs/**, STATE/ISSUES/snapshots) and all Bash are never blocked; Task '
-        + 'delegation is never gated (a subagent isolates noise and shrinks context).',
+        + 'warnPct soft nudge; gatePct hard block on NEW source Edit/Write. Prefer '
+        + '/synthesize + /clear (keep delivery:) over compact near gate. Checkpoint '
+        + 'docs/** never gated.',
+    },
+    delivery: {
+      staleAfterHours: 24,
+      phaseHours: { S: 2, M: 4, L: 8, XL: 16 },
+      assumptionBudgetPerPhase: 3,
+      _note: 'Agent-active ETA uses phaseHours by size. Waiting-on-human pauses ETA; '
+        + 'after staleAfterHours → WAITING_STALE.',
     },
     sprint: {
       defaultCapacity: 8,
-      _note: 'Sprint layer (/sprint). defaultCapacity = points committed to the FIRST '
-        + 'sprint before any velocity history exists; later sprints size to the rolling '
-        + 'completed-velocity average. Optional — /sprint falls back to 8 if absent.',
+      _note: 'Sprint layer (/sprint). defaultCapacity = points for first sprint.',
     },
   }, null, 2) + '\n';
 }
@@ -334,7 +354,7 @@ function main() {
   if (fs.existsSync(gi)) {
     const txt = fs.readFileSync(gi, 'utf8');
     if (/^\.issflow\/\*\s*$/m.test(txt)) {
-      const tracked = ['agents', 'commands', 'skills', 'hooks', 'runtime', 'routing', 'istartsoft-flow'];
+      const tracked = ['agents', 'commands', 'skills', 'hooks', 'runtime', 'routing', 'models', 'scripts', 'templates', 'istartsoft-flow'];
       const lines = new Set(txt.split(/\r?\n/).map(line => line.trim()));
       const missing = tracked.map(dir => `!.issflow/${dir}/`).filter(line => !lines.has(line));
       if (missing.length) {

@@ -53,6 +53,36 @@ claude
 
 ---
 
+## How you talk to it (PM / SA mode)
+
+You speak to the orchestrator as a **PM** (and as **SA** during `/design`). You do
+**not** pair-program with a developer persona. Subagents never address you.
+
+During build (`/phase`, `/feature`) it reports **stage · ETA · WAITING · SLIP ·
+DONE** — short standup language. Prefer **AUTO** autonomy so it follows the plan
+without dragging you into code details (hard-stops still pause).
+
+### Direction Picker · finish dates · dual estimate
+
+- If the product has UI, `/overview` shows a **Direction Picker** (2–3 looks). You
+  pick one; tokens lock before `/propose` / build — no random restyle later.
+- `docs/STATE.md` keeps a **`delivery:`** board: **agent ETA** (when AI can finish
+  if not waiting on you) vs **WAITING_ON_HUMAN** (your gate — AI clock paused).
+  Past ETA while still active → **SLIP** report. Quiet too long on a gate →
+  **WAITING_STALE** (not an agent hang).
+- `/propose` uses two clocks: **A** scope effort (pricing) and **B** agent
+  delivery + `demo_by` dates. Price from A only.
+
+### Hosts & enforcement
+
+| Host | Enforcement |
+|------|-------------|
+| Claude Code | Full hooks (strongest) |
+| Cursor | sessionStart + rules (`issflow-gates`) — partial |
+| Codex / Gemini / Aider | Model-run rituals (SESSION-OPEN by hand) |
+
+---
+
 ## How to use it — pick your situation
 
 **Default paths** (most days): `/overview` · `/feature` · `/quick`.  
@@ -66,18 +96,19 @@ claude
 
 It **interviews you** like a good PM: what are we building, for whom, what are
 the constraints. Answer honestly — "I don't know" is a fine answer (it will
-research). Then it writes a **plan** and stops: **read it and approve it before
-anything gets built.** (This is a real lock — while the plan is unapproved, the
-AI physically cannot edit source files.)
+research). If there's UI, you pick a look via the Direction Picker. Then it writes
+a **plan**, runs a **Plan-Ready** check (testable acceptance, no big TBDs), and
+stops: **read it and approve it before anything gets built.** (Real lock — while
+the plan is unapproved, source edits are blocked on hosts with plan-gate.)
 
-After approval, build slice by slice:
+After approval (and `/propose` + `/design` when quoting a client), build slice by slice:
 
 ```
 /phase
 ```
 
-Each phase: tests written first → code until tests pass → security check →
-close. Repeat `/phase` until the plan is done.
+Each phase: set ETA → tests first → code until tests pass → security / UI task
+check → close. Use `/phase lite` only for small non-UI slices. Repeat until done.
 
 ### Situation 2: adding a feature to an existing product (the star of the kit)
 

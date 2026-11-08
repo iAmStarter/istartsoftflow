@@ -1,0 +1,27 @@
+{
+  "planId": "PLAN-0006",
+  "revision": 1,
+  "planBlobSha": "b24937adbfbf07f44750e66d51c029346a7bdb82",
+  "approvedBy": "User in this conversation",
+  "approvedAt": "2026-11-08",
+  "approvalSource": "User: อืม ใช่ใช่ถูกต้องถูกต้อง; confirms assistant question asking to publish new create-issflow on npm while main PR proceeds.",
+  "allowedPaths": [
+    ".gitignore",
+    ".issflow/**",
+    "create-issflow/**",
+    "tests/**",
+    "scripts/token-lint.js",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0006.md",
+    "docs/approvals/PLAN-0006.json",
+    "docs/release-1.12.0.md",
+    "docs/research/INDEX.md",
+    "docs/research/design-platform-surfaces-2026-11.md",
+    "docs/research/design-sdlc-refresh-2026-11.md",
+    "README.md",
+    "HOW-TO-USE.md",
+    "HOW-TO-USE.th.md",
+    "how-to-use.html",
+    "index.html"
+  ]
+}

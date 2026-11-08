@@ -28,6 +28,8 @@ Steps:
 1. Verify applicable plan revision/digest and allowed paths per METHODOLOGY →
    Plan-scoped approvals; intake confirmation alone cannot override that gate.
    grep docs/ISSUES.md for anything related.
+1b. If the change touches UI: read `docs/design/tokens.css` + inventory when present.
+    Use semantic tokens only — no raw hex/spacing literals in components.
 2. Make the change. Smallest diff that works.
 3. Run it — lint/typecheck/smoke. Show me result.
 4. REGRESSION GUARD: run `scripts/regression.sh` (mock corpus). No corpus in this

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design direction picker — {{PROJECT}}</title>
+<style>
+  /* Fixed chrome — agents only replace CSS variables + text slots below. */
+  :root {
+    --bg: {{P1_BG}};
+    --surface: {{P1_SURFACE}};
+    --text: {{P1_TEXT}};
+    --muted: {{P1_MUTED}};
+    --accent: {{P1_ACCENT}};
+    --border: {{P1_BORDER}};
+    --radius: {{P1_RADIUS}};
+    --font: {{P1_FONT}};
+    --bg2: {{P2_BG}};
+    --surface2: {{P2_SURFACE}};
+    --text2: {{P2_TEXT}};
+    --muted2: {{P2_MUTED}};
+    --accent2: {{P2_ACCENT}};
+    --border2: {{P2_BORDER}};
+    --radius2: {{P2_RADIUS}};
+    --font2: {{P2_FONT}};
+    --bg3: {{P3_BG}};
+    --surface3: {{P3_SURFACE}};
+    --text3: {{P3_TEXT}};
+    --muted3: {{P3_MUTED}};
+    --accent3: {{P3_ACCENT}};
+    --border3: {{P3_BORDER}};
+    --radius3: {{P3_RADIUS}};
+    --font3: {{P3_FONT}};
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; background: #f3f1ec; color: #1c1917; }
+  header { padding: 28px 24px 8px; max-width: 1100px; margin: 0 auto; }
+  header h1 { margin: 0 0 8px; font-size: 1.6rem; }
+  header p { margin: 0; color: #57534e; max-width: 52ch; }
+  .grid { display: grid; gap: 18px; padding: 20px 24px 40px; max-width: 1100px; margin: 0 auto;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .card { border: 1px solid #d6d3d1; border-radius: 12px; overflow: hidden; background: #fff;
+    box-shadow: 0 8px 24px rgba(28,25,23,.06); }
+  .card h2 { margin: 0; padding: 14px 16px 6px; font-size: 1.05rem; }
+  .meta { padding: 0 16px 12px; font-size: .85rem; color: #78716c; }
+  .swatches { display: flex; gap: 6px; padding: 0 16px 12px; }
+  .swatches i { width: 28px; height: 28px; border-radius: 999px; border: 1px solid rgba(0,0,0,.12); display: block; }
+  .preview { margin: 0 16px 16px; border: 1px solid var(--c-border); border-radius: 10px; overflow: hidden;
+    background: var(--c-bg); color: var(--c-text); font-family: var(--c-font); }
+  .preview.wide { --c-bg: var(--bg); --c-surface: var(--surface); --c-text: var(--text); --c-muted: var(--muted);
+    --c-accent: var(--accent); --c-border: var(--border); --c-radius: var(--radius); --c-font: var(--font); }
+  .d2 .preview.wide { --c-bg: var(--bg2); --c-surface: var(--surface2); --c-text: var(--text2); --c-muted: var(--muted2);
+    --c-accent: var(--accent2); --c-border: var(--border2); --c-radius: var(--radius2); --c-font: var(--font2); }
+  .d3 .preview.wide { --c-bg: var(--bg3); --c-surface: var(--surface3); --c-text: var(--text3); --c-muted: var(--muted3);
+    --c-accent: var(--accent3); --c-border: var(--border3); --c-radius: var(--radius3); --c-font: var(--font3); }
+  .top { display: flex; gap: 12px; align-items: center; padding: 10px 12px; background: var(--c-surface);
+    border-bottom: 1px solid var(--c-border); font-size: .8rem; font-weight: 700; }
+  .top .brand { color: var(--c-accent); }
+  .top .spacer { flex: 1; }
+  .body { padding: 14px 12px; background: var(--c-bg); }
+  .body h3 { margin: 0 0 6px; font-size: .95rem; }
+  .body p { margin: 0 0 12px; font-size: .8rem; color: var(--c-muted); }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { border: 0; border-radius: var(--c-radius); padding: 8px 12px; font: inherit; font-size: .8rem; font-weight: 700; cursor: default; }
+  .btn.primary { background: var(--c-accent); color: #fff; }
+  .btn.ghost { background: transparent; color: var(--c-text); border: 1px solid var(--c-border); }
+  .field { flex: 1; min-width: 120px; border: 1px solid var(--c-border); border-radius: var(--c-radius);
+    padding: 8px 10px; background: var(--c-surface); color: var(--c-muted); font-size: .8rem; }
+  .narrow-wrap { padding: 0 16px 16px; }
+  .narrow { width: 160px; margin: 0 auto; border: 1px solid var(--c-border); border-radius: 18px; overflow: hidden;
+    background: var(--c-bg); color: var(--c-text); font-family: var(--c-font); transform: scale(1); }
+  .narrow .top { font-size: .7rem; padding: 8px; }
+  .narrow .body { padding: 10px 8px; }
+  .narrow .btn, .narrow .field { font-size: .7rem; padding: 6px 8px; }
+  .anti { padding: 0 16px 16px; font-size: .8rem; color: #9a3412; }
+  .pick { display: block; margin: 0 16px 16px; text-align: center; padding: 10px; border-radius: 8px;
+    background: #1c1917; color: #fff; font-weight: 700; font-size: .85rem; text-decoration: none; }
+  footer { max-width: 1100px; margin: 0 auto; padding: 0 24px 40px; color: #78716c; font-size: .85rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>{{PROJECT}} — pick a visual direction</h1>
+  <p>Open this file in a browser. Choose A, B, or C. Then lock tokens into <code>docs/design/DIRECTION.md</code> + <code>docs/design/tokens.css</code>. Do not re-roll styles after lock.</p>
+</header>
+<div class="grid">
+  <article class="card d1">
+    <h2>A · {{P1_NAME}}</h2>
+    <div class="meta">{{P1_BLURB}}</div>
+    <div class="swatches">
+      <i style="background:{{P1_BG}}"></i>
+      <i style="background:{{P1_SURFACE}}"></i>
+      <i style="background:{{P1_ACCENT}}"></i>
+      <i style="background:{{P1_TEXT}}"></i>
+    </div>
+    <div class="preview wide">
+      <div class="top"><span class="brand">Brand</span><span>Home</span><span>Work</span><span class="spacer"></span><span>Account</span></div>
+      <div class="body">
+        <h3>Primary task</h3>
+        <p>Short supporting line for this direction.</p>
+        <div class="row"><span class="field">Email</span><button class="btn primary" type="button">Continue</button><button class="btn ghost" type="button">Cancel</button></div>
+      </div>
+    </div>
+    <div class="narrow-wrap"><div class="narrow">
+      <div class="top"><span class="brand">Brand</span><span class="spacer"></span>☰</div>
+      <div class="body"><h3>Mobile</h3><p>Single column</p><button class="btn primary" type="button">Continue</button></div>
+    </div></div>
+    <div class="anti">Avoid: {{P1_ANTI}}</div>
+    <a class="pick" href="#lock-a">Lock direction A</a>
+  </article>
+  <article class="card d2">
+    <h2>B · {{P2_NAME}}</h2>
+    <div class="meta">{{P2_BLURB}}</div>
+    <div class="swatches">
+      <i style="background:{{P2_BG}}"></i>
+      <i style="background:{{P2_SURFACE}}"></i>
+      <i style="background:{{P2_ACCENT}}"></i>
+      <i style="background:{{P2_TEXT}}"></i>
+    </div>
+    <div class="preview wide">
+      <div class="top"><span class="brand">Brand</span><span>Home</span><span>Work</span><span class="spacer"></span><span>Account</span></div>
+      <div class="body">
+        <h3>Primary task</h3>
+        <p>Short supporting line for this direction.</p>
+        <div class="row"><span class="field">Email</span><button class="btn primary" type="button">Continue</button><button class="btn ghost" type="button">Cancel</button></div>
+      </div>
+    </div>
+    <div class="narrow-wrap"><div class="narrow">
+      <div class="top"><span class="brand">Brand</span><span class="spacer"></span>☰</div>
+      <div class="body"><h3>Mobile</h3><p>Single column</p><button class="btn primary" type="button">Continue</button></div>
+    </div></div>
+    <div class="anti">Avoid: {{P2_ANTI}}</div>
+    <a class="pick" href="#lock-b">Lock direction B</a>
+  </article>
+  <article class="card d3">
+    <h2>C · {{P3_NAME}}</h2>
+    <div class="meta">{{P3_BLURB}}</div>
+    <div class="swatches">
+      <i style="background:{{P3_BG}}"></i>
+      <i style="background:{{P3_SURFACE}}"></i>
+      <i style="background:{{P3_ACCENT}}"></i>
+      <i style="background:{{P3_TEXT}}"></i>
+    </div>
+    <div class="preview wide">
+      <div class="top"><span class="brand">Brand</span><span>Home</span><span>Work</span><span class="spacer"></span><span>Account</span></div>
+      <div class="body">
+        <h3>Primary task</h3>
+        <p>Short supporting line for this direction.</p>
+        <div class="row"><span class="field">Email</span><button class="btn primary" type="button">Continue</button><button class="btn ghost" type="button">Cancel</button></div>
+      </div>
+    </div>
+    <div class="narrow-wrap"><div class="narrow">
+      <div class="top"><span class="brand">Brand</span><span class="spacer"></span>☰</div>
+      <div class="body"><h3>Mobile</h3><p>Single column</p><button class="btn primary" type="button">Continue</button></div>
+    </div></div>
+    <div class="anti">Avoid: {{P3_ANTI}}</div>
+    <a class="pick" href="#lock-c">Lock direction C</a>
+  </article>
+</div>
+<footer>
+  Fallback presets (no Python): A Calm SaaS · B Bold Commerce · C Trust Fintech.
+  After lock, set STATE <code>design-direction: locked &lt;id&gt; &lt;date&gt;</code>.
+</footer>
+</body>
+</html>
