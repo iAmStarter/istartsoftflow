@@ -39,6 +39,29 @@ if (state !== null) {
   emit('');
 }
 
+// Durable workflow state is advisory: never auto-retry a running task after interruption.
+const workflowFile = 'docs/WORKFLOW.json';
+if (exists(workflowFile)) {
+  emit('## Autonomous workflow checkpoint');
+  try {
+    const workflow = require('../runtime/workflow.js');
+    const summary = workflow.status(workflowFile);
+    emit(JSON.stringify({ state: summary.state, revision: summary.revision,
+      budget: summary.budget, spent: summary.spent, remaining: summary.remaining,
+      runnable: summary.runnable.slice(0, 10), totalTasks: summary.tasks.length }));
+    const unfinished = summary.tasks.filter(task => task.state !== 'done');
+    for (const task of unfinished.slice(0, 10)) {
+      emit(JSON.stringify({ id: task.id, state: task.state, attempts: task.attempts,
+        reason: task.reason.slice(0, 160), blockers: task.blockers.slice(0, 3) }));
+    }
+    emit(`Read ${workflowFile} for full task/evidence details (${unfinished.length} unfinished).`);
+    emit('Reconcile running work and its evidence before retrying; resume only within existing approval and budget.');
+  } catch (error) {
+    emit('Workflow checkpoint unreadable: ' + error.message + '. Preserve it; do not silently reset progress.');
+  }
+  emit('');
+}
+
 // 2b. active sprint (sprint layer) — surface goal + burndown if one is active
 const sprintMatch = (state || '').match(/^\s*sprint:\s*(\d+)\s*\(active\)/m);
 if (sprintMatch) {

@@ -5,7 +5,8 @@ argument-hint: [phase number · "dry-run" to preview what the phase would do]
 
 
 Caveman ULTRA mode. You are the ORCHESTRATOR. Route work to subagents —
-you do NOT implement or debug yourself.
+use native isolated workers when available; otherwise use sequential role passes
+per METHODOLOGY → Host capabilities and continuity.
 
 Note: subagents cannot talk to the user. Only YOU can.
 
@@ -24,7 +25,9 @@ run, commit, deploy nothing. (METHODOLOGY → Dry-run.)
 
 ## 0. PRE-FLIGHT
 
-a. PLAN-APPROVAL CHECK (hard rule 13): Read the docs/PLAN.md `> Approval:` header.
+a. PLAN-APPROVAL CHECK: apply METHODOLOGY → Plan-scoped approvals first: verify
+   ACTIVE-PLAN, exact revision/digest and allowed paths when present. A legacy
+   docs/PLAN.md `> Approval:` header is fallback only, never an override.
    Still `PENDING` (or no header) -> STOP. The plan is not signed off; no phase may
    start. Route me to the `/overview` PLAN-APPROVAL gate (or `/replan` then re-approve).
    Approved -> continue.
@@ -42,12 +45,16 @@ a2. DESIGN + ARCHITECTURE GATES (hard rule 15): Read `docs/STATE.md` for `design
 b. INFRA CHECK (phases > 0): Read the declared infra in docs/OVERVIEW.md.
    - Managed infra -> confirm it is reachable; no provisioning step is needed.
    - Self-managed infra -> confirm Phase 0 (infra) ran and is healthy.
-   Surface infra + auth status before any work. Blocked infra -> STOP.
+   Surface infra + auth status before any work. After bounded readiness retries,
+   blocked infra parks this phase; return control to a goal/sprint driver for
+   independent approved work. Never treat an unavailable service as tested.
 
 c. PHASE STATE CHECK: Read docs/STATE.md and docs/PLAN.md.
    - No phase in progress, requested is next pending -> START at step 1.
-   - Same phase in-progress -> RESUME from STATE.md "next action".
-   - Different phase in-progress -> STOP. Tell me which phase is open.
+   - Same phase in-progress -> reconcile worktree, approval, and checkpoint
+     evidence before resuming STATE.md "next action"; retain retry counters.
+   - Different phase in-progress -> finish it first unless parked and the driver
+     selected this independently approved phase; preserve both checkpoints.
    - Out of dependency order -> AUTO: ignore the request and run the next pending
      phase in PLAN order. GUIDED: STOP, warn, proceed only if I confirm.
    - Phase not in PLAN.md -> STOP. Suggest /overview or /replan.
@@ -62,7 +69,8 @@ d. FINAL PHASE CHECK: Read docs/PLAN.md. Is this the last phase (no further
 
 Dispatch `researcher` in IMPL mode scoped to this phase.
 Returns terse summary + path. Read the file only if needed.
-Unknowns block the phase -> re-dispatch narrowed. No guessing.
+Unknowns block the phase -> re-dispatch narrowed within the methodology retry
+budget, then park if unresolved. No guessing or unbounded research.
 
 SECURE SDLC (design): if this phase touches a TRUST BOUNDARY (auth, untrusted input,
 data store, money, PII), threat-model it now (`security` skill) and fold the abuse
@@ -133,8 +141,9 @@ PHASE GATE (rule 5) -> go to §4/§5/§6 (see GATE below).
 
 Dispatch `implementer` (legacy mode) with phase spec + research summary.
 Returns STUCK -> go to ESCALATE.
-If IS_FINAL_PHASE: phase spec includes the deploy task; confirm the return
-includes "deployed URL" before proceeding.
+If IS_FINAL_PHASE: prepare the deploy task, but do not deploy without explicit
+release authorization. Record deployment as pending approval when not authorized;
+never require a fabricated deployed URL to advance local verification.
 
 ## 3N. TEST (blind)
 
@@ -170,10 +179,11 @@ Dispatch `debugger` (isolated context) on the specific failure.
   (it is token-expensive); re-dispatch `debugger` with the findings, budget 3.
   STILL STUCK (or already spent this phase's unstuck): log the issue (root cause +
   every failed hypothesis) to ISSUES.md,
-  mark the slice `BLOCKED` in PLAN, and move to the next INDEPENDENT slice/phase.
-  Add it to the batched end-of-run report. HARD-STOP (pause for me) ONLY if no
-  independent work remains, or the blocker is on the hard-stop list
-  (security / irreversible / contradictory spec).
+  mark the slice `BLOCKED` in execution state without rewriting the approved plan,
+  then return to the goal/sprint driver for the next INDEPENDENT approved unit.
+  A standalone phase reports the blocker rather than starting unrelated work.
+  Hard stops park affected work and dependents; do not bypass them or halt safe
+  independent driver work. Retain attempt counts across resume.
 
 **GUIDED:**
   FIRST STUCK: STOP. Present the problem, 3 failed hypotheses, the debugger's
@@ -206,7 +216,9 @@ SECURITY GATE (rule 11 — Secure SDLC build stage):
 - Open HIGH/CRITICAL findings BLOCK the close -> route to FIX. Deploying to prod
   with open high/critical findings is a hard-stop (human sign-off).
 
-Mark phase `done` in docs/PLAN.md.
+Record phase `done` in execution state only if all required gates passed. Do not
+edit approval-hashed plan content for progress; pending deployment remains pending
+and prevents declaring a deployment-inclusive phase complete.
 
 SPRINT STANDUP (if a sprint is active — STATE.md shows `sprint: <n> (active)`):
 fire the `/sprint standup` tick — append the one-line standup to
@@ -239,18 +251,25 @@ IF IS_FINAL_PHASE — FINAL CLOSE sequence:
      - Full endpoint catalogue: docs/ENDPOINTS.md
      - Project history: docs/HISTORY.md
      ```
-  Tell me the project is complete and ready to use.
+  Use the PROJECT COMPLETE / READY TO USE wording only if every required unit,
+  check, and authorized deployment is actually complete. Otherwise report local
+  implementation verified, pending release/approval, blocked, or not run, with
+  evidence. Include only observed URLs and never include secret auth values.
 
 ELSE (not final phase):
 
   Run `/synthesize`.
-  Tell me phase done + the next phase. Recommend `/clear` then `/phase` next.
+  Report phase result + next approved phase. Under `/goal run` or `/sprint run`,
+  checkpoint and return to the driver to continue without routine confirmation.
+  A standalone `/phase` ends here; use a context reset only if the host supports it.
 
 ---
 
 ## STATE CHECKPOINTING
 
-After each step, update docs/STATE.md:
+After each step, checkpoint per METHODOLOGY → Execution contract (including
+approval digest, branch/base, evidence, attempts and remaining budget). Update
+docs/STATE.md without losing other lanes:
 ```
 
 phase: <n> (in progress)

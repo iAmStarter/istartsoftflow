@@ -50,7 +50,9 @@ velocity table). Create `docs/sprints/` if absent. STATE.md carries the active s
 =====================================================================
 ## §1 — SPRINT PLANNING  (ceremony)
 
-Pre: `docs/PLAN.md` exists AND its `> Approval:` header reads `approved …` (the
+Pre: verify the active plan revision/digest and allowed paths per METHODOLOGY →
+Plan-scoped approvals. For legacy plans only, `docs/PLAN.md` exists AND its
+`> Approval:` header reads `approved …` (the
 PLAN-APPROVAL gate, hard rule 13). Still `PENDING` / missing → STOP, route to the
 `/overview` plan-approval gate. A sprint only SLICES an already-signed-off plan.
 
@@ -58,7 +60,7 @@ a. **Estimate (one-time, lazy).** Every pending PLAN phase needs a points estima
    (Fibonacci `1 2 3 5 8`, relative effort from the phase `slice` + `acceptance`
    size; a phase that feels `>8` is too big — note it for `/replan` to split). If the
    planner already wrote `[N pts]` tags, reuse them; otherwise assign now and write
-   them back into PLAN.md next to each phase header.
+   them into the sprint artifact, leaving the approved plan unchanged.
 
 b. **Capacity.** Read `docs/sprints/VELOCITY.md`.
    - Have history → capacity = rolling-average completed velocity (last ≤3 sprints).
@@ -73,7 +75,8 @@ c. **Commit.** Walk the PLAN in dependency order, pull pending phases into this 
 
 d. **Write** `docs/sprints/sprint-<n>.md` from the template below; set
    `status: active`; seed the burndown tick 0 = total committed points. Group the
-   committed phases under a `## Sprint <n>` header in PLAN.md if not already grouped.
+   committed phases in the sprint artifact, referencing the immutable approved
+   plan revision. Do not add sprint headers to approval-hashed PLAN content.
    Update STATE.md: `sprint: <n> (active)`.
 
 AUTO: auto-commit the computed backlog, log the goal + points + capacity, continue.
@@ -136,7 +139,8 @@ Inspect-and-adapt on the PROCESS, not the product. Write the `## Retro` block:
 - **estimate accuracy** — committed vs completed points; note phases that blew their
   estimate so the next sprint's poker is calibrated.
 
-AUTO: auto-apply the routed actions (log/replan) and continue. GUIDED: list actions,
+AUTO: auto-apply in-scope logging/process actions and continue. A replan is a
+proposal requiring the plan gate, not permission to change approved scope. GUIDED: list actions,
 confirm before applying.
 
 =====================================================================
@@ -156,11 +160,13 @@ d. Update STATE.md: clear the active sprint (or set the next one if `/sprint run
 =====================================================================
 ## §RUN — AUTO END-TO-END DRIVER  (the headline: "do all the process automatically")
 
-`/sprint run [n]` drives one full sprint — or, if you keep going, every remaining
-sprint until the PLAN is exhausted — with NO human stop except a hard-stop:
+`/sprint run [n]` drives the requested approved sprint scope. Continue across
+sprints only when that scope was authorized. Establish finite unit/retry budgets
+before execution using the methodology Execution contract; preserve them on resume.
+Routine phase and ceremony boundaries need no new confirmation:
 
 ```
-loop while pending phases remain in PLAN.md:
+loop while approved, dependency-ready units remain and run budget permits:
   1. §1 PLANNING            → commit the next sprint from PLAN + velocity
   2. for each committed phase, in dependency order:
        run /phase <p>       → the full build loop (its own gates + circuit breaker)
@@ -170,11 +176,14 @@ loop while pending phases remain in PLAN.md:
   3. §3 REVIEW              → demo + boundary audits (fix blockers, re-audit)
   4. §4 RETRO               → routed actions, applied
   5. §5 CLOSE              → velocity + carry-forward + HISTORY
-  6. /synthesize → suggest /clear  (token reset at the sprint boundary, like a phase)
-  AUTO: start the next sprint automatically.  GUIDED: stop, report, wait.
-HARD-STOP at any point: deploy/irreversible/outbound action, security-sensitive
-change, contradictory spec, or debug budget spent with no independent slice left →
-pause, surface the consolidated report, hand to the human.
+  6. /synthesize → checkpoint evidence, attempts, remaining budget and next action
+     (reset context only with a supported host mechanism; preserve resume state)
+  AUTO: start the next sprint only within the authorized run scope and budget.
+  GUIDED: stop, report, wait.
+HARD-STOP: park the affected action and its dependents; continue only safe,
+independently approved work. Stop the run for exhausted budget, a run-wide blocker,
+or no actionable units. Never recycle a blocked phase into the next sprint without
+new evidence or a resolved prerequisite. Report partial completion truthfully.
 ```
 
 When the last PLAN phase is `accepted`, the build is sprint-complete → recommend

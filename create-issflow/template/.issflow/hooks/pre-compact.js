@@ -18,11 +18,15 @@ const stamp = `${d.getFullYear()}${p2(d.getMonth() + 1)}${p2(d.getDate())}-${p2(
 const snap = path.join('docs/.snapshots', `precompact-${stamp}.md`);
 
 const state = read('docs/STATE.md');
+const workflow = read('docs/WORKFLOW.json');
 const body = [
   `# Pre-compact snapshot ${stamp}`, '',
   '## Git',
   sh('git status --short').replace(/\n+$/, ''),
   sh('git diff --stat').replace(/\n+$/, ''),
+  '',
+  '## Durable workflow checkpoint',
+  workflow === null ? '(no docs/WORKFLOW.json)' : 'Resume from docs/WORKFLOW.json; reconcile running tasks before retrying. This snapshot is not an approval or a replacement checkpoint.',
   '',
   '## STATE.md at compact time',
   state !== null ? state.replace(/\n$/, '') : '(no STATE.md)',
