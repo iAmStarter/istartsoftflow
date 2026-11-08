@@ -211,10 +211,10 @@
   <p class="lead">
     <span class="en">Talk as <b>PM / SA</b> — the agent builds to the plan. Pick a look, lock tokens,
     see a clear <b>AI finish date</b> (separate from waiting on you). Spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship
-    with hooks the agent can't skip.</span>
+    with host-specific hooks and explicit verification.</span>
     <span class="th">คุยแบบ <b>PM / SA</b> — AI พัฒนาตามแผน เลือกโทน ล็อก tokens
     เห็น <b>วัน AI ทำเสร็จ</b> แยกจากเวลารอคุณ ลูป spec&nbsp;→&nbsp;plan&nbsp;→&nbsp;test&nbsp;→&nbsp;ship
-    ที่บังคับด้วย hook</span>
+    พร้อม hook ตามความสามารถของเครื่องมือและการตรวจสอบที่ชัดเจน</span>
   </p>
   <div class="paths" aria-label="default paths">
     <a href="#howto"><code>/overview</code> <span class="en">new project</span><span class="th">งานใหม่</span></a>
@@ -436,7 +436,7 @@
   <h2><span class="en">Three commands cover most days</span><span class="th">จำแค่ 3 คำสั่ง ก็ใช้งานได้แล้ว</span></h2>
   <p class="muted" style="max-width:760px">
     <span class="en"><b>Default:</b> <code>/overview</code> · <code>/feature</code> · <code>/quick</code>. Advanced commands (<code>/propose</code>, <code>/design</code>, <code>/support</code>, audits, sprints…) stay in the kit — use them when the job needs them. The system stops only for human moments: confirm understanding, approvals (plan / design / price), dangerous actions, final UAT + merge.</span>
-    <span class="th"><b>เส้นทางหลัก:</b> <code>/overview</code> · <code>/feature</code> · <code>/quick</code> คำสั่งขั้นสูง (<code>/propose</code>, <code>/design</code>, <code>/support</code>, audits, sprints…) ยังอยู่ในชุด — ใช้เมื่องานต้องการ และมันหยุดถามเฉพาะจุดที่ต้องเป็นคน: ทวนความเข้าใจ · อนุมัติ (แผน / ดีไซน์ / ราคา) · ของอันตราย · UAT สุดท้าย + merge</span>
+    <span class="th"><b>เส้นทางหลัก:</b> <code>/overview</code> · <code>/feature</code> · <code>/quick</code> คำสั่งขั้นสูง (<code>/propose</code>, <code>/design</code>, <code>/support</code>, audits, sprints…) ยังอยู่ในชุด — ใช้เมื่องานต้องการ แ��ะมันหยุดถามเฉพาะจุดที่ต้องเป็นคน: ทวนความเข้าใจ · อนุมัติ (แผน / ดีไซน์ / ราคา) · ของอันตราย · UAT สุดท้าย + merge</span>
   </p>
   <div class="grid g3" style="margin-top:24px">
     <div class="card"><h3><code class="flat">/overview</code> <span class="tag"><span class="en">new project</span><span class="th">งานใหม่</span></span></h3>
@@ -539,9 +539,9 @@
   <h2><span class="en">In</span><span class="th">ใน</span> <code>&lt;project&gt;/.issflow/</code></h2>
   <div class="grid g2" style="margin-top:24px">
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0"/><path d="M16 5.5a3 3 0 0 1 0 5M20.5 20a5.5 5.5 0 0 0-4.5-5.4"/></svg> <span class="en">7 agents</span><span class="th">7 agent</span></h3><p>planner · researcher · implementer · test-author · debugger · e2e-runner · synthesizer</p></div>
-    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">20 commands</span><span class="th">20 คำสั่ง</span></h3><p><code class="flat">/overview /feature /goal /propose /phase /sprint /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
-    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7z"/></svg> <span class="en">6 skills</span><span class="th">6 สกิล</span></h3>
-      <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · security · code-standards — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M7 9l3 3-3 3M13 15h4"/></svg> <span class="en">23 commands</span><span class="th">23 คำสั่ง</span></h3><p><code class="flat">/overview /feature /goal /propose /design /redesign /support /phase /sprint /ui-audit /qa-audit /security-audit /release /uat /change-request /replan /quick /synthesize /runbook /store-wisdom /log-issue /log-decision /unstuck</code></p></div>
+    <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l1.7 4.3L18 10l-4.3 1.7L12 16l-1.7-4.3L6 10l4.3-1.7z"/></svg> <span class="en">8 skills</span><span class="th">8 สกิล</span></h3>
+      <p><span class="en">caveman · grill-me · karpathy-guidelines · ux-design · ui-ux-pro-max · support-triage · security · code-standards — authored to Anthropic's Skills guide (kebab-case, what + when-to-use, progressive disclosure).</span><span class="th">caveman · grill-me · karpathy-guidelines · ux-design · ui-ux-pro-max · support-triage · security · code-standards — เขียนตามคู่มือ Skills ของ Anthropic (kebab-case, ระบุ "ทำอะไร + ใช้เมื่อไหร่", progressive disclosure)</span></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 1 0-5.7-5.7l-1.5 1.5"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 1 0 5.7 5.7l1.5-1.5"/></svg> <span class="en">6 hooks</span><span class="th">6 ฮุก</span></h3>
       <p><span class="en">session-start · context-guard · plan-gate (rule-13 enforcement) · pre-compact · subagent-stop · feature-gate (the /feature Stop gate, artifact-verified) — pure-Node, cross-platform, wired per tool.</span><span class="th">session-start · context-guard · plan-gate (บังคับ rule 13) · pre-compact · subagent-stop · feature-gate (Stop gate ของ /feature ตรวจ artifact จริง) — Node ล้วน ข้ามแพลตฟอร์ม ต่อสายตามเครื่องมือ</span></p></div>
   </div>
@@ -551,18 +551,21 @@
   <div class="ey"><span class="en">UX guardrail</span><span class="th">การ์ดราว UX</span></div>
   <h2><span class="en">The</span><span class="th"></span> <code>ux-design</code> <span class="en">cookbook</span><span class="th">cookbook</span></h2>
   <p class="muted" style="max-width:760px">
-    <span class="en">Generated UI is validated against a frame so it can't drift. The skill bundles a cookbook
-    (design tokens · 8&#8209;pt grid · WCAG&nbsp;2.1&nbsp;AA · state matrix · breakpoints · i18n) and a canonical
-    wireframe baseline under <code>references/</code> — loaded only when you touch UI. A frontend phase can't close until the check passes.</span>
-    <span class="th">UI ที่สร้างจะถูกตรวจกับ "กรอบ" ไม่ให้หลุดดีไซน์ สกิลนี้รวม cookbook
-    (design token · กริด 8&#8209;pt · WCAG&nbsp;2.1&nbsp;AA · state matrix · breakpoint · i18n) และ wireframe ต้นแบบ
-    ไว้ใน <code>references/</code> — โหลดเฉพาะตอนทำ UI และ phase ฝั่งหน้าบ้านปิดไม่ได้จนกว่าจะผ่านการตรวจ</span>
+    <span class="en">Review an existing product with <code>/ui-audit</code>, or plan a behavior-preserving refresh with <code>/redesign</code>. The workflow covers user tasks, navigation, content, accessibility, responsive states and visual direction. Your coding host must run the inspection and tests; the kit does not include an autonomous browser.</span>
+    <span class="th">ตรวจผลิตภัณฑ์เดิมด้วย <code>/ui-audit</code> หรือวางแผนปรับโฉมโดยรักษาพฤติกรรมเดิมด้วย <code>/redesign</code> ครอบคลุมงานของผู้ใช้ การนำทาง เนื้อหา การเข้าถึง responsive และทิศทางภาพ เครื่องมือ AI ที่ใช้ต้องลงมือตรวจและรันเทสต์ ชุดนี้ไม่มีเบราว์เซอร์อัตโนมัติในตัว</span>
   </p>
   <div class="grid g3" style="margin-top:24px">
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.2"/><rect x="13" y="4" width="7" height="7" rx="1.2"/><rect x="4" y="13" width="7" height="7" rx="1.2"/><rect x="13" y="13" width="7" height="7" rx="1.2"/></svg> <span class="en">Tokens</span><span class="th">โทเคน</span></h3><p><span class="en">No raw hex/px — named tokens, 8-pt spacing scale, fixed type ramp.</span><span class="th">ห้าม hex/px ดิบ — ใช้ token มีชื่อ, สเกลระยะ 8-pt, type ramp ตายตัว</span></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="4.5" r="1.6"/><path d="M4.5 8h15M12 8v6M12 14l-3 5.5M12 14l3 5.5"/></svg> <span class="en">Accessibility</span><span class="th">การเข้าถึง</span></h3><p><span class="en">Contrast ≥ 4.5:1, keyboard-reachable, semantic HTML, 44×44 hit areas.</span><span class="th">คอนทราสต์ ≥ 4.5:1, ใช้คีย์บอร์ดได้, semantic HTML, พื้นที่กด 44×44</span></p></div>
     <div class="card"><h3><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9.5h18M9.5 9.5v10"/></svg> <span class="en">Wireframe-first</span><span class="th">เริ่มที่ wireframe</span></h3><p><span class="en">Every screen maps to a low-fidelity baseline before pixels exist. Drift = defect.</span><span class="th">ทุกหน้าจอแมปกับต้นแบบ low-fidelity ก่อนมีพิกเซล — หลุดกรอบ = ข้อบกพร่อง</span></p></div>
   </div>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card"><h3><code>/ui-audit</code></h3><p><span class="en">Inventory screens and flows, report evidence and coverage, separate blockers from checks not run. Review mode does not change production code.</span><span class="th">ทำบัญชีหน้าจอและ flow รายงานหลักฐานกับความครอบคลุม แยกสิ่งที่ติดขัดจากสิ่งที่ยังไม่ได้ทดสอบ โหมด review ไม่แก้โค้ด production</span></p></div>
+    <div class="card"><h3><code>/redesign</code></h3><p><span class="en">Compare 2–3 contextual previews, approve a direction, then implement in small batches while preserving routes, permissions, data and business behavior.</span><span class="th">เปรียบเทียบภาพตัวอย่างตามบริบท 2–3 แบบ อนุมัติทิศทางก่อนปรับทีละส่วน รักษาเส้นทาง สิทธิ์ ข้อมูล และพฤติกรรมธุรกิจเดิม</span></p></div>
+    <div class="card"><h3><span class="en">Honest evidence</span><span class="th">หลักฐานที่ไม่กล่าวเกินจริง</span></h3><p><span class="en">The portable validator checks report consistency. Missing runtime checks stay INCOMPLETE. REVIEWED does not authenticate screenshots or certify usability or accessibility.</span><span class="th">ตัวตรวจแบบพกพาตรวจความสอดคล้องของรายงาน หากขาดการทดสอบขณะใช้งานจะคงสถานะ INCOMPLETE ส่วน REVIEWED ไม่ได้ยืนยันภาพหลักฐานหรือรับรอง usability และ accessibility</span></p></div>
+  </div>
+  <p class="muted" style="margin-top:20px"><span class="en">Run the installed report check:</span><span class="th">ตรวจรายงานหลังติดตั้ง:</span> <code>node .issflow/scripts/ux-evidence.js docs/UX-EVIDENCE.json</code></p>
+
 </div></section>
 
 <section id="security"><div class="wrap">

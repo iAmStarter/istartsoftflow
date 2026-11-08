@@ -1,0 +1,20 @@
+{
+  "planId": "PLAN-0007",
+  "revision": 1,
+  "planBlobSha": "6cbddb2e1d3ede5fefc0d57b680ae8959a7a004a",
+  "approvedBy": "User in this conversation",
+  "approvedAt": "2026-11-08",
+  "approvalSource": "Explicit user request to verify UX improvements, update index.html, push Git and publish npm.",
+  "allowedPaths": [
+    ".issflow/**",
+    "create-issflow/**",
+    "README.md",
+    "index.html",
+    "tests/**",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0007.md",
+    "docs/approvals/PLAN-0007.json",
+    "docs/ux-review-redesign-verification.md",
+    "docs/research/ux-review-redesign-capability.md"
+  ]
+}

@@ -96,9 +96,13 @@ proceeds to the planner. (This is the planning confirmation gate.)
 
 5c. If the product has UI (default yes unless OVERVIEW says none):
 1. Copy `.issflow/templates/design/picker.html` → `docs/design/picker.html`.
-2. Fill placeholders only (names, swatches, fonts, blurbs, anti-patterns). Prefer
+2. Read `ux-design/references/visual-direction.md`. Create project-specific screen
+   previews with realistic content at narrow/wide sizes and a meaningful non-happy
+   state. Compare different compositions, not only swatches. Use picker chrome
+   to link/show those previews; record if browser rendering could not be verified.
+   Fill placeholders (names, swatches, fonts, blurbs, anti-patterns). Prefer
    `ui-ux-pro-max` `--design-system` output; if Python 3 is missing, use the three
-   fallback presets in the template footer (Calm SaaS / Bold Commerce / Trust Fintech).
+   fallback presets as inspiration only, adapted to the brief, never the final identity.
    **Do not freehand redesign the HTML/CSS chrome.**
 3. SHOW me the picker path and STOP for choice (A/B/C).
 4. On choice: write `docs/design/DIRECTION.md` + `docs/design/tokens.css` from templates;

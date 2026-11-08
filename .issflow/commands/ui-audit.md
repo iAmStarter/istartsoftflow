@@ -1,54 +1,49 @@
 ---
-description: Holistic UI audit — sweep the WHOLE product's UI against the ux-design cookbook (+ a11y / responsive / consistency), score it, and produce a prioritized findings report. On-demand or before a release. This is NOT the per-phase gate — the `ux-design` gate checks one screen at phase close (pass/block); this audit sweeps every screen and reports accumulated drift.
-argument-hint: [optional scope — a route, or "all"]
+description: Task-based UX/UI review of existing or new products with explicit coverage, browser evidence and bounded authorized repair.
+argument-hint: [scope or all] [review | fix]
 ---
 
-Caveman ULTRA mode. You are the ORCHESTRATOR.
+You are the ORCHESTRATOR. Read `.issflow/skills/ux-design/SKILL.md` and its
+`references/product-experience.md`. The review covers real jobs and whole flows,
+not only contrast, alignment or token compliance.
 
-Purpose: a periodic, WHOLE-PRODUCT UI audit — distinct from the inline `ux-design`
-gate. The gate validates ONE screen at phase close; this AUDIT sweeps EVERY screen,
-scores the product, and surfaces drift that accumulated across changes. Run before a
-release, after big UI work, or on request.
+## Preflight
+Default is REVIEW: read-only product inspection, audit artifacts allowed. `fix`
+requires user-authorized implementation scope and the normal approved-plan gates.
+Do not infer repair permission from "review", "audit" or "find problems". A new
+visual direction uses `/redesign` and requires direction approval. Preserve an
+existing system without forcing `/overview` or a commercial proposal.
 
-## PRE-FLIGHT
-Read the rubric: `.issflow/skills/ux-design/SKILL.md` (the cookbook) and
-`references/wireframe-template.md` (the frame). The cookbook IS the checklist —
-do not invent new criteria; audit against it.
+## Inventory and evaluate
+1. Record mode, users/jobs, baseline build, routes, flows, roles, components,
+   contracts, devices and exclusions using `UX-AUDIT-template.md`.
+2. Declare required dimensions per screen/flow before checks: task success,
+   information architecture, feedback/recovery, visual hierarchy, accessibility,
+   responsive/content, consistency and behavior preservation where applicable.
+   JSON dimension IDs: screens use hierarchy, accessibility, responsive, states,
+   content, consistency; flows use task-success, navigation, recovery, feedback.
+   Add behavior-preservation for redesign. Baseline dimensions cannot be omitted.
+3. Review critical journeys first, then shared components and remaining screens.
+   Use bounded workers/batches and a shared inventory. Record sampling explicitly.
+4. Inspect actual browser behavior where available. Cover success, failure,
+   permissions, first use, large content, keyboard, resize, interruption, repeated
+   action, cancel/close and Back/Forward. Use safe test fixtures only.
+5. Keep observed results separate from source-only deductions and hypotheses.
+   Attach screenshot/interaction/command evidence with revision and environment.
+   A blocked browser is incomplete coverage, not a reason to fabricate a pass.
 
-## STEP 1 — INVENTORY
-List every screen / route / major component to audit (from the router, the
-wireframe baseline, or `$ARGUMENTS`). Audit shared components once.
+## Findings and report
+Write `docs/ui-audit-<YYYY-MM-DD>.md` from the audit template and optionally an
+adjacent evidence JSON using `UX-EVIDENCE-template.json`. Findings include task
+impact, severity, exact location, reproduction, source principle, proposed fix,
+confidence and verification. Deduplicate root causes, retain affected route IDs.
+Log blockers/majors to ISSUES. Use FIX-FIRST / INCOMPLETE / REVIEWED, never an
+unqualified SHIP verdict from an expert review. Validate JSON via
+`node .issflow/scripts/ux-evidence.js <report.json>`; this validates bookkeeping only.
 
-## STEP 2 — SWEEP  (dispatch a worker per area to keep context lean)
-Score each screen against the cookbook dimensions:
-- design tokens · 8-pt spacing · type scale (no raw hex/px)
-- iconography — a real SVG set, **NEVER emoji**
-- accessibility (WCAG 2.1 AA): contrast ≥ 4.5:1, visible focus, keyboard reach,
-  semantic HTML, labels / alt / aria, 44×44 targets, `prefers-reduced-motion`
-- state matrix: default · hover · focus · active · disabled · loading · empty · error
-- responsive breakpoints (no overflow / break)
-- content & i18n (no hardcoded strings; growth-safe)
-- consistency / wireframe conformance (no drift BETWEEN screens)
-Run automated tools if the project has them (axe-core / Lighthouse / pa11y) and fold
-their output in; otherwise do the manual cookbook sweep.
-
-## STEP 3 — SCORE + FINDINGS
-Rate each dimension PASS / WARN / FAIL. For every finding record:
-- **severity**: BLOCKER (a11y / contrast / unusable) · MAJOR (drift / missing state)
-  · MINOR (polish)
-- **location**: screen + element
-- **issue** + the cookbook rule it breaks
-- **fix**: the concrete change
-
-## STEP 4 — REPORT
-Write `docs/ui-audit-<YYYY-MM-DD>.md`:
-- coverage (screens audited) · a per-dimension scoreboard · the findings table sorted
-  by severity · a prioritized fix list.
-- Log BLOCKER / MAJOR findings to `docs/ISSUES.md`.
-- **VERDICT: SHIP | FIX-FIRST** — a release must not ship with open BLOCKERs.
-
-## STEP 5 — REMEDIATE
-AUTO: fix MINOR / MAJOR that don't change the visual direction, re-audit them, log.
-A new visual direction or a design-token change → confirm with the user first
-(hard rule 9 — UI conforms to the frame; new direction is a human call).
-Hand back the report + what was fixed vs parked.
+## Authorized repair
+When authorized, preserve behavior and approved visual direction. Fix bounded
+batches, retest failed checks plus critical regressions, and record before/after.
+Default maximum two repair passes per issue; report remaining blockers honestly.
+New scope, token direction or contract changes require approval before changes.
+Return coverage, useful findings, completed fixes, remaining risks and report path.

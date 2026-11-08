@@ -65,3 +65,18 @@ and `npm publish`. `prepublishOnly` rebuilds `template/` on publish automaticall
 Everything is cross-platform: the installer and `build.js` are pure Node, and the
 lifecycle hooks are Node scripts (`node .issflow/hooks/*.js`) — no bash/jq/python,
 so the kit runs the same on macOS, Windows, and Linux.
+
+### Existing-product UX/UI review and redesign
+
+- `/ui-audit [scope]`: review jobs, navigation, flows, recovery, visual hierarchy,
+  accessibility and responsive behavior. Product code is read-only by default.
+- `/redesign [scope]`: baseline current behavior, compare context-driven visual
+  previews, approve direction, then implement and retest without silently changing
+  contracts. Minimal luxury is an option when it fits, not a universal template.
+- `/ui-audit [scope] fix`: repair only within explicitly authorized plan scope.
+- `node .issflow/scripts/ux-evidence.js report.json`: validate declared coverage
+  and evidence bookkeeping. Missing runtime checks remain incomplete. This is not
+  a browser runner, user-research substitute or accessibility certification.
+
+Use `UX-AUDIT-template.md` and `UX-EVIDENCE-template.json` in `.issflow/templates/`.
+New-project foundations remain available through `/overview` and `/design`.

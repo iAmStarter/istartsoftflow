@@ -236,7 +236,7 @@ function agentsMd() {
     '## Procedures — `.issflow/commands/` (run as `/name`)', '',
     '**Default:** `/overview` · `/feature` · `/quick`', '',
     '**Advanced:** `/propose` · `/design` · `/support` · `/phase` · `/sprint` · `/goal` ·',
-    '`/ui-audit` · `/qa-audit` · `/security-audit` · `/release` · `/uat` ·',
+    '`/ui-audit` · `/redesign` · `/qa-audit` · `/security-audit` · `/release` · `/uat` ·',
     '`/change-request` · `/replan` · `/synthesize` · `/runbook` · `/store-wisdom` ·',
     '`/log-issue` · `/log-decision` · `/unstuck`', '',
     '## Skills — `.issflow/skills/` (loaded on demand)', '',
@@ -319,7 +319,7 @@ function main() {
   const TOOL = pickTool();
   const targets = TOOL === 'all' ? Object.keys(TOOLS).filter(t => t !== 'all') : [TOOL];
 
-  // 1. portable kit tree (.issflow/) — every tool gets it.
+  // 1. portable kit tree (.issflow/) ��� every tool gets it.
   for (const src of walk(path.join(TPL, '.issflow'))) {
     const rel = path.relative(TPL, src);
     writeFile(rel, fs.readFileSync(src, 'utf8'));

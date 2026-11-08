@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "mode": "audit",
+  "revision": "REPLACE-with-inspected-build",
+  "scope": [
+    {
+      "id": "S-01",
+      "kind": "screen",
+      "name": "Primary screen",
+      "requiredDimensions": [
+        "behavior-preservation"
+      ]
+    },
+    {
+      "id": "F-01",
+      "kind": "flow",
+      "name": "Primary user job"
+    }
+  ],
+  "checks": [
+    {
+      "id": "C-S-01-hierarchy",
+      "targetId": "S-01",
+      "dimension": "hierarchy",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-S-01-accessibility",
+      "targetId": "S-01",
+      "dimension": "accessibility",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-S-01-responsive",
+      "targetId": "S-01",
+      "dimension": "responsive",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-S-01-states",
+      "targetId": "S-01",
+      "dimension": "states",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-S-01-content",
+      "targetId": "S-01",
+      "dimension": "content",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-S-01-consistency",
+      "targetId": "S-01",
+      "dimension": "consistency",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-S-01-behavior-preservation",
+      "targetId": "S-01",
+      "dimension": "behavior-preservation",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-F-01-task-success",
+      "targetId": "F-01",
+      "dimension": "task-success",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-F-01-navigation",
+      "targetId": "F-01",
+      "dimension": "navigation",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-F-01-recovery",
+      "targetId": "F-01",
+      "dimension": "recovery",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    },
+    {
+      "id": "C-F-01-feedback",
+      "targetId": "F-01",
+      "dimension": "feedback",
+      "status": "not-run",
+      "method": "static",
+      "explanation": "Template only: replace with actual result, method, evidence and context."
+    }
+  ],
+  "findings": []
+}
