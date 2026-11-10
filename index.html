@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>iStartSoftFlow — a disciplined workflow for AI coding agents</title>
-<meta name="description" content="A portable workflow for Claude Code, Codex, Cursor, Gemini and Aider: native skills and specialist roles where supported, risk-based lanes, UX review and explicit verification. Inspect your installation with --doctor. Hook coverage varies by host." />
+<meta name="description" content="Install published create-issflow 1.13.0. This page also previews repository 1.14.0 native capabilities, which are not yet published on npm." />
 <meta name="theme-color" content="#ffffff" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,14 +13,14 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="iStartSoftFlow" />
 <meta property="og:title" content="iStartSoftFlow — a disciplined workflow for AI coding agents" />
-<meta property="og:description" content="Native agent integrations, risk-based workflows and evidence-based UX review. Keep approvals and verification explicit; host support and runtime checks determine what is verified." />
+<meta property="og:description" content="Published npm release: 1.13.0. Repository 1.14.0 native capabilities are a preview, not yet available from npm." />
 <meta property="og:url" content="https://iamstarter.github.io/istartsoftflow/" />
 <meta property="og:image" content="https://iamstarter.github.io/istartsoftflow/og.svg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="iStartSoftFlow — a disciplined workflow for AI coding agents" />
-<meta name="twitter:description" content="A lean CORE contract, native skills and roles, risk-based lanes and installation diagnostics for AI coding workflows. No universal hook or browser guarantee." />
+<meta name="twitter:description" content="Published npm release: 1.13.0. Native integrations and diagnostics described for 1.14.0 are a repository preview pending npm publication." />
 <meta name="twitter:image" content="https://iamstarter.github.io/istartsoftflow/og.svg" />
 <style>
   /* ── Brand: ink + teal (avoid violet-on-white / Inter defaults) ── */
@@ -77,6 +77,7 @@
   #lang-th:checked ~ * label[for="lang-th"]{background:var(--ink);color:#fff}
   @media(max-width:760px){nav .links a:not(.keep){display:none}}
 
+  #release-status{border:1px solid var(--line);border-left:4px solid var(--violet);border-radius:8px;background:var(--surface-2);padding:16px 20px;margin-bottom:30px;text-align:left;font-size:.95rem}
   .hero{padding:80px 0 60px;text-align:center}
   .hero h1{font-size:clamp(40px,6vw,72px);line-height:.96;margin-bottom:.18em;color:var(--ink);letter-spacing:-.02em}
   .grad{color:var(--violet)}
@@ -206,6 +207,10 @@
 </div></nav>
 
 <header class="hero"><div class="wrap">
+  <aside class="path-box" id="release-status" aria-label="Release availability">
+    <p><strong><span class="en">Published npm release: 1.13.0</span><span class="th">เวอร์ชันที่เผยแพร่บน npm: 1.13.0</span></strong></p>
+    <p><span class="en">Verified 10 November 2026. Version 1.14.0 is not yet published on npm. This page previews the repository's 1.14.0 capabilities, including native integrations, risk-based lanes and --doctor. They are not included in the 1.13.0 installation below. Check the live npm version in the footer for the latest status.</span><span class="th">ตรวจสอบเมื่อ 10 พฤศจิกายน 2026 โดย 1.14.0 ยังไม่เผยแพร่บน npm หน้านี้แสดงตัวอย่างความสามารถใน repository สำหรับ 1.14.0 รวมถึง native integrations, risk-based lanes และ --doctor ซึ่งยังไม่รวมในการติดตั้ง 1.13.0 ด้านล่าง ตรวจสอบสถานะล่าสุดได้จากเลขเวอร์ชัน npm ในส่วนท้ายหน้า</span></p>
+  </aside>
   <div class="ey"><span class="en">workflow kit for AI coding agents</span><span class="th">ชุดเวิร์กโฟลว์สำหรับ AI coding agent</span></div>
   <h1>iStartSoft<span class="grad">Flow</span></h1>
   <p class="lead">
@@ -222,8 +227,8 @@
     <a href="#howto"><code>/quick</code> <span class="en">tiny fix</span><span class="th">แก้จุกจิก</span></a>
   </div>
   <div class="cmd">
-    <code><span class="pp">$</span> npx create-issflow</code>
-    <button class="copy" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText('npx create-issflow').then(()=>{this.textContent='copied';setTimeout(()=>this.textContent='copy',1200)})">copy</button>
+    <code><span class="pp">$</span> npx create-issflow@1.13.0</code>
+    <button class="copy" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText('npx create-issflow@1.13.0').then(()=>{this.textContent='copied';setTimeout(()=>this.textContent='copy',1200)})">copy</button>
   </div>
   <div class="cta">
     <a class="btn primary" href="#howto"><span class="en">How to use</span><span class="th">วิธีใช้</span></a>
@@ -376,7 +381,7 @@
       <p><span class="en">Approve the doc · run UAT from the generated <code>TEST-PLAN.md</code> · merge. A push/PR needs recorded consent in the doc; <b>merge and production deploy require explicit authorization and release checks</b>.</span><span class="th">อนุมัติเอกสาร · รัน UAT จาก <code>TEST-PLAN.md</code> ที่ระบบทำให้ · merge — ส่วน push/PR ต้องมี consent ระบุไว้ในเอกสาร และ <b>merge และ deploy ขึ้น production ต้องมีการอนุมัติชัดเจนและผ่านการตรวจ release</b></span></p></div>
   </div>
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px">
-    <div class="cmd"><code><span class="pp">$</span> npx create-issflow <span class="muted">--ci --docker</span></code></div>
+    <div class="cmd"><code><span class="pp">$</span> npx create-issflow@1.13.0 <span class="muted">--ci --docker</span></code></div>
     <div class="cmd"><code><span class="pp">$</span> node scripts/feature-docker.js <span class="muted">docs/features/&lt;slug&gt;/FEATURE.md</span></code></div>
   </div>
 </div></section>
@@ -405,7 +410,7 @@
     <span class="en">Claude uses its native mirror. Codex and Cursor get shared skills in <code>.agents/skills/</code> and native role definitions. Codex hooks are not installed; Cursor installs sessionStart and subagentStop only. Discovery depends on host version and project trust.</span>
     <span class="th">Claude ใช้ native mirror ส่วน Codex และ Cursor ได้สกิลร่วมใน <code>.agents/skills/</code> และ role แบบ native โดยยังไม่ติดตั้ง hook ให้ Codex ส่วน Cursor ติดตั้งเฉพาะ sessionStart และ subagentStop การค้นพบขึ้นกับเวอร์ชันและความเชื่อถือโปรเจ็กต์</span>
   </p>
-  <p class="muted"><span class="en"><code>npx create-issflow --doctor</code> is a read-only installation diagnostic, not a live-host test. Mixed-host installs can expose duplicate skill names; inspect the host skill list. Native role files do not guarantee isolation or expand permissions. Browser checks need an available browser and safe test fixtures.</span><span class="th"><code>npx create-issflow --doctor</code> ตรวจการติดตั้งแบบอ่านอย่างเดียว ไม่ใช่การทดสอบ host จริง การติดตั้งหลาย host อาจเห็นชื่อสกิลซ้ำ ควรตรวจรายการใน host ไฟล์ role แบบ native ไม่ได้รับประกันการแยกงานหรือเพิ่มสิทธิ์ การตรวจ browser ต้องมีเครื่องมือและข้อมูลทดสอบที่ปลอดภัย</span></p>
+  <p class="muted"><span class="en">Repository preview only (1.14.0, not yet on npm): <code>node create-issflow/bin/cli.js --doctor</code> is a read-only installation diagnostic, not a live-host test. Mixed-host installs can expose duplicate skill names; inspect the host skill list. Native role files do not guarantee isolation or expand permissions. Browser checks need an available browser and safe test fixtures.</span><span class="th">ตัวอย่างจาก repository เท่านั้น (1.14.0 ยังไม่อยู่บน npm): <code>node create-issflow/bin/cli.js --doctor</code> ตรวจการติดตั้งแบบอ่านอย่างเดียว ไม่ใช่การทดสอบ host จริง การติดตั้งหลาย host อาจเห็นชื่อสกิลซ้ำ ควรตรวจรายการใน host ไฟล์ role แบบ native ไม่ได้รับประกันการแยกงานหรือเพิ่มสิทธิ์ การตรวจ browser ต้องมีเครื่องมือและข้อมูลทดสอบที่ปลอดภัย</span></p>
   <div class="scroll" style="margin-top:22px"><table class="tbl">
     <tr>
       <th scope="col"><span class="en">Tool</span><span class="th">เครื่องมือ</span></th>
@@ -460,7 +465,7 @@
   <ol class="steps">
     <li><div class="stepno">1</div>
       <details class="stepd" open><summary>
-        <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow</code></span>
+        <span class="sumt"><h3><span class="en">Install</span><span class="th">ติดตั้ง</span></h3><code class="chip">npx create-issflow@1.13.0</code></span>
         <span class="caret"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>
       </summary><div class="stepbody">
         <p><span class="en">Scaffolds <code>.issflow/</code> into your project (non-destructive). Open it in your AI tool — the SessionStart hook fires automatically.</span><span class="th">วาง <code>.issflow/</code> ลงในโปรเจกต์ (ไม่ทับไฟล์เดิม) เปิดในเครื่องมือ AI ของคุณ — hook ทำงานอัตโนมัติ</span></p>
@@ -605,7 +610,7 @@
   <a href="https://www.npmjs.com/package/create-issflow">npm</a>
   <a href="https://github.com/iAmStarter/istartsoftflow/blob/main/LICENSE">MIT License</a>
   <span class="sp">© 2026 iStartSoft</span>
-  <span class="version-info"><span class="en">Docs target:</span><span class="th">คู่มือสำหรับ:</span> <a href="https://github.com/iAmStarter/istartsoftflow/blob/main/create-issflow/package.json" id="docs-version">create-issflow 1.14.0</a></span>
+  <span class="version-info"><span class="en">Repository preview (not npm release):</span><span class="th">ตัวอย่างใน repository (ยังไม่ใช่รุ่น npm):</span> <a href="https://github.com/iAmStarter/istartsoftflow/blob/main/create-issflow/package.json" id="docs-version">create-issflow 1.14.0</a></span>
   <span class="version-info" aria-live="polite"><span class="en">npm latest:</span><span class="th">npm ล่าสุด:</span> <a id="npm-latest-version" href="https://www.npmjs.com/package/create-issflow"><span class="en">Check npm</span><span class="th">ตรวจสอบบน npm</span></a> <span id="npm-version-status"><span class="en">(not checked)</span><span class="th">(ยังไม่ได้ตรวจสอบ)</span></span></span>
 </div></footer>
 
