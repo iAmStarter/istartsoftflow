@@ -1,3 +1,12 @@
+# 1.14.0
+
+- Generate native skills and host-specific subagent definitions for Codex and Cursor.
+- Add concise core guidance and proportional quick/planned/high-risk workflows without weakening approval gates.
+- Add read-only doctor diagnostics and explicit native activation limits.
+- Reconcile UX responsibilities and update bilingual landing-page capability claims.
+- Preserve non-destructive upgrades, Claude behavior and ESM/CommonJS support.
+- Document verified installer comparisons separately from blocked live-host performance evaluation.
+
 # 1.13.0
 
 - Add existing-product UI audit and behavior-preserving redesign procedures.

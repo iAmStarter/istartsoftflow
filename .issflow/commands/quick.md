@@ -5,29 +5,36 @@ argument-hint: [what to change · "dry-run" to preview the edit]
 
 Caveman ULTRA mode. Apply `karpathy-guidelines` skill.
 
-Purpose: skip the orchestration tax for a 5-line fix.
+Purpose: use the smallest sufficient workflow for a bounded low-risk change.
+Read `.issflow/istartsoft-flow/RISK-LANES.md` before choosing this lane.
 
 DRY-RUN: if `$ARGUMENTS` contains `dry-run`/`--dry-run`, describe the exact edit
 you'd make (file · lines · the change) and the regression you'd run, then STOP —
 change nothing. (METHODOLOGY → Dry-run.)
 
 Use `/quick` when ALL hold:
-- change is small (under 30 lines) and obvious
+- change is bounded, local, reversible and fully specified; line count is not a safety test
 - no new vertical slice
-- no external service contract change
+- no public/API/data contract or material visual-direction change
+- no auth/security/permission change, migration, destructive/outbound action or release
 - not mid-phase
 
-If any fail -> STOP, tell me, recommend `/phase`.
+If any fail -> reclassify before editing; recommend `/feature`, `/phase` or `/redesign` as appropriate.
 (Hard rule 10: never route phase-worthy work through `/quick` to dodge the RED gate.)
 
 Steps:
-0. UNDERSTAND-FIRST (hard rule 14): brief back in 2–3 lines — the change as you
-   understand it · file(s) you'll touch · blast radius — and WAIT for my confirm.
-   One cheap turn beats redoing a misunderstood edit. (Already confirmed in this
-   conversation? say so and proceed — don't re-ask the same understanding.)
-1. Verify applicable plan revision/digest and allowed paths per METHODOLOGY →
-   Plan-scoped approvals; intake confirmation alone cannot override that gate.
-   grep docs/ISSUES.md for anything related.
+0. UNDERSTAND-FIRST (hard rule 14): inspect the relevant context and classify risk.
+   If the direct request already specifies the exact bounded outcome and scope,
+   state the intended change briefly and proceed to verification of authorization;
+   do not add a redundant confirmation turn. Ask only for missing consequential
+   choices or unclear scope. A generic improvement request is not exact consent.
+1. Reuse an existing valid scoped approval, or prepare a concise scope receipt
+   using `RISK-LANES.md`: goal, exact allowed paths, acceptance/checks and direct
+   request provenance. The existing owner-controlled recording mechanism must bind
+   that consent to the plan revision/digest; never self-approve. If that mechanism
+   is unavailable, stop at the recording boundary and explain the smallest needed
+   action. Then verify the approved digest and paths with the existing verifier.
+   No shell/tool bypass. grep docs/ISSUES.md for anything related.
 1b. If the change touches UI: read `docs/design/tokens.css` + inventory when present.
     Use semantic tokens only — no raw hex/spacing literals in components.
 2. Make the change. Smallest diff that works.

@@ -46,9 +46,17 @@ coding task.
 
 -----
 
+## Selective loading and risk-based lanes
+
+Start with `CORE.md` and `RISK-LANES.md`. Keep this complete reference available,
+but load its relevant sections and procedures on demand instead of repeating the
+whole methodology for every task. A low-risk quick edit uses a concise scoped
+receipt and the existing approval verifier, not a full discovery/sprint ceremony.
+Classification never bypasses host safety or grants permission.
+
 ## Plan-scoped approvals (new work)
 
-For each new task, create one `docs/plans/PLAN-<id>.md` with a unique ID, revision,
+For each new implementation scope, create one `docs/plans/PLAN-<id>.md` with a unique ID, revision,
 scope, changed-file boundaries, acceptance criteria, tests, and risks. Set
 `docs/ACTIVE-PLAN` to its relative path. One human approval authorizes exactly
 one plan revision, not other plans or future edits to that plan.
@@ -58,7 +66,10 @@ Approval is recorded separately in `docs/approvals/PLAN-<id>.json` with
 `approvedBy`, `approvedAt`, `approvalSource`, and `allowedPaths`.
 The approval record is created only after explicit human consent. Revisions,
 including seemingly small edits, invalidate the old digest and require new approval.
-Do not let an agent self-approve a plan.
+Do not let an agent self-approve a plan. For a fully specified low-risk `/quick`
+request, the explicit direct request may supply consent for that exact scope;
+`RISK-LANES.md` defines the concise receipt and owner-controlled recording boundary.
+This removes redundant conversation, not digest/path verification or approval provenance.
 
 Use `node .issflow/hooks/verify-approval.js --base origin/main` to check the
 active plan and changed paths. Run `node --test tests/approval-policy.test.js`
@@ -252,12 +263,13 @@ Three layers make "hands-off" real — each uses the mechanism suited to its job
    gates — and it verifies ARTIFACTS, not ticks: a checked `test-plan` /
    `mini-plan` / `contract-probe` / `token-stamp` / `summary` / `memory-queued`
    gate whose deliverable is missing on disk blocks too (also re-checked in the
-   `(done)` state). A prompt can be ignored; the hook cannot. Rule 13 gets the
-   same treatment: the `PreToolUse` plan gate (`.issflow/hooks/plan-gate.js`)
-   denies source Edit/Write while `docs/PLAN.md` reads `> Approval: PENDING`
-   (docs/kit paths stay writable; an active feature lane is exempt — its doc
-   approval is its own scoped gate). Hosts without lifecycle hooks run these as
-   model-run rituals.
+   `(done)` state). This is deterministic checking only when the host installs and
+   runs the hook; it is not a complete security boundary. Rule 13 uses the
+   `PreToolUse` plan gate (`.issflow/hooks/plan-gate.js`) for supported edit tools
+   and the explicit verifier/CI for diff checks. Missing, stale or out-of-scope
+   approvals block edits. An active feature is not exempt:
+   its approved intent must be bound to the execution plan and allowed paths.
+   Hosts without installed/verified lifecycle wiring run explicit checks instead.
 3. **No-human-at-the-keyboard → a headless runner.** `ISSFLOW_HEADLESS=1` tells the
    lane no human is present: every hard-stop degrades to a `BLOCKED.md` report +
    lane return/exit — never a guess; an enclosing goal can still run independent
@@ -422,8 +434,10 @@ Named procedures, each with a canonical body in `.issflow/commands/<name>.md`.
 | An OUTCOME spanning several units ("clear the feature queue") | `/goal` (drives the lanes above) |
 | Whole-product quality sweep / pre-release | `/ui-audit` · `/qa-audit` · `/security-audit` · `/release` |
 
-On ambiguity between `/quick` and `/feature`: does it add or change a public
-surface or need its own acceptance criteria? -> `/feature`. Otherwise `/quick`.
+Choose `/quick` only when every low-risk condition in `RISK-LANES.md` holds.
+A public contract, new behavior, security/data risk or material design change uses
+its planned lane. Every lane has acceptance checks; checks alone do not make a
+small fix a feature. Ambiguity that could change consequences requires clarification.
 
 - **overview** — bootstrap a project: design-research → grill r1 → design-research
   → re-grill r2 → `OVERVIEW.md` → planner → `PLAN.md`.
@@ -460,11 +474,14 @@ surface or need its own acceptance criteria? -> `/feature`. Otherwise `/quick`.
   the ceremonies (planning → standups → review/demo + boundary audits → retro → close)
   with burndown + velocity. `/sprint run` drives a whole sprint (or every remaining
   one) AUTO end-to-end. Opt-in; phases run unchanged inside it.
-- **quick [change]** — small, obvious, non-phase change; no agent chain. Stays
-  non-TDD. Runs the mock regression corpus after the change.
-- **ui-audit** — whole-product UI audit against the `ux-design` cookbook (a11y /
-  responsive / consistency); scored findings report. Periodic / pre-release. Distinct
-  from the per-phase ux-design gate (one screen) — this sweeps every screen.
+- **quick [change]** — bounded low-risk change; concise scope receipt, no mandatory
+  agent chain or redundant confirmation. Keeps approved digest/path checks and
+  targeted verification plus affected regression. Never a shortcut around a TDD phase.
+- **ui-audit** — task-based product UX/UI review: jobs, flows, navigation, recovery,
+  hierarchy, content, accessibility and responsiveness. Product code is read-only
+  unless repair is authorized. Report declared/sampled/untested scope and evidence.
+- **redesign** — preserve existing behavior and contracts, compare contextual visual
+  directions, approve the chosen scope/direction, then implement and retest.
 - **qa-audit** — whole-product FUNCTIONAL QA audit (coverage gaps, regression health,
   flaky tests, critical-flow e2e, edge/error handling); scored report. The QA
   counterpart of `ui-audit`. Distinct from the per-phase real-suite gate.
@@ -750,18 +767,16 @@ Mirrors the installer's `--dry-run`. (In a dry-run, even AUTO never acts — it 
     the planning twin of the commercial sign-off gate (`/propose`). A `/replan` that
     adds or reshapes UNBUILT scope reverts the affected plan to `PENDING` and
     re-surfaces it for confirmation before those phases run.
-14. **UNDERSTAND-FIRST gate (brief-back).** No new task starts executing on an
-    unconfirmed understanding. Any command that takes free-text work (`/quick`,
-    `/change-request`, `/goal set`, the `/overview` grill) BRIEFS BACK first:
-    restate the task — goal · scope · out-of-scope · assumptions · plan sketch ·
-    blast radius — then WAIT for explicit confirmation before touching anything.
-    A recorded approval artifact IS the confirmation for its lane (approved
-    PLAN → phases · APPROVED FEATURE doc → the feature lane · approved CR → the
-    change · `Approved:` goal → goal runs) — that is exactly what arms headless.
-    Reuse that confirmation for routine steps and retries within the same scope;
-    goal approval does not replace the required approval of each execution plan.
-    Rationale: a wrong understanding burns tokens and context at 100× the cost
-    of one confirm turn. AUTO governs execution AFTER intake, never instead of it.
+14. **UNDERSTAND-FIRST gate (risk-based).** Understand the requested outcome and
+    consequences before executing. For a fully specified low-risk `/quick` request,
+    the direct request can be the consent: briefly state scope, verify its recorded
+    authorization and proceed without a second confirmation question. Follow
+    `RISK-LANES.md`; the existing plan/digest/path gate and owner-controlled approval
+    recording still apply. A broad goal or an agent's risk label is not permission.
+    Larger, ambiguous or consequential work requires a brief-back and the relevant
+    explicit scoped approval before implementation. Reuse valid confirmation for
+    routine steps and retries within the same scope. Any material scope/revision
+    change reopens approval; goal approval does not approve every execution plan.
 15. **DESIGN + ARCHITECTURE gates.** After a client proposal is signed (quoted
     work), no `/phase` / `/sprint` build starts until `docs/UX-PACK.md` and
     `docs/ARCHITECTURE.md` carry human approval, recorded as `design:` /
@@ -788,8 +803,11 @@ AUDIT (whole product, pre-release):
 
 **QA is the test discipline**, not a single agent: `test-author` (blind tests) +
 `e2e-runner` (functional E2E) + the phase gate + the regression corpus + `debugger`.
-UI audit checks *presentation*; QA checks *behaviour* — a button can pass one and
-fail the other.
+UX review examines whether users can understand and complete their jobs, including
+interaction behavior and recovery. QA verifies functional contracts and regressions.
+They overlap without substituting for each other: correct code can still be hard
+to use, and a pleasing interface can still break a task. Neither a report validator
+nor a screenshot proves usability or full accessibility.
 
 -----
 
@@ -888,7 +906,16 @@ works normally without a KB.
 
 -----
 
-## Capability matrix (which host gets what)
+## Capability matrix (installed wiring, not vendor ceilings)
+
+Codex, Cursor and Claude have native extension mechanisms. Read
+`../runtime/HOSTS.md` and inspect generated files for this adapter version; do not
+infer vendor inability from a missing adapter. Native discovery and hook support
+must be verified in the actual host. The legacy fallback table below describes
+reference behavior when a native adapter is unavailable, not the full capabilities
+of current products.
+
+### Fallback compatibility
 
 Single-source kit: **`.issflow/` tree** (portable) + **this file** (rules) + root
 **`AGENTS.md`** (open-standard entry). `create-issflow --tool=<host>` (omit =
@@ -904,5 +931,5 @@ silently vanish. Assets are the same everywhere — only the *wiring* differs.
 | **Aider** | `.aider.conf.yml` → `AGENTS.md` | read as reference | model-run | model-run | yes |
 | **Claude Code** | `CLAUDE.md` (`@AGENTS.md`) + `.claude/` mirror | `.claude/commands/` (mirror of `.issflow/`) | native | SessionStart · PreToolUse (context watchdog + plan gate) · PreCompact · SubagentStop · Stop — hooks run from `.issflow/` | yes |
 
-"model-run" = the host can't automate the ritual, so the model performs it by hand
+"model-run" = this installation has no verified wiring for the ritual, so the model performs it explicitly
 (SESSION-OPEN at the top of each session; the COMPRESS snapshot before a reset).

@@ -1,0 +1,82 @@
+{
+  "kind": "structural-comparison-not-agent-performance",
+  "baseline": "76bc3d50d2df98e5f1edabc092833a57df94db76",
+  "results": [
+    {
+      "variant": "baseline",
+      "host": "codex",
+      "installExit": 0,
+      "sharedNativeSkills": 0,
+      "codexNativeRoles": 0,
+      "cursorNativeRoles": 0,
+      "claudeNativeRoles": 0,
+      "defaultCoreLines": null,
+      "methodologyLines": 909,
+      "liveActivation": "not-tested"
+    },
+    {
+      "variant": "baseline",
+      "host": "cursor",
+      "installExit": 0,
+      "sharedNativeSkills": 0,
+      "codexNativeRoles": 0,
+      "cursorNativeRoles": 0,
+      "claudeNativeRoles": 0,
+      "defaultCoreLines": null,
+      "methodologyLines": 909,
+      "liveActivation": "not-tested"
+    },
+    {
+      "variant": "baseline",
+      "host": "claude",
+      "installExit": 0,
+      "sharedNativeSkills": 0,
+      "codexNativeRoles": 0,
+      "cursorNativeRoles": 0,
+      "claudeNativeRoles": 7,
+      "defaultCoreLines": null,
+      "methodologyLines": 909,
+      "liveActivation": "not-tested"
+    },
+    {
+      "variant": "candidate",
+      "host": "codex",
+      "installExit": 0,
+      "sharedNativeSkills": 8,
+      "codexNativeRoles": 7,
+      "cursorNativeRoles": 0,
+      "claudeNativeRoles": 0,
+      "defaultCoreLines": 61,
+      "methodologyLines": 936,
+      "liveActivation": "not-tested"
+    },
+    {
+      "variant": "candidate",
+      "host": "cursor",
+      "installExit": 0,
+      "sharedNativeSkills": 8,
+      "codexNativeRoles": 0,
+      "cursorNativeRoles": 7,
+      "claudeNativeRoles": 0,
+      "defaultCoreLines": 61,
+      "methodologyLines": 936,
+      "liveActivation": "not-tested"
+    },
+    {
+      "variant": "candidate",
+      "host": "claude",
+      "installExit": 0,
+      "sharedNativeSkills": 0,
+      "codexNativeRoles": 0,
+      "cursorNativeRoles": 0,
+      "claudeNativeRoles": 7,
+      "defaultCoreLines": 61,
+      "methodologyLines": 936,
+      "liveActivation": "not-tested"
+    }
+  ],
+  "limits": [
+    "No quality, latency, token or cost outcome is inferred from file counts.",
+    "Installer invocation is real; host discovery/execution was not verified."
+  ]
+}

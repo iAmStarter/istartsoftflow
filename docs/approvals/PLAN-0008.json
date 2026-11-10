@@ -1,0 +1,20 @@
+{
+  "planId": "PLAN-0008",
+  "revision": 1,
+  "planBlobSha": "44d15c0b06397cd80df8d5aed6e4d8eb24105839",
+  "approvedBy": "User in this conversation",
+  "approvedAt": "2026-11-10",
+  "approvalSource": "Explicit user request to release the completed native integration improvements, update index.html, push Git and publish npm; exact request recorded in PLAN-0008.",
+  "allowedPaths": [
+    ".issflow/**",
+    "create-issflow/**",
+    "README.md",
+    "index.html",
+    "tests/**",
+    "scripts/compare-native-installers.js",
+    "docs/evaluations/**",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0008.md",
+    "docs/approvals/PLAN-0008.json"
+  ]
+}
