@@ -1,0 +1,16 @@
+{
+  "planId": "PLAN-0011",
+  "revision": 1,
+  "planBlobSha": "fee3dee8b3130fcdd03317eab768a6003b958477",
+  "approvedBy": "User in this conversation",
+  "approvedAt": "2026-11-10",
+  "approvalSource": "User requested removing outdated release notices after verified publication; quotes in PLAN-0011.",
+  "allowedPaths": [
+    "index.html",
+    "npm-version.js",
+    "tests/npm-version.test.js",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0011.md",
+    "docs/approvals/PLAN-0011.json"
+  ]
+}

@@ -1,4 +1,4 @@
-/* Live npm dist-tag lookup. Docs target is separate and never used as npm fallback. */
+/* Live npm dist-tag lookup with an honest unavailable fallback. */
 (function () {
   'use strict';
   var link = document.getElementById('npm-latest-version');
@@ -28,7 +28,7 @@
     }
     link.textContent = 'v' + data.version;
     link.href = 'https://www.npmjs.com/package/create-issflow/v/' + encodeURIComponent(data.version);
-    message('(registry checked on this visit)', '(ตรวจสอบ registry ในการเปิดหน้านี้)');
+    status.replaceChildren();
   }).catch(function () {
     message('(unable to verify; open npm)', '(ตรวจสอบไม่ได้ โปรดเปิด npm)');
   }).finally(function () { clearTimeout(timer); });
