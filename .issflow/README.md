@@ -55,3 +55,19 @@ Host capabilities and smoke checks: [runtime/HOSTS.md](runtime/HOSTS.md).
 
 Use `UX-AUDIT-template.md` and `UX-EVIDENCE-template.json` in `.issflow/templates/`.
 New-project foundations remain available through `/overview` and `/design`.
+
+### Native discovery and proportional workflows
+
+Codex and Cursor installs now generate native skills in `.agents/skills` and
+host-specific agents in `.codex/agents` (TOML) or `.cursor/agents` (Markdown).
+Host defaults select models; Claude model aliases are not copied into other hosts.
+Start with `.issflow/istartsoft-flow/CORE.md`; load detailed policy only as needed.
+The quick lane uses a concise scope receipt and avoids redundant confirmation of
+an already explicit request, while retaining existing approval/digest/path gates.
+An owner-controlled approval-recording action is still required where enforced.
+
+Run `npx create-issflow --doctor` in a project for read-only file/version diagnostics.
+It does not prove native discovery, hook enforcement or successful agent execution.
+Mixed-host installs may expose duplicate shared/Claude skills in Cursor; inspect
+its skill selector. No Codex hooks are installed until runtime semantics are verified.
+See `.issflow/runtime/HOSTS.md` for verification levels and current integration docs.

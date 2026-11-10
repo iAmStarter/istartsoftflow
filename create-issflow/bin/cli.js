@@ -22,7 +22,7 @@ const toolArg = (argv.find(a => a.startsWith('--tool=')) || '').split('=')[1];
 
 const TOOLS = {
   claude: 'Claude Code (Anthropic) — full: subagents, lifecycle hooks, skills',
-  codex:  'OpenAI Codex — AGENTS.md; use native tools only when available',
+  codex:  'OpenAI Codex — AGENTS.md + native skills and TOML subagents; hooks remain explicit',
   cursor: 'Cursor — .cursor/rules + commands + hooks; kit stays in .issflow/ (no .claude/)',
   gemini: 'Google Gemini CLI — GEMINI.md pointer; commands/skills as readable files',
   aider:  'Aider — .aider.conf.yml loads the methodology as conventions',
@@ -47,6 +47,7 @@ Flags:
   --ci        also write .github/workflows/issflow-feature.yml (headless /feature via GitHub Actions)
   --docker    also write Dockerfile.issflow + scripts/feature-docker.js (headless /feature in a container)
   --dry-run   print what would happen, write nothing
+  --doctor    inspect installed configuration read-only (does not install)
   --force     overwrite existing kit files (default keeps yours -> <file>.issflow-new)
   -h, --help  this message
 
@@ -143,24 +144,69 @@ function adapterClaude() {
   warnings.push('claude: portable SoT is .issflow/ — .claude/ is a host mirror; refresh with create-issflow --tool=claude after kit edits.');
 }
 
+// Native discovery adapters. Keep the portable source untouched; do not translate
+// Claude-specific tools/model aliases into another host's permission/config fields.
+let nativeSkillsWritten = false;
+function nativeSkills() {
+  if (nativeSkillsWritten) return;
+  nativeSkillsWritten = true;
+  const source = path.join(TPL, '.issflow', 'skills');
+  for (const file of walk(source)) {
+    writeFile(path.join('.agents', 'skills', path.relative(source, file)), fs.readFileSync(file, 'utf8'));
+  }
+  if (fs.existsSync(path.join(CWD, '.claude', 'skills')) || pickTool() === 'all') {
+    warnings.push('skills: Cursor can discover both .agents/skills and .claude/skills. Mixed-host installs retain both for Codex/Claude compatibility; inspect the host skill list for duplicate names before use. No undocumented skill precedence is assumed.');
+  }
+}
+
+function nativeAgents(host) {
+  const source = path.join(TPL, '.issflow', 'agents');
+  for (const file of fs.readdirSync(source).filter(name => name.endsWith('.md')).sort()) {
+    const raw = fs.readFileSync(path.join(source, file), 'utf8');
+    const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+    if (!match) throw new Error(`Missing agent frontmatter: ${file}`);
+    const field = name => (match[1].match(new RegExp('^' + name + ': (.+)$', 'm')) || [])[1];
+    const name = field('name');
+    const description = field('description');
+    if (!/^[a-z][a-z0-9-]*$/.test(name) || !description) throw new Error(`Invalid native agent metadata: ${file}`);
+    const instructions = 'Follow the assigned scope and host permissions. Role restrictions below are instructions, not a sandbox. Never self-approve, publish, or expand authorization.\n\n' + match[2].trim() + '\n';
+    if (host === 'codex') {
+      // TOML basic strings share the JSON escaping used here for these UTF-8 texts.
+      // Omitted model/effort/sandbox fields inherit host defaults, never widen access.
+      const config = '# Generated from .issflow/agents/' + file + '\n' +
+        'name = ' + JSON.stringify(name) + '\n' +
+        'description = ' + JSON.stringify(description) + '\n' +
+        'developer_instructions = ' + JSON.stringify(instructions) + '\n';
+      writeFile(path.join('.codex', 'agents', name + '.toml'), config);
+    } else {
+      writeFile(path.join('.cursor', 'agents', file),
+        '---\nname: ' + name + '\ndescription: ' + JSON.stringify(description) + '\nmodel: inherit\n---\n\n' + instructions);
+    }
+  }
+}
+
 function adapterCodex() {
-  warnings.push('codex: this installer configures AGENTS.md, not lifecycle hooks or subagent registration. Detect native delegation in the current host; otherwise run roles serially. Run checkpoint and verification commands explicitly.');
+  nativeSkills();
+  nativeAgents('codex');
+  warnings.push('codex: native skills and TOML subagents installed; discovery depends on the host version and project trust. No lifecycle hooks installed. Run checkpoint and verification commands explicitly; use serial roles if native delegation is unavailable.');
 }
 
 function adapterCursor() {
+  nativeSkills();
+  nativeAgents('cursor');
   writeFile('.cursor/rules/istartsoftflow.mdc', [
     '---', 'description: iStartSoftFlow workflow — always apply', 'alwaysApply: true', '---', '',
     'Run the **iStartSoftFlow** workflow. The full, single-source methodology is',
-    '`.issflow/istartsoft-flow/METHODOLOGY.md` — read it before acting. Roles live in',
-    '`.issflow/agents/` (role references, not registered native agents); procedures in `.cursor/commands/`',
+    '`.issflow/istartsoft-flow/CORE.md` — read first; load relevant METHODOLOGY.md sections on demand. Roles live in',
+    '`.cursor/agents/` (native definitions; .issflow/agents/ remains the source); procedures in `.cursor/commands/`',
     '(mirror of `.issflow/commands/`). Caveman ULTRA mode; apply the `karpathy-guidelines`',
     'and `ux-design` skills. See `AGENTS.md` for the role/command/skill map.', '',
   ].join('\n'));
   writeFile('.cursor/rules/issflow-gates.mdc', [
     '---', 'description: iStartSoftFlow gates — STATE delivery + plan lock', 'alwaysApply: true', '---', '',
-    'Before any source Edit/Write:',
+    'Before source changes, read CORE.md and classify the lane:',
     '1. Read `docs/STATE.md` — respect `delivery:` (ETA · WAITING · SLIP · DONE).',
-    '2. If PLAN approval is PENDING → do not edit source (rule 13).',
+    '2. Every source-change lane requires valid scoped approval, including the concise quick scope receipt. A pending or denied plan is never bypassed by relabeling work quick.',
     '3. Past `agent_eta` while AGENT_ACTIVE → report SLIP; do not silent-continue.',
     '4. WAITING_ON_HUMAN / WAITING_STALE → do not pretend the agent is still building.',
     '5. UI work: locked `design-direction` / `docs/design/tokens.css` — no freehand palette.',
@@ -177,7 +223,7 @@ function adapterCursor() {
       subagentStop: [{ command: 'node .issflow/hooks/subagent-stop.js' }],
     },
   }, null, 2) + '\n');
-  warnings.push('cursor: only sessionStart and subagentStop hooks are configured here; no edit/stop approval enforcement. Verify host hook support. Run checkpoint and verification commands explicitly; role files do not register subagents.');
+  warnings.push('cursor: only sessionStart and subagentStop hooks are configured here; no edit/stop approval enforcement. Verify host hook support. Run checkpoint and verification commands explicitly. Native .cursor/agents take precedence over same-name Claude/Codex compatibility agents.');
 }
 
 function adapterGemini() {
@@ -185,7 +231,7 @@ function adapterGemini() {
     '# GEMINI.md — iStartSoftFlow', '',
     'This repo runs the **iStartSoftFlow** agentic dev workflow. The complete,',
     'tool-agnostic methodology (the single source of truth) lives in',
-    '`.issflow/istartsoft-flow/METHODOLOGY.md` — read it before acting. Roles are in',
+    '`.issflow/istartsoft-flow/CORE.md` — read first; load relevant METHODOLOGY.md sections on demand. Roles are in',
     '`.issflow/agents/`, procedures in `.issflow/commands/` (run their bodies as prompts),',
     'skills in `.issflow/skills/` (read on demand). See `AGENTS.md` for the full map.', '',
     'Lifecycle hooks do not auto-fire in Gemini CLI — run the SESSION-OPEN ritual',
@@ -200,7 +246,7 @@ function adapterAider() {
     '# Aider has no lifecycle hooks/subagents; the workflow degrades to model-run rituals.',
     'read:',
     '  - AGENTS.md',
-    '  - .issflow/istartsoft-flow/METHODOLOGY.md',
+    '  - .issflow/istartsoft-flow/CORE.md',
     '',
   ].join('\n'));
   warnings.push('aider: hooks + named subagents unsupported — the loop runs as a single-agent, model-driven workflow.');
@@ -222,7 +268,8 @@ function agentsMd() {
     '# AGENTS.md — iStartSoftFlow', '',
     'This repo runs the **iStartSoftFlow** agentic dev workflow.', '',
     '**Primary entry (this file).** The complete, tool-agnostic methodology — loop,',
-    'roles, procedures, rituals, hard rules — lives in ONE place. Read before acting:', '',
+    'roles, procedures, rituals, hard rules — lives in ONE place. Start with the short contract:', '',
+    '> **`.issflow/istartsoft-flow/CORE.md`** — always-on contract; load detailed procedures only as needed.', '',
     '> **`.issflow/istartsoft-flow/METHODOLOGY.md`** ← single source of truth.', '',
     'The portable kit lives in **`.issflow/`** (commands, agents, hooks, skills,',
     'methodology — see `.issflow/README.md`). Host adapters (`.cursor/`, `CLAUDE.md`,',
@@ -311,6 +358,14 @@ function flowConfig() {
 
 function main() {
   if (HELP) { printHelp(); return; }
+  if (argv.includes('--doctor')) {
+    const { spawnSync } = require('node:child_process');
+    const doctor = path.join(TPL, '.issflow', 'scripts', 'doctor.js');
+    if (!fs.existsSync(doctor)) { console.error('doctor is missing from this package'); process.exitCode = 2; return; }
+    const result = spawnSync(process.execPath, [doctor], { cwd: CWD, stdio: 'inherit' });
+    process.exitCode = result.status === null ? 2 : result.status;
+    return;
+  }
   if (!fs.existsSync(path.join(TPL, '.issflow'))) {
     console.error('create-issflow: embedded template/ missing. From source run: npm run build');
     process.exit(1);

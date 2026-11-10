@@ -1,41 +1,56 @@
 # Host capabilities and verification
 
-The installer ships procedures plus local Node helpers. It does not install an
-agent service, guarantee unattended continuation, or enable persistent access.
-An active host agent must perform the work and call the helper. Future sessions
-require a separately authorized host scheduler. A checkpoint is not approval.
+The kit supplies project guidance, native discovery artifacts and local Node
+helpers. It does not replace the host's execution engine, scheduler or security.
+A checkpoint is not approval. Support below describes what the installer writes,
+not a claim that every installed vendor version activates it.
 
 | Capability | Claude adapter | Codex adapter | Cursor adapter |
 | --- | --- | --- | --- |
-| Entry instructions | CLAUDE.md imports AGENTS.md | AGENTS.md | always-apply workflow/gate rules + AGENTS.md |
-| Roles | .claude agent mirror, host-dependent discovery | reference files; use native delegation if exposed | reference files; use native delegation if exposed |
-| Installed hooks | session, pre-tool, pre-compact, subagent-stop, stop | none | sessionStart, subagentStop only |
-| Task state helper | explicit Node CLI | explicit Node CLI | explicit Node CLI |
-| Checkpoint recovery | lean Tier-A session hook summarizes state; agent reconciles | agent reads state explicitly | session hook if supported; otherwise explicit |
-| Approval enforcement | edit hook covers listed edit tools, not all shell writes | explicit verifier / CI | explicit verifier / CI |
-| Completion proof | agent checks current code; file gate alone is insufficient | same | same |
+| Entry | CLAUDE.md imports AGENTS.md | AGENTS.md → concise CORE | scoped host rules + AGENTS.md → CORE |
+| Skills | .claude/skills | .agents/skills | .agents/skills |
+| Roles | .claude/agents | .codex/agents TOML | .cursor/agents Markdown |
+| Model selection | existing Claude aliases | inherit host default | inherit host default |
+| Installed hooks | session, pre-tool, pre-compact, subagent-stop, stop | none in this release | sessionStart, subagentStop |
+| State helper | explicit Node CLI | explicit Node CLI | explicit Node CLI |
+| Approval enforcement | supported edit tools only; shell writes not covered | explicit verifier / CI | explicit verifier / CI |
+| Completion proof | current code and runtime evidence, not file presence | same | same |
 
-Host versions and permissions vary. Detect available tools at session start.
-Never claim a role file creates an isolated worker or a hook covers every edit.
-If delegation is absent, use serial roles. If a hook is absent, perform the same
-ritual explicitly. Respect host safety, approval, token, and execution limits.
+Codex supports native hooks; this kit deliberately does not install them until
+its payload, trust and denial behavior has been verified against supported host
+versions. Do not copy Claude hook JSON into another host and assume equivalence.
+Native role definitions are configuration, not evidence a worker was spawned.
+Check session capabilities and use serial roles when unavailable. Never claim
+isolated/blind testing unless the host actually provides that isolation.
 
-## Smoke checks
+Run `npx create-issflow --doctor` or `node .issflow/scripts/doctor.js` from the
+consumer project. This is a read-only structural/version check, not host execution
+or a security audit. It reports unresolved activation and missing executables.
+An all-host install includes Claude compatibility mirrors. Cursor may discover
+shared and Claude skills with identical names; inspect the actual host selector
+and resolve duplicates deliberately without deleting customized user files.
 
-Automated installer tests cover Claude/Codex/Cursor in CommonJS and ESM projects,
-dry-run, runtime loading, non-destructive upgrades, and truthful adapter text.
-Runtime tests exercise restart, blocked dependencies, independent tasks, budgets,
-retries, and evidence. These are local contract tests, not live vendor-host tests.
+## Verification levels
 
-For a real host smoke check, use an isolated disposable project:
-1. Install its adapter and inspect generated entry files/hooks.
-2. Start a fresh session, verify instructions are loaded and note actual tools.
-3. Run an authorized tiny task and record command output with code revision.
-4. Interrupt after a checkpoint. Start a new session and reconcile running work
-   rather than blindly retrying a possibly completed external action.
-5. Block one task and confirm independent authorized work continues.
-6. Verify the final report distinguishes passed, failed, blocked and unrun checks.
+1. Contract tests: generation, parsing, non-destructive updates and helper behavior.
+2. Host smoke: vendor process discovers skills/roles, authorized tiny task, denied
+   scope, checkpoint interruption/resume and honest final report.
+3. Product evaluation: the same representative tasks with and without the kit,
+   including a real UI flow, behavior preservation, independent acceptance tests,
+   human interruptions, elapsed time and measured usage/cost where available.
 
-Do not count these live-host checks as passed until they actually run. Publishing,
-PR creation and deployment need their own authorized scope; local tests do not
-imply remote publication or CI success.
+Passing one level does not imply the next. Record host version, model, setup,
+code revision and exact results. Unknown usage/cost is unavailable, not zero.
+Do not benchmark against the active production checkout or run real outbound
+transactions. Use disposable fixtures or a separately authorized example project.
+
+## Current official integration references
+
+Checked 2026-11-10; host versions and deployment surfaces may differ:
+- Codex skills: https://learn.chatgpt.com/docs/build-skills
+- Codex subagents: https://learn.chatgpt.com/docs/agent-configuration/subagents
+- Codex hooks: https://learn.chatgpt.com/docs/hooks
+- Cursor skills: https://cursor.com/docs/skills
+- Cursor subagents: https://cursor.com/docs/subagents
+- Claude subagents: https://code.claude.com/docs/en/sub-agents
+- Claude hooks: https://code.claude.com/docs/en/hooks

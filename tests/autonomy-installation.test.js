@@ -26,7 +26,7 @@ for (const tool of ['claude', 'codex', 'cursor']) {
         else assert.match(JSON.parse(fs.readFileSync(path.join(dir,'.claude/settings.json'),'utf8')).hooks.SessionStart[0].matcher,/resume/);
         const agents = fs.readFileSync(path.join(dir, 'AGENTS.md'), 'utf8');
         assert.match(agents, /does not execute agents or schedule/);
-        if (tool === 'cursor') assert.match(fs.readFileSync(path.join(dir, '.cursor/rules/istartsoftflow.mdc'), 'utf8'), /not registered native agents/);
+        if (tool === 'cursor') assert.match(fs.readFileSync(path.join(dir, '.cursor/rules/istartsoftflow.mdc'), 'utf8'), /native|\.cursor\/agents/);
         fs.writeFileSync(runtime, '// customized\n');
         execFileSync(process.execPath, [cli, `--tool=${tool}`], {cwd:dir});
         assert.equal(fs.readFileSync(runtime, 'utf8'), '// customized\n');
@@ -70,4 +70,15 @@ test('session hook bounds large valid checkpoint context', () => {
     const out=execFileSync(process.execPath,[path.join(root,'.issflow/hooks/session-start.js')],{cwd:dir,env:{...process.env,CLAUDE_PROJECT_DIR:dir},encoding:'utf8'});
     assert.match(out,/1000 unfinished/);assert.ok(out.length<10000);
   } finally {fs.rmSync(dir,{recursive:true,force:true});}
+});
+
+
+test('Cursor always-on rule preserves scoped approval for quick work', (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'issflow-quick-gates-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const result = require('node:child_process').spawnSync(process.execPath, [path.resolve(__dirname, '../create-issflow/bin/cli.js'), '--tool=cursor'], { cwd: root, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  const rules = fs.readFileSync(path.join(root, '.cursor/rules/issflow-gates.mdc'), 'utf8');
+  assert.match(rules, /Every source-change lane requires valid scoped approval/);
+  assert.match(rules, /quick scope receipt/);
 });
