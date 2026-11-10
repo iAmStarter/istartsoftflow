@@ -1,0 +1,15 @@
+{
+  "planId": "PLAN-0010",
+  "revision": 1,
+  "planBlobSha": "8f579efc8be7eacf020a7c0478fcb7c95e905f21",
+  "approvedBy": "User in this conversation",
+  "approvedAt": "2026-11-10",
+  "approvalSource": "Explicit user request to correct website release availability; exact question and answer in PLAN-0010.",
+  "allowedPaths": [
+    "index.html",
+    "tests/npm-version.test.js",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0010.md",
+    "docs/approvals/PLAN-0010.json"
+  ]
+}
