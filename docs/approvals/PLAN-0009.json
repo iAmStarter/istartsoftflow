@@ -1,0 +1,16 @@
+{
+  "planId": "PLAN-0009",
+  "revision": 1,
+  "planBlobSha": "898bf19d9af97cf15f18e34b1bddcc7d693c1e28",
+  "approvedBy": "User in this conversation",
+  "approvedAt": "2026-11-10",
+  "approvalSource": "Explicit user request to add verifiable npm version near copyright, with existing release PR/check/merge authorization; quotes in PLAN-0009.",
+  "allowedPaths": [
+    "index.html",
+    "npm-version.js",
+    "tests/npm-version.test.js",
+    "docs/ACTIVE-PLAN",
+    "docs/plans/PLAN-0009.md",
+    "docs/approvals/PLAN-0009.json"
+  ]
+}
